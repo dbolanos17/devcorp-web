@@ -15,6 +15,11 @@ const PRECIOS = [
   title="Firmas Electrónicas en Ecuador — DEVCORP S.A.S."
   description="Obtén tu firma electrónica en minutos, para personas naturales o jurídicas, con validez legal en Ecuador. Vigencia de 1 a 5 años desde $18.50."
 >
+  <Fragment slot="head">
+    <link rel="stylesheet" href="https://cdn.payphonetodoesposible.com/box/v2.0/payphone-payment-box.css" />
+    <script type="module" src="https://cdn.payphonetodoesposible.com/box/v2.0/payphone-payment-box.js"></script>
+    <script src={`https://www.paypal.com/sdk/js?client-id=${SITE.paypalClientId}&currency=USD`}></script>
+  </Fragment>
   <PageHero
     title="Firmas Electrónicas"
     sub="Obtén tu firma electrónica en minutos. Completa el formulario y te contactamos de inmediato."
@@ -65,27 +70,192 @@ const PRECIOS = [
             </select>
           </div>
           <p class="price-hint">Total a pagar: <strong id="firma-precio">—</strong></p>
+          <div class="form-check"><input type="checkbox" required /> Acepto la política de privacidad y el tratamiento de mis datos.</div>
           <button class="btn-submit" type="submit" id="firmas-btn">Enviar solicitud</button>
           <p class="file-hint">Al enviar, te contactamos para recibir la copia de tu cédula y RUC (si aplica) y coordinar el pago.</p>
           <p class="form-notice" id="firmas-notice"></p>
         </form>
+
+        <div class="pay-divider"><span>o paga en línea ahora</span></div>
+        <p class="file-hint" id="pay-hint">Completa tus datos arriba y elige la vigencia para habilitar el pago.</p>
+        <div id="payphone-button" class="pay-widget"></div>
+        <div id="paypal-button-container" class="pay-widget"></div>
+        <p class="form-notice" id="pay-notice"></p>
       </aside>
     </div>
   </div>
 
-  <script>
-    const sel = document.getElementById('firma-vigencia') as HTMLSelectElement | null;
+  <script define:vars={{ PAYPHONE_TOKEN: SITE.payphone.token, PAYPHONE_STORE_ID: SITE.payphone.storeId }}>
+    const sel = document.getElementById('firma-vigencia');
     sel?.addEventListener('change', () => {
       const price = sel.options[sel.selectedIndex]?.dataset.price ?? '—';
       const el = document.getElementById('firma-precio');
       if (el) el.textContent = price;
+      refreshPaymentButtons();
     });
 
-    const form = document.getElementById('form-firmas') as HTMLFormElement | null;
+    // ─── Pago en línea (PayPhone + PayPal) ───
+    const REQUIRED_FIELDS = ['nombre', 'cedula', 'correo', 'telefono', 'tipo'];
+    document.querySelectorAll('#form-firmas input[name], #form-firmas select[name]').forEach((el) => {
+      el.addEventListener('input', () => refreshPaymentButtons());
+      el.addEventListener('change', () => refreshPaymentButtons());
+    });
+
+    function getCustomer() {
+      const form = document.getElementById('form-firmas');
+      const d = new FormData(form);
+      const opt = sel?.options[sel.selectedIndex];
+      return {
+        nombre: d.get('nombre'),
+        cedula: d.get('cedula'),
+        correo: d.get('correo'),
+        telefono: d.get('telefono'),
+        tipo: d.get('tipo'),
+        ruc: d.get('ruc') || 'No aplica',
+        vigencia: opt?.value || '',
+        amount: opt?.dataset.price ? parseFloat(opt.dataset.price.replace('$', '')) : 0,
+      };
+    }
+
+    function customerIsValid(c) {
+      return REQUIRED_FIELDS.every((f) => c[f] && String(c[f]).trim() !== '') && c.amount > 0;
+    }
+
+    function genClientTxId() {
+      return 'DEVCORP-' + Date.now() + '-' + Math.random().toString(36).slice(2, 8);
+    }
+
+    let paypalRendered = false;
+
+    function refreshPaymentButtons() {
+      const c = getCustomer();
+      const hint = document.getElementById('pay-hint');
+      const payphoneBox = document.getElementById('payphone-button');
+      payphoneBox.innerHTML = '';
+
+      if (!customerIsValid(c)) {
+        hint.style.display = 'block';
+        return;
+      }
+      hint.style.display = 'none';
+
+      const clientTransactionId = genClientTxId();
+      localStorage.setItem(clientTransactionId, JSON.stringify(c));
+
+      // PayPhone requiere reconstruir la caja cada vez que cambia el monto.
+      // @ts-ignore — clase global cargada desde el script del CDN de PayPhone
+      new PPaymentButtonBox({
+        token: PAYPHONE_TOKEN,
+        storeId: PAYPHONE_STORE_ID,
+        clientTransactionId,
+        amount: Math.round(c.amount * 100),
+        amountWithoutTax: Math.round(c.amount * 100),
+        amountWithTax: 0,
+        tax: 0,
+        service: 0,
+        tip: 0,
+        currency: 'USD',
+        reference: 'Firma Electrónica DEVCORP — ' + c.vigencia,
+        email: c.correo,
+        phoneNumber: c.telefono,
+        documentId: c.cedula,
+        identificationType: c.tipo === 'Persona Jurídica' ? 2 : 1,
+        lang: 'es',
+        responseUrl: window.location.origin + window.location.pathname,
+      }).render('payphone-button');
+
+      if (!paypalRendered && window.paypal) {
+        paypalRendered = true;
+        // @ts-ignore — SDK global cargado desde el script de PayPal
+        paypal.Buttons({
+          createOrder: async () => {
+            const cust = getCustomer();
+            if (!customerIsValid(cust)) {
+              showPayNotice('⚠️ Completa tus datos y elige la vigencia antes de pagar.');
+              throw new Error('Datos incompletos');
+            }
+            const res = await fetch('/.netlify/functions/paypal-capture', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                action: 'create',
+                amount: cust.amount,
+                description: 'Firma Electrónica DEVCORP — ' + cust.vigencia,
+              }),
+            });
+            const data = await res.json();
+            return data.id;
+          },
+          onApprove: async (data) => {
+            const cust = getCustomer();
+            const res = await fetch('/.netlify/functions/paypal-capture', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'capture', orderID: data.orderID, customer: cust }),
+            });
+            const result = await res.json();
+            if (result.success) {
+              showPaySuccess();
+            } else {
+              showPayNotice('⚠️ No se pudo confirmar el pago con PayPal. Escríbenos a info@devcorp-ec.com.');
+            }
+          },
+          onError: () => showPayNotice('⚠️ Ocurrió un error con PayPal. Intenta de nuevo.'),
+        }).render('#paypal-button-container');
+      }
+    }
+
+    function showPayNotice(text) {
+      const notice = document.getElementById('pay-notice');
+      notice.textContent = text;
+      notice.classList.add('show');
+    }
+
+    function showPaySuccess() {
+      showPayNotice('Mensaje enviado correctamente.');
+      const form = document.getElementById('form-firmas');
+      form?.reset();
+      document.getElementById('firma-precio').textContent = '—';
+      document.getElementById('payphone-button').innerHTML = '';
+      document.getElementById('pay-hint').style.display = 'block';
+    }
+
+    // Si volvemos de un redireccionamiento de PayPhone, confirmar el pago.
+    (async function checkPayphoneReturn() {
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get('id');
+      const clientTxId = params.get('clientTransactionId') || params.get('clientTxId');
+      if (!id || !clientTxId) return;
+
+      history.replaceState({}, '', window.location.pathname);
+      showPayNotice('Confirmando tu pago...');
+
+      const stored = localStorage.getItem(clientTxId);
+      const customer = stored ? JSON.parse(stored) : null;
+
+      try {
+        const res = await fetch('/.netlify/functions/payphone-confirm', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id, clientTxId, customer }),
+        });
+        const result = await res.json();
+        if (result.success) {
+          localStorage.removeItem(clientTxId);
+          showPaySuccess();
+        } else {
+          showPayNotice('⚠️ El pago no pudo confirmarse. Escríbenos a info@devcorp-ec.com.');
+        }
+      } catch {
+        showPayNotice('⚠️ No se pudo confirmar el pago. Escríbenos a info@devcorp-ec.com.');
+      }
+    })();
+
+    const form = document.getElementById('form-firmas');
     form?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const btn = document.getElementById('firmas-btn') as HTMLButtonElement;
-      const notice = document.getElementById('firmas-notice')!;
+      const btn = document.getElementById('firmas-btn');
+      const notice = document.getElementById('firmas-notice');
       const d = new FormData(form);
 
       btn.disabled = true;
@@ -111,9 +281,9 @@ const PRECIOS = [
         });
         const data = await res.json();
         if (data.success) {
-          notice.textContent = '✅ Solicitud enviada correctamente. Te contactaremos en menos de 24 horas.';
+          notice.textContent = 'Mensaje enviado correctamente.';
           form.reset();
-          document.getElementById('firma-precio')!.textContent = '—';
+          document.getElementById('firma-precio').textContent = '—';
         } else {
           notice.textContent = '⚠️ No se pudo enviar la solicitud. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
         }

@@ -2,7 +2,6 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import ServiceSidebar from '../../components/ServiceSidebar.astro';
-import ReportsIllustration from '../../components/ReportsIllustration.astro';
 ---
 <Base
   title="Asesoría Contable — DEVCORP S.A.S. | Quito, Ecuador"
@@ -16,13 +15,14 @@ import ReportsIllustration from '../../components/ReportsIllustration.astro';
   <div class="section">
     <div class="svc-detail-grid">
       <div class="svc-detail-body">
-        <ReportsIllustration />
+        <div class="svc-detail-photo">
+          <img src="/images/contable.jpg" alt="Equipo de asesoría contable revisando reportes financieros" loading="lazy" />
+        </div>
         <h2>Reportes que soportan tus decisiones</h2>
         <p>Tomar decisiones acertadas para el beneficio de tu negocio requiere contar con servicios contables que se adapten plenamente a tus necesidades. Generamos los reportes que se convierten en el soporte para la alta dirección.</p>
         <h2>¿Qué incluye?</h2>
         <div class="check-list">
           <div class="check-item"><span class="check-icon">✓</span>Contabilidad general y registro de operaciones</div>
-          <div class="check-item"><span class="check-icon">✓</span>Gestión de inventarios</div>
           <div class="check-item"><span class="check-icon">✓</span>Control y análisis de costos</div>
           <div class="check-item"><span class="check-icon">✓</span>Estados financieros mensuales</div>
           <div class="check-item"><span class="check-icon">✓</span>Conciliaciones bancarias</div>

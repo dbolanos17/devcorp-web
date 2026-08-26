@@ -94,7 +94,7 @@ import { SITE, SERVICES } from '../data/site';
         });
         const data = await res.json();
         if (data.success) {
-          notice.textContent = '✅ Mensaje enviado correctamente. Te contactaremos en menos de 24 horas.';
+          notice.textContent = 'Mensaje enviado correctamente.';
           form.reset();
         } else {
           notice.textContent = '⚠️ No se pudo enviar el mensaje. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';

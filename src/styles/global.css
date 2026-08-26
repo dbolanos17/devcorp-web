@@ -386,6 +386,11 @@ nav {
 .price-row:nth-child(even) { background:var(--off-white); }
 .price-row strong { color:var(--blue);font-weight:800; }
 .form-notice { display:none;margin-top:14px;padding:14px 16px;border-radius:10px;background:rgba(56,113,193,.08);border:1px solid rgba(56,113,193,.25);color:var(--navy);font-size:.85rem;line-height:1.6; }
+
+.pay-divider { display:flex;align-items:center;gap:12px;margin:26px 0 14px;color:var(--gray);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em; }
+.pay-divider::before, .pay-divider::after { content:'';flex:1;height:1px;background:var(--gray-light); }
+.pay-widget { margin-top:10px;min-height:2px; }
+.pay-widget:empty { min-height:0; }
 .form-notice.show { display:block; }
 
 /* ─── AUTH PAGES ─── */

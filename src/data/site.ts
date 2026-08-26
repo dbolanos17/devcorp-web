@@ -14,6 +14,18 @@ export const SITE = {
     encodeURIComponent('Hola, me interesa una asesoría gratuita con DEVCORP'),
   email: 'info@devcorp-ec.com',
   web3formsKey: '2d27232a-9864-4e50-bf55-01077f13254d',
+  // Pagos en línea (Firmas Electrónicas). Estos valores son públicos por diseño
+  // de cada proveedor (van en el JavaScript del navegador) — las credenciales
+  // realmente secretas (PAYPHONE_TOKEN de confirmación, PAYPAL_CLIENT_SECRET)
+  // viven solo como variables de entorno en Netlify, nunca aquí.
+  payphone: {
+    // Mismo token que usas para confirmar transacciones. PayPhone diseña su
+    // "Cajita de Pagos" para que este valor se use también en el navegador —
+    // es su arquitectura oficial, no un descuido nuestro.
+    token: 'REEMPLAZAR_CON_TU_PAYPHONE_TOKEN',
+    storeId: 'REEMPLAZAR_CON_TU_PAYPHONE_STORE_ID',
+  },
+  paypalClientId: 'REEMPLAZAR_CON_TU_PAYPAL_CLIENT_ID',
   city: 'Quito, Ecuador',
   hours: 'Lunes a viernes · 9:00 – 18:00',
   social: {
