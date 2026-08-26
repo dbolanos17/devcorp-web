@@ -1,0 +1,26 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceCard from '../../components/ServiceCard.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { SITE, SERVICES } from '../../data/site';
+---
+<Base
+  title="Servicios — DEVCORP S.A.S. | Asesoría financiera, contable, tributaria y laboral"
+  description="Asesoría financiera, contable, tributaria, laboral, negociación de notas de crédito del SRI y firmas electrónicas en Ecuador."
+>
+  <PageHero
+    title="Nuestros servicios"
+    sub="Aliados estratégicos para tu negocio: asesoría financiera, contable, tributaria, laboral y servicios complementarios."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios' }]}
+  />
+  <div class="section">
+    <div class="services-grid">
+      {SERVICES.map((s) => <ServiceCard service={s} showItems />)}
+    </div>
+  </div>
+  <FinalCta sub="Cuéntanos sobre tu negocio y te recomendamos la asesoría ideal.">
+    <Fragment slot="title">¿No sabes qué servicio <span>necesitas</span>?</Fragment>
+    <a class="btn-wa" href={SITE.whatsappGreeting} target="_blank" rel="noopener">📱 Escríbenos por WhatsApp</a>
+  </FinalCta>
+</Base>

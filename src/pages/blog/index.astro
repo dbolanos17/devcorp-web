@@ -1,0 +1,80 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import FinalCta from '../../components/FinalCta.astro';
+import { getCollection } from 'astro:content';
+import { SITE } from '../../data/site';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const featured = posts.find((p) => p.data.featured) ?? posts[0];
+const rest = posts.filter((p) => p.id !== featured?.id);
+const categories = [...new Set(posts.map((p) => p.data.category))];
+
+const fmt = (d: Date) =>
+  d.toLocaleDateString('es-EC', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+<Base
+  title="Blog — DEVCORP S.A.S. | Finanzas, contabilidad y tributación en Ecuador"
+  description="Noticias, guías y análisis sobre finanzas, contabilidad, tributación y normativa laboral en Ecuador."
+>
+  <PageHero
+    title="Blog DEVCORP"
+    sub="Noticias, guías y análisis sobre finanzas, contabilidad, tributación y normativa laboral en Ecuador."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Blog' }]}
+  />
+
+  <div class="section">
+    {featured && (
+      <div class="blog-featured">
+        <div class="blog-featured-img">{featured.data.icon}</div>
+        <div class="blog-featured-body">
+          <span class="blog-cat">{featured.data.category} · Destacado</span>
+          <h2>{featured.data.title}</h2>
+          <p>{featured.data.description}</p>
+          <a class="btn-primary" style="width:fit-content;" href={`/blog/${featured.id}/`}>Leer artículo completo →</a>
+        </div>
+      </div>
+    )}
+
+    <div class="blog-filters">
+      <button class="blog-filter active" data-cat="todos">Todos</button>
+      {categories.map((c) => <button class="blog-filter" data-cat={c}>{c}</button>)}
+    </div>
+
+    <div class="blog-grid" id="blog-grid">
+      {rest.map((p) => (
+        <a class="blog-card" href={`/blog/${p.id}/`} data-cat={p.data.category}>
+          <div class="blog-img">{p.data.icon}</div>
+          <div class="blog-body">
+            <span class="blog-cat">{p.data.category}</span>
+            <h3>{p.data.title}</h3>
+            <p>{p.data.description}</p>
+            <div class="blog-meta"><span>DEVCORP</span><span>{fmt(p.data.date)}</span></div>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <FinalCta sub="Recibe noticias, guías y novedades directamente en tu WhatsApp.">
+    <Fragment slot="title">¿Tienes dudas sobre algún <span>tema</span>?</Fragment>
+    <a class="btn-wa" href={SITE.whatsappGreeting} target="_blank" rel="noopener">📱 Consulta con un asesor</a>
+  </FinalCta>
+
+  <script>
+    const filters = document.querySelectorAll<HTMLButtonElement>('.blog-filter');
+    const cards = document.querySelectorAll<HTMLElement>('#blog-grid .blog-card');
+    filters.forEach((btn) => {
+      btn.addEventListener('click', () => {
+        filters.forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const cat = btn.dataset.cat;
+        cards.forEach((card) => {
+          card.style.display = cat === 'todos' || card.dataset.cat === cat ? '' : 'none';
+        });
+      });
+    });
+  </script>
+</Base>

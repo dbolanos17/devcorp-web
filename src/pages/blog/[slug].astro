@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const related = (await getCollection('blog'))
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 4);
+
+const fecha = post.data.date.toLocaleDateString('es-EC', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+<Base title={`${post.data.title} — Blog DEVCORP`} description={post.data.description}>
+  <PageHero
+    title={post.data.title}
+    sub={`Por DEVCORP S.A.S. · ${fecha} · ${post.data.category}`}
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Blog', href: '/blog/' }, { label: 'Artículo' }]}
+  />
+  <div class="section">
+    <div class="svc-detail-grid">
+      <div class="svc-detail-body post-body">
+        <div class="blog-img" style="height:280px;border-radius:18px;margin-bottom:32px;">{post.data.icon}</div>
+        <Content />
+        <a class="btn-primary" style="margin-top:24px;" href="/blog/">← Volver al blog</a>
+      </div>
+      <aside class="svc-sidebar">
+        <h4>Artículos relacionados</h4>
+        <div class="svc-sidebar-list">
+          {related.map((p) => (
+            <a href={`/blog/${p.id}/`}>{p.data.icon} {p.data.title}</a>
+          ))}
+        </div>
+        <a class="btn-primary" style="width:100%;justify-content:center;" href="/contacto/">Habla con un asesor →</a>
+      </aside>
+    </div>
+  </div>
+</Base>

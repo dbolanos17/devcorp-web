@@ -1,0 +1,15 @@
+---
+interface Props {
+  sub?: string;
+  photo?: string;
+}
+const { sub, photo } = Astro.props;
+---
+<div class:list={['final-cta', { 'final-cta-photo': !!photo }]}>
+  {photo && <img class="final-cta-bg" src={photo} alt="" role="presentation" />}
+  <h2><slot name="title" /></h2>
+  {sub && <p>{sub}</p>}
+  <div class="cta-row">
+    <slot />
+  </div>
+</div>

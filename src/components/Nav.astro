@@ -1,0 +1,47 @@
+---
+import { SERVICES } from '../data/site';
+
+const path = Astro.url.pathname;
+const isCurrent = (href: string) =>
+  href === '/' ? path === '/' : path.startsWith(href);
+---
+<nav>
+  <a href="/" class="nav-logo" aria-label="DEVCORP — Inicio">
+    <div class="nav-logo-badge"><img src="/isotipo-devcorp-white.png" alt="DEVCORP S.A.S." /></div>
+  </a>
+
+  <ul class="nav-menu" id="nav-menu">
+    <li><a class:list={['nav-link', { current: isCurrent('/') }]} href="/">Inicio</a></li>
+    <li><a class:list={['nav-link', { current: isCurrent('/nosotros') }]} href="/nosotros/">Nosotros</a></li>
+    <li class="has-dropdown">
+      <a class:list={['nav-link', { current: isCurrent('/servicios') }]} href="/servicios/">Servicios <span class="caret">▾</span></a>
+      <div class="dropdown">
+        {SERVICES.map((s) => (
+          <a href={`/servicios/${s.slug}/`}>
+            <span class="dropdown-icon">{s.icon}</span>
+            <span>{s.title}<span class="dropdown-sub">{s.navSub}</span></span>
+          </a>
+        ))}
+      </div>
+    </li>
+    <li><a class:list={['nav-link', { current: isCurrent('/blog') }]} href="/blog/">Blog</a></li>
+    <li><a class:list={['nav-link', { current: isCurrent('/contacto') }]} href="/contacto/">Contacto</a></li>
+  </ul>
+
+  <div class="nav-actions">
+    <a class="btn-login" href="/login/">Iniciar Sesión</a>
+    <a class="btn-register" href="/registro/">Registrarse</a>
+    <button class="nav-burger" id="nav-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<script>
+  const burger = document.getElementById('nav-burger');
+  const menu = document.getElementById('nav-menu');
+  burger?.addEventListener('click', () => {
+    const open = menu?.classList.toggle('open');
+    burger.setAttribute('aria-expanded', String(!!open));
+  });
+</script>

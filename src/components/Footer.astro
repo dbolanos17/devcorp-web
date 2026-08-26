@@ -1,0 +1,39 @@
+---
+import { SITE, SERVICES } from '../data/site';
+const year = new Date().getFullYear();
+---
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col footer-brand">
+      <div class="logo-text" style="color:#fff;font-size:1.4rem;">DEVCORP</div>
+      <p>Asesores Financieros, Contables, Tributarios y Legales en Ecuador. Más de una década acompañando el crecimiento de tu empresa.</p>
+      <div class="footer-social">
+        <a href={SITE.social.facebook} target="_blank" rel="noopener" aria-label="Facebook">f</a>
+        <a href={SITE.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">ig</a>
+        <a href={SITE.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Navegación</h5>
+      <a href="/">Inicio</a>
+      <a href="/nosotros/">Nosotros</a>
+      <a href="/servicios/">Servicios</a>
+      <a href="/blog/">Blog</a>
+      <a href="/contacto/">Contacto</a>
+    </div>
+    <div class="footer-col">
+      <h5>Servicios</h5>
+      {SERVICES.map((s) => <a href={`/servicios/${s.slug}/`}>{s.title}</a>)}
+    </div>
+    <div class="footer-col">
+      <h5>Contacto</h5>
+      <a href={SITE.phoneHref}>{SITE.phone}</a>
+      <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+      <span class="footer-line">{SITE.city}</span>
+      <a href="/login/">Portal de Clientes</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© {year} DEVCORP S.A.S. Todos los derechos reservados.</p>
+  </div>
+</footer>

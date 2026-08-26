@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import FinalCta from '../components/FinalCta.astro';
+---
+<Base title="Página no encontrada — DEVCORP S.A.S." description="La página que buscas no existe.">
+  <FinalCta sub="La página que buscas no existe o fue movida.">
+    <Fragment slot="title">Error <span>404</span></Fragment>
+    <a class="btn-primary" href="/">Volver al inicio →</a>
+    <a class="btn-secondary" href="/servicios/">Ver servicios</a>
+  </FinalCta>
+</Base>

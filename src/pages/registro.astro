@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base
+  title="Crear cuenta — Portal de Clientes DEVCORP S.A.S."
+  description="Regístrate para acceder al Portal de Clientes DEVCORP: documentos, facturas y seguimiento de tus asesorías en línea."
+>
+  <div class="auth-wrap">
+    <div class="hero-grid"></div><div class="hero-glow-2"></div>
+    <div class="auth-card">
+      <div class="auth-logo"><span class="logo-text" style="color:var(--text);">DEVCORP</span></div>
+      <h2>Crea tu cuenta</h2>
+      <p class="sub">Regístrate para acceder al Portal de Clientes DEVCORP.</p>
+      <form id="form-registro">
+        <div class="form-row">
+          <div class="form-group"><label>Nombres *</label><input type="text" required /></div>
+          <div class="form-group"><label>Apellidos *</label><input type="text" required /></div>
+        </div>
+        <div class="form-group"><label>Correo electrónico *</label><input type="email" required /></div>
+        <div class="form-group"><label>Teléfono *</label><input type="tel" required /></div>
+        <div class="form-group"><label>Tipo de cliente *</label>
+          <select required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            <option>Persona Natural</option>
+            <option>Persona Jurídica</option>
+            <option>ONG</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Contraseña *</label><input type="password" required /></div>
+        <div class="form-check"><input type="checkbox" required /> Acepto los Términos y Condiciones y la Política de Privacidad.</div>
+        <button class="btn-submit" type="submit">Crear cuenta →</button>
+        <p class="form-notice" id="registro-notice">El Portal de Clientes estará disponible muy pronto. Te avisaremos cuando puedas crear tu cuenta.</p>
+      </form>
+      <div class="auth-benefits">
+        <div class="auth-benefit">✅ Accede a tus documentos y facturas en línea</div>
+        <div class="auth-benefit">✅ Da seguimiento al estado de tus asesorías</div>
+        <div class="auth-benefit">✅ Comunicación directa con tu asesor asignado</div>
+      </div>
+      <div class="auth-switch">¿Ya tienes cuenta? <a href="/login/">Inicia sesión</a></div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('form-registro')?.addEventListener('submit', (e) => {
+      e.preventDefault();
+      document.getElementById('registro-notice')?.classList.add('show');
+    });
+  </script>
+</Base>

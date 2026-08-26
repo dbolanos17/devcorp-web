@@ -1,0 +1,111 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { SITE, SERVICES } from '../data/site';
+---
+<Base
+  title="Contacto — DEVCORP S.A.S. | Agenda tu asesoría gratuita"
+  description="Agenda una asesoría gratuita con DEVCORP S.A.S. Respondemos en menos de 24 horas por WhatsApp, teléfono o correo. Quito, Ecuador."
+>
+  <PageHero
+    title="Hablemos de tu negocio"
+    sub="Agenda una asesoría gratuita o escríbenos por cualquiera de nuestros canales. Respondemos en menos de 24 horas."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Contacto' }]}
+  />
+
+  <div class="section">
+    <div class="contact-grid">
+      <div>
+        <div class="contact-info-card">
+          <div class="contact-row"><div class="contact-icon">📍</div><div><h5>Oficina</h5><span>{SITE.city}</span></div></div>
+          <div class="contact-row"><div class="contact-icon">📞</div><div><h5>Teléfono / WhatsApp</h5><a href={SITE.phoneHref}>{SITE.phone}</a></div></div>
+          <div class="contact-row"><div class="contact-icon">✉️</div><div><h5>Correo electrónico</h5><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div></div>
+          <div class="contact-row"><div class="contact-icon">🕒</div><div><h5>Horario de atención</h5><span>{SITE.hours}</span></div></div>
+          <div style="padding-top:18px;">
+            <h5 style="font-size:.88rem;font-weight:700;margin-bottom:10px;">Síguenos</h5>
+            <div class="social-row">
+              <a class="social-pill" href={SITE.social.facebook} target="_blank" rel="noopener" aria-label="Facebook">f</a>
+              <a class="social-pill" href={SITE.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">ig</a>
+              <a class="social-pill" href={SITE.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+            </div>
+          </div>
+        </div>
+        <div class="map-embed">
+          <iframe
+            title="Ubicación DEVCORP — Quito, Ecuador"
+            src="https://www.google.com/maps?q=Quito,Ecuador&output=embed"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+
+      <div class="form-card">
+        <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;margin-bottom:6px;">Envíanos un mensaje</h3>
+        <p style="color:var(--gray);font-size:.9rem;margin-bottom:28px;">Completa el formulario y tu mensaje nos llegará directo a nuestro correo. Un asesor se pondrá en contacto contigo.</p>
+        <form id="form-contacto" data-key={SITE.web3formsKey}>
+          <div class="form-row">
+            <div class="form-group"><label>Nombre completo *</label><input type="text" name="nombre" required /></div>
+            <div class="form-group"><label>Teléfono *</label><input type="tel" name="telefono" required /></div>
+          </div>
+          <div class="form-group"><label>Correo electrónico *</label><input type="email" name="correo" required /></div>
+          <div class="form-group">
+            <label>Servicio de interés</label>
+            <select name="servicio">
+              {SERVICES.map((s) => <option>{s.title}</option>)}
+              <option>Otro</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Mensaje *</label><textarea name="mensaje" required placeholder="Cuéntanos sobre tu negocio y en qué podemos ayudarte..."></textarea></div>
+          <div class="form-check"><input type="checkbox" required /> Acepto la política de privacidad y el tratamiento de mis datos.</div>
+          <button class="btn-submit" type="submit" id="contacto-btn">Enviar mensaje →</button>
+          <p class="form-notice" id="contacto-notice"></p>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('form-contacto') as HTMLFormElement | null;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('contacto-btn') as HTMLButtonElement;
+      const notice = document.getElementById('contacto-notice')!;
+      const d = new FormData(form);
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      notice.classList.remove('show');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: form.dataset.key,
+            subject: `Nuevo mensaje de contacto — ${d.get('nombre')}`,
+            from_name: 'Sitio Web DEVCORP',
+            'Nombre': d.get('nombre'),
+            'Teléfono': d.get('telefono'),
+            'Correo': d.get('correo'),
+            'Servicio de interés': d.get('servicio'),
+            'Mensaje': d.get('mensaje'),
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          notice.textContent = '✅ Mensaje enviado correctamente. Te contactaremos en menos de 24 horas.';
+          form.reset();
+        } else {
+          notice.textContent = '⚠️ No se pudo enviar el mensaje. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+        }
+      } catch {
+        notice.textContent = '⚠️ No se pudo enviar el mensaje. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+      }
+
+      notice.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Enviar mensaje →';
+    });
+  </script>
+</Base>

@@ -1,0 +1,142 @@
+---
+import Base from '../layouts/Base.astro';
+import ServiceCard from '../components/ServiceCard.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { getCollection } from 'astro:content';
+import { SITE, SERVICES } from '../data/site';
+
+const testimonials = (await getCollection('testimonials')).sort(
+  (a, b) => a.data.order - b.data.order
+);
+const initials = (name: string) =>
+  name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+---
+<Base>
+  <div class="hero hero-photo">
+    <img class="hero-bg" src="/images/stock-oficina.jpg" alt="" role="presentation" />
+    <div class="hero-overlay"></div>
+    <div class="hero-inner">
+      <div class="hero-content">
+        <h1>Impulsamos el crecimiento de tu empresa<span class="line2">con asesoría integral.</span></h1>
+        <p class="hero-sub">Soluciones financieras, contables, tributarias y laborales a la medida de tu negocio. Más de una década ayudando a empresas, personas naturales y ONGs a tomar mejores decisiones.</p>
+        <div class="hero-ctas">
+          <a class="btn-primary" href="/contacto/">Solicita tu asesoría →</a>
+          <a class="btn-secondary" href="/servicios/">Ver servicios</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat-card"><div class="stat-num">+100</div><div class="stat-label">Clientes atendidos</div></div>
+          <div class="stat-card"><div class="stat-num">11 años</div><div class="stat-label">De experiencia</div></div>
+          <div class="stat-card"><div class="stat-num">99%</div><div class="stat-label">Satisfacción</div></div>
+        </div>
+      </div>
+      <div class="hero-visual-panel">
+        <div class="hero-visual-card">
+          <div class="hvp-badge"><img src="/isotipo-devcorp.png" alt="Isotipo DEVCORP" /></div>
+          <div class="hvp-title">Asesoría integral 360 para tu empresa</div>
+          <div class="hvp-pillars">
+            <a class="hvp-pill" href="/servicios/asesoria-financiera/">💰 Financiera</a>
+            <a class="hvp-pill" href="/servicios/asesoria-contable/">📊 Contable</a>
+            <a class="hvp-pill" href="/servicios/asesoria-tributaria/">🧾 Tributaria</a>
+            <a class="hvp-pill" href="/servicios/asesoria-laboral-empresarial/">👥 Laboral</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header center">
+      <h2 class="section-title">Soluciones <span class="hi">integrales</span> para tu negocio</h2>
+      <p class="section-sub">Evaluamos, diseñamos y proponemos estrategias personalizadas que se adaptan a las necesidades y oportunidades de tu empresa.</p>
+    </div>
+    <div class="services-grid">
+      {SERVICES.map((s) => <ServiceCard service={s} />)}
+    </div>
+  </div>
+
+  <div class="section section-dark">
+    <div class="why-grid">
+      <div>
+        <span class="tag" style="font-size:.9rem;">¿Por qué DEVCORP?</span>
+        <h2 class="section-title section-title-white" style="margin-bottom:32px;">Aliados estratégicos para el <span class="hi">crecimiento</span> de tu negocio</h2>
+        <div class="why-list">
+          <div class="why-item"><div class="why-num">01</div><div class="why-text"><strong>Equipo multidisciplinario</strong><span>Profesionales especializados en finanzas, contabilidad, tributación y derecho laboral.</span></div></div>
+          <div class="why-item"><div class="why-num">02</div><div class="why-text"><strong>Soluciones a la medida</strong><span>Diagnosticamos tu realidad económica antes de proponer cualquier estrategia.</span></div></div>
+          <div class="why-item"><div class="why-num">03</div><div class="why-text"><strong>Cumplimiento garantizado</strong><span>Trabajamos en estricto apego a la normativa vigente del SRI, IESS y entes de control.</span></div></div>
+          <div class="why-item"><div class="why-num">04</div><div class="why-text"><strong>Acompañamiento continuo</strong><span>No te dejamos solo: te acompañamos en cada trámite administrativo y legal.</span></div></div>
+        </div>
+      </div>
+      <div class="why-visual">
+        <div class="metric-row">
+          <div class="metric"><span class="metric-num">+100</span><span class="metric-label">Empresas asesoradas</span></div>
+          <div class="metric"><span class="metric-num">11</span><span class="metric-label">Años en el mercado</span></div>
+          <div class="metric"><span class="metric-num">99%</span><span class="metric-label">Retención de clientes</span></div>
+          <div class="metric"><span class="metric-num">24h</span><span class="metric-label">Tiempo de respuesta</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section section-alt">
+    <div class="spotlight-grid">
+      <div class="spotlight-photo">
+        <img src="/images/equipo-reunion.jpg" alt="Equipo DEVCORP en reunión de estrategia financiera" loading="lazy" />
+      </div>
+      <div class="about-text">
+        <span class="tag">Nosotros</span>
+        <h2>Más de una década impulsando el desarrollo empresarial en Ecuador</h2>
+        <p>DEVCORP S.A.S. nace con el propósito de ofrecer el respaldo de una asesoría profesional y confiable a empresas, personas naturales, jurídicas y organizaciones no gubernamentales.</p>
+        <p>Evaluamos el entorno económico-financiero de cada organización para diseñar soluciones que se adapten a los cambios constantes del entorno empresarial ecuatoriano.</p>
+        <a class="btn-primary" href="/nosotros/">Conoce nuestra historia →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="trust-bar">
+    <span class="trust-label">Trabajamos en cumplimiento con</span>
+    <div class="trust-marquee">
+      <div class="trust-track">
+        <img src="/images/logo-sri.png" alt="SRI — Servicio de Rentas Internas" />
+        <img src="/images/logo-iess.png" alt="IESS — Instituto Ecuatoriano de Seguridad Social" />
+        <img src="/images/logo-mdt.jpeg" alt="Ministerio del Trabajo" />
+        <img src="/images/logo-scvs.png" alt="Superintendencia de Compañías y Valores" />
+        <img src="/images/logo-seps.png" alt="Superintendencia de Economía Popular y Solidaria" />
+        <img src="/images/logo-superbancos.jpeg" alt="Superintendencia de Bancos" />
+        <img src="/images/logo-sri.png" alt="" aria-hidden="true" />
+        <img src="/images/logo-iess.png" alt="" aria-hidden="true" />
+        <img src="/images/logo-mdt.jpeg" alt="" aria-hidden="true" />
+        <img src="/images/logo-scvs.png" alt="" aria-hidden="true" />
+        <img src="/images/logo-seps.png" alt="" aria-hidden="true" />
+        <img src="/images/logo-superbancos.jpeg" alt="" aria-hidden="true" />
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header center">
+      <span class="tag">Testimonios</span>
+      <h2 class="section-title">Lo que dicen <span class="hi">nuestros clientes</span></h2>
+    </div>
+    <div class="test-grid">
+      {testimonials.map((t) => (
+        <div class="test-card">
+          <div class="stars">{'★'.repeat(t.data.stars)}</div>
+          <p class="test-quote">"{t.body?.trim()}"</p>
+          <div class="test-author">
+            <div class="avatar">{initials(t.data.name)}</div>
+            <div>
+              <div class="author-name">{t.data.name}</div>
+              <div class="author-role">{t.data.role}</div>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <FinalCta sub="Agenda una asesoría gratuita con nuestro equipo de expertos.">
+    <Fragment slot="title">¿Listo para hacer crecer <span>tu negocio</span>?</Fragment>
+    <a class="btn-wa" href={SITE.whatsappGreeting} target="_blank" rel="noopener">📱 Escríbenos por WhatsApp</a>
+    <a class="btn-primary" href="/contacto/">Agendar asesoría</a>
+  </FinalCta>
+</Base>

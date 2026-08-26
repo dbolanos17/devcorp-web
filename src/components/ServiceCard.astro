@@ -1,0 +1,18 @@
+---
+import type { Service } from '../data/site';
+interface Props {
+  service: Service;
+  showItems?: boolean;
+}
+const { service, showItems = false } = Astro.props;
+---
+<a class="svc-card" href={`/servicios/${service.slug}/`}>
+  <div class="svc-head"><div class="svc-icon">{service.icon}</div><h3>{service.title}</h3></div>
+  <p>{service.short}</p>
+  {showItems && (
+    <div class="svc-items">
+      {service.items.map((item) => <span class="svc-item">{item}</span>)}
+    </div>
+  )}
+  <span class="svc-link">Conocer más →</span>
+</a>

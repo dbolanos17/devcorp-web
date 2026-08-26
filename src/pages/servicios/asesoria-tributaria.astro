@@ -1,0 +1,36 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceSidebar from '../../components/ServiceSidebar.astro';
+---
+<Base
+  title="Asesoría Tributaria — DEVCORP S.A.S. | Quito, Ecuador"
+  description="Declaraciones SRI, planificación tributaria, optimización de carga fiscal y atención de requerimientos tributarios en Ecuador."
+>
+  <PageHero
+    title="Asesoría Tributaria"
+    sub="La administración tributaria exige dominio de la normativa legal y gestión eficaz ante las autoridades pertinentes."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios', href: '/servicios/' }, { label: 'Asesoría Tributaria' }]}
+  />
+  <div class="section">
+    <div class="svc-detail-grid">
+      <div class="svc-detail-body">
+        <div class="svc-detail-photo">
+          <img src="/images/stock-tributaria.webp" alt="Gestión y cálculo de obligaciones tributarias" loading="lazy" />
+        </div>
+        <h2>Cumplimiento y eficiencia tributaria</h2>
+        <p>Mediante una consultoría especializada en tributación, dispones de una herramienta para cumplir con las obligaciones legales, optimizando al mismo tiempo los procesos dentro de tu estructura empresarial.</p>
+        <h2>¿Qué incluye?</h2>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">✓</span>Gestión de obligaciones impositivas (IVA, Renta, ICE)</div>
+          <div class="check-item"><span class="check-icon">✓</span>Planificación tributaria y optimización de carga fiscal</div>
+          <div class="check-item"><span class="check-icon">✓</span>Atención de requerimientos del SRI</div>
+          <div class="check-item"><span class="check-icon">✓</span>Declaraciones mensuales y anuales</div>
+        </div>
+        <h2>¿Para quién es?</h2>
+        <p>Personas naturales, jurídicas y organizaciones que buscan un manejo tributario seguro, eficiente y en regla con el SRI.</p>
+      </div>
+      <ServiceSidebar current="asesoria-tributaria" />
+    </div>
+  </div>
+</Base>

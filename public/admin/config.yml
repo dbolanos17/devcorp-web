@@ -1,0 +1,42 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images"
+public_folder: "/images"
+
+collections:
+  - name: "blog"
+    label: "Blog"
+    folder: "src/content/blog"
+    create: true
+    delete: true
+    slug: "{{slug}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Descripción corta", name: "description", widget: "text" }
+      - label: "Categoría"
+        name: "category"
+        widget: "select"
+        options: ["Financiero", "Tributario", "Laboral", "Contable", "Trámites"]
+      - { label: "Fecha", name: "date", widget: "datetime" }
+      - { label: "Ícono (emoji)", name: "icon", widget: "string", default: "📰" }
+      - { label: "Destacado en portada del blog", name: "featured", widget: "boolean", default: false }
+      - { label: "Contenido del artículo", name: "body", widget: "markdown" }
+
+  - name: "testimonials"
+    label: "Testimonios"
+    folder: "src/content/testimonials"
+    create: true
+    delete: true
+    slug: "{{fields.name}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Nombre del cliente", name: "name", widget: "string" }
+      - { label: "Cargo y empresa", name: "role", widget: "string" }
+      - { label: "Estrellas (1 a 5)", name: "stars", widget: "number", default: 5, min: 1, max: 5, value_type: "int" }
+      - { label: "Orden de aparición", name: "order", widget: "number", default: 0, value_type: "int", hint: "1 = primero, 2 = segundo, etc." }
+      - { label: "Texto del testimonio", name: "body", widget: "text" }

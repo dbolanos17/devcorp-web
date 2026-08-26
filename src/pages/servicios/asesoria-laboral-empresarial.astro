@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceSidebar from '../../components/ServiceSidebar.astro';
+---
+<Base
+  title="Asesoría Laboral y Empresarial — DEVCORP S.A.S. | Quito, Ecuador"
+  description="Gestión de nómina, trámites ante el IESS y el Ministerio de Trabajo, seguridad ocupacional y gestión empresarial en Ecuador."
+>
+  <PageHero
+    title="Asesoría Laboral & Empresarial"
+    sub="Apoyo para alcanzar una gestión eficiente del talento humano y de los procesos administrativos de tu organización."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios', href: '/servicios/' }, { label: 'Asesoría Laboral & Empresarial' }]}
+  />
+  <div class="section">
+    <div class="svc-detail-grid">
+      <div class="svc-detail-body">
+        <h2>Gestión del talento y de tu organización</h2>
+        <p>Brindamos apoyo mediante la asesoría de nuestros especialistas, incluidas ONGs. Gracias al profundo conocimiento en la materia, desarrollamos soluciones personalizadas que impulsan el rendimiento y la efectividad de tu organización.</p>
+        <p>Además, evaluamos el entorno económico-financiero de tu organización para diseñar políticas y procesos administrativos adaptados a los cambios del entorno actual.</p>
+        <h2>¿Qué incluye?</h2>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">✓</span>Trámites ante el Instituto Ecuatoriano de Seguridad Social (IESS)</div>
+          <div class="check-item"><span class="check-icon">✓</span>Gestión ante el Ministerio de Trabajo</div>
+          <div class="check-item"><span class="check-icon">✓</span>Seguridad y salud ocupacional</div>
+          <div class="check-item"><span class="check-icon">✓</span>Administración general y gestión empresarial</div>
+          <div class="check-item"><span class="check-icon">✓</span>Control y cumplimiento normativo</div>
+        </div>
+        <h2>¿Para quién es?</h2>
+        <p>Personas naturales, jurídicas y ONGs que necesitan ordenar su gestión laboral y administrativa con respaldo legal.</p>
+      </div>
+      <ServiceSidebar current="asesoria-laboral-empresarial" />
+    </div>
+  </div>
+</Base>

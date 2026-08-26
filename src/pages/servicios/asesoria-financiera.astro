@@ -1,0 +1,37 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceSidebar from '../../components/ServiceSidebar.astro';
+---
+<Base
+  title="Asesoría Financiera — DEVCORP S.A.S. | Quito, Ecuador"
+  description="Planificación presupuestaria, análisis financiero, flujo de caja e indicadores de gestión para empresas, personas naturales y ONGs en Ecuador."
+>
+  <PageHero
+    title="Asesoría Financiera"
+    sub="Ofrecemos el respaldo de una asesoría profesional y confiable en torno a los aspectos financieros de tu organización."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios', href: '/servicios/' }, { label: 'Asesoría Financiera' }]}
+  />
+  <div class="section">
+    <div class="svc-detail-grid">
+      <div class="svc-detail-body">
+        <div class="svc-detail-photo">
+          <img src="/images/stock-finanzas.jpg" alt="Análisis financiero con indicadores y presupuestos" loading="lazy" />
+        </div>
+        <h2>Estrategias financieras a la medida</h2>
+        <p>Nuestro equipo evalúa, diseña y propone estrategias personalizadas que se adaptan a las necesidades y oportunidades de su firma. Realizamos un diagnóstico integral de la situación económico-financiera antes de proponer cualquier plan de acción.</p>
+        <h2>¿Qué incluye?</h2>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">✓</span>Planificación presupuestaria anual y por proyectos</div>
+          <div class="check-item"><span class="check-icon">✓</span>Análisis financiero y de indicadores de gestión</div>
+          <div class="check-item"><span class="check-icon">✓</span>Evaluación de viabilidad de inversiones</div>
+          <div class="check-item"><span class="check-icon">✓</span>Diseño de estrategias de financiamiento</div>
+          <div class="check-item"><span class="check-icon">✓</span>Reportes financieros para la alta dirección</div>
+        </div>
+        <h2>¿Para quién es?</h2>
+        <p>Empresas en crecimiento, personas naturales y jurídicas, y organizaciones no gubernamentales que requieren una gestión financiera ordenada y estratégica.</p>
+      </div>
+      <ServiceSidebar current="asesoria-financiera" />
+    </div>
+  </div>
+</Base>

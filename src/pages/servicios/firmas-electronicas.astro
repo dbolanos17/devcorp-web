@@ -1,0 +1,129 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { SITE } from '../../data/site';
+
+const PRECIOS = [
+  { years: '1 año', price: '$18.50' },
+  { years: '2 años', price: '$32.50' },
+  { years: '3 años', price: '$44.99' },
+  { years: '4 años', price: '$54.99' },
+  { years: '5 años', price: '$64.99' },
+];
+---
+<Base
+  title="Firmas Electrónicas en Ecuador — DEVCORP S.A.S."
+  description="Obtén tu firma electrónica en minutos, para personas naturales o jurídicas, con validez legal en Ecuador. Vigencia de 1 a 5 años desde $18.50."
+>
+  <PageHero
+    title="Firmas Electrónicas"
+    sub="Obtén tu firma electrónica en minutos. Completa el formulario y te contactamos de inmediato."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios', href: '/servicios/' }, { label: 'Firmas Electrónicas' }]}
+  />
+  <div class="section">
+    <div class="svc-detail-grid">
+      <div class="svc-detail-body">
+        <h2>Rápida, segura y válida legalmente</h2>
+        <p>Ofrecemos la emisión de firmas electrónicas para personas naturales y jurídicas, con validez legal en Ecuador, en un proceso simple y guiado por nuestro equipo.</p>
+        <h2>¿Qué incluye?</h2>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">✓</span>Emisión para persona natural o jurídica</div>
+          <div class="check-item"><span class="check-icon">✓</span>Firma con RUC (opcional)</div>
+          <div class="check-item"><span class="check-icon">✓</span>Acompañamiento en la carga de documentos</div>
+          <div class="check-item"><span class="check-icon">✓</span>Entrega en minutos una vez validada la información</div>
+        </div>
+        <h2>Tarifas vigentes</h2>
+        <div class="price-table">
+          {PRECIOS.map((p) => (
+            <div class="price-row"><span>{p.years}</span><strong>{p.price}</strong></div>
+          ))}
+        </div>
+      </div>
+      <aside class="svc-sidebar">
+        <h4>Solicita tu firma electrónica</h4>
+        <form id="form-firmas" data-key={SITE.web3formsKey}>
+          <div class="form-group"><input type="text" name="nombre" placeholder="Apellidos y nombres completos *" required /></div>
+          <div class="form-group"><input type="text" name="cedula" placeholder="Cédula de identidad *" required /></div>
+          <div class="form-group"><input type="email" name="correo" placeholder="Correo electrónico *" required /></div>
+          <div class="form-group"><input type="tel" name="telefono" placeholder="Número de teléfono *" required /></div>
+          <div class="form-group">
+            <select name="tipo" required>
+              <option value="" disabled selected>Persona Natural o Jurídica *</option>
+              <option>Persona Natural</option>
+              <option>Persona Jurídica</option>
+            </select>
+          </div>
+          <div class="form-group"><input type="text" name="ruc" placeholder="RUC (si aplica)" /></div>
+          <div class="form-group">
+            <select name="vigencia" id="firma-vigencia" required>
+              <option value="" disabled selected>Años de vigencia *</option>
+              <option value="1 año — $18.50" data-price="$18.50">1 año — $18.50</option>
+              <option value="2 años — $32.50" data-price="$32.50">2 años — $32.50</option>
+              <option value="3 años — $44.99" data-price="$44.99">3 años — $44.99</option>
+              <option value="4 años — $54.99" data-price="$54.99">4 años — $54.99</option>
+              <option value="5 años — $64.99" data-price="$64.99">5 años — $64.99</option>
+            </select>
+          </div>
+          <p class="price-hint">Total a pagar: <strong id="firma-precio">—</strong></p>
+          <button class="btn-submit" type="submit" id="firmas-btn">Enviar solicitud</button>
+          <p class="file-hint">Al enviar, te contactamos para recibir la copia de tu cédula y RUC (si aplica) y coordinar el pago.</p>
+          <p class="form-notice" id="firmas-notice"></p>
+        </form>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const sel = document.getElementById('firma-vigencia') as HTMLSelectElement | null;
+    sel?.addEventListener('change', () => {
+      const price = sel.options[sel.selectedIndex]?.dataset.price ?? '—';
+      const el = document.getElementById('firma-precio');
+      if (el) el.textContent = price;
+    });
+
+    const form = document.getElementById('form-firmas') as HTMLFormElement | null;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('firmas-btn') as HTMLButtonElement;
+      const notice = document.getElementById('firmas-notice')!;
+      const d = new FormData(form);
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      notice.classList.remove('show');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: form.dataset.key,
+            subject: `Solicitud de Firma Electrónica — ${d.get('nombre')}`,
+            from_name: 'Sitio Web DEVCORP',
+            'Nombre': d.get('nombre'),
+            'Cédula': d.get('cedula'),
+            'Correo': d.get('correo'),
+            'Teléfono': d.get('telefono'),
+            'Tipo': d.get('tipo'),
+            'RUC': d.get('ruc') || 'No aplica',
+            'Vigencia': d.get('vigencia'),
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          notice.textContent = '✅ Solicitud enviada correctamente. Te contactaremos en menos de 24 horas.';
+          form.reset();
+          document.getElementById('firma-precio')!.textContent = '—';
+        } else {
+          notice.textContent = '⚠️ No se pudo enviar la solicitud. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+        }
+      } catch {
+        notice.textContent = '⚠️ No se pudo enviar la solicitud. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+      }
+
+      notice.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Enviar solicitud';
+    });
+  </script>
+</Base>

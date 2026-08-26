@@ -1,0 +1,91 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { SITE } from '../../data/site';
+---
+<Base
+  title="Negociación de Notas de Crédito del SRI — DEVCORP S.A.S."
+  description="Convierte tus notas de crédito del SRI en liquidez inmediata, de forma legal y transparente. Evaluación gratuita y pago en tiempo récord."
+>
+  <PageHero
+    title="Negociación de Notas de Crédito del SRI"
+    sub="Convierte tus notas de crédito en liquidez inmediata, de forma legal y transparente."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios', href: '/servicios/' }, { label: 'Notas de Crédito SRI' }]}
+  />
+  <div class="section">
+    <div class="svc-detail-grid">
+      <div class="svc-detail-body">
+        <h2>¿Por qué elegirnos?</h2>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">✓</span><span><strong>Liquidez inmediata:</strong> obtén el valor de tu nota de crédito sin esperas.</span></div>
+          <div class="check-item"><span class="check-icon">✓</span><span><strong>Proceso legal y transparente:</strong> cumplimos con todas las normativas vigentes del SRI.</span></div>
+          <div class="check-item"><span class="check-icon">✓</span><span><strong>Asesoría personalizada:</strong> nuestro equipo te guía en cada paso del proceso.</span></div>
+          <div class="check-item"><span class="check-icon">✓</span><span><strong>Sin complicaciones:</strong> nos encargamos de todos los trámites por ti.</span></div>
+        </div>
+        <h2>¿Cómo funciona?</h2>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">1</span><span><strong>Evaluación:</strong> verificamos la validez y el monto de tu nota de crédito.</span></div>
+          <div class="check-item"><span class="check-icon">2</span><span><strong>Oferta:</strong> te presentamos una propuesta de compra.</span></div>
+          <div class="check-item"><span class="check-icon">3</span><span><strong>Formalización:</strong> firmamos un acuerdo respaldado legalmente.</span></div>
+          <div class="check-item"><span class="check-icon">4</span><span><strong>Pago:</strong> recibes el dinero en tu cuenta bancaria en tiempo récord.</span></div>
+        </div>
+        <h2>Requisitos</h2>
+        <p>Nota de crédito electrónica vigente emitida por el SRI, y documentación que respalde la titularidad de la nota.</p>
+      </div>
+      <aside class="svc-sidebar">
+        <h4>Solicita tu cotización</h4>
+        <form id="form-notas" data-key={SITE.web3formsKey}>
+          <div class="form-group"><input type="text" name="nombre" placeholder="Nombre completo *" required /></div>
+          <div class="form-group"><input type="tel" name="telefono" placeholder="Teléfono *" required /></div>
+          <div class="form-group"><input type="email" name="correo" placeholder="Correo electrónico *" required /></div>
+          <div class="form-group"><input type="text" name="monto" placeholder="Monto de la nota de crédito *" required /></div>
+          <button class="btn-submit" type="submit" id="notas-btn">Enviar solicitud</button>
+          <p class="form-notice" id="notas-notice"></p>
+        </form>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('form-notas') as HTMLFormElement | null;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('notas-btn') as HTMLButtonElement;
+      const notice = document.getElementById('notas-notice')!;
+      const d = new FormData(form);
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      notice.classList.remove('show');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: form.dataset.key,
+            subject: `Cotización de Nota de Crédito SRI — ${d.get('nombre')}`,
+            from_name: 'Sitio Web DEVCORP',
+            'Nombre': d.get('nombre'),
+            'Teléfono': d.get('telefono'),
+            'Correo': d.get('correo'),
+            'Monto de la nota': d.get('monto'),
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          notice.textContent = '✅ Solicitud enviada correctamente. Te contactaremos en menos de 24 horas.';
+          form.reset();
+        } else {
+          notice.textContent = '⚠️ No se pudo enviar la solicitud. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+        }
+      } catch {
+        notice.textContent = '⚠️ No se pudo enviar la solicitud. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+      }
+
+      notice.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Enviar solicitud';
+    });
+  </script>
+</Base>

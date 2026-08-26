@@ -1,0 +1,18 @@
+---
+import { SERVICES } from '../data/site';
+interface Props {
+  current: string;
+}
+const { current } = Astro.props;
+---
+<aside class="svc-sidebar">
+  <h4>Servicios relacionados</h4>
+  <div class="svc-sidebar-list">
+    {SERVICES.map((s) => (
+      <a class:list={[{ active: s.slug === current }]} href={`/servicios/${s.slug}/`}>
+        {s.icon} {s.title}
+      </a>
+    ))}
+  </div>
+  <a class="btn-primary" style="width:100%;justify-content:center;" href="/contacto/">Solicitar asesoría →</a>
+</aside>
