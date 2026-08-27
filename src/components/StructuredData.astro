@@ -1,0 +1,24 @@
+---
+import { SITE } from '../data/site';
+
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: SITE.name,
+  url: SITE.url,
+  email: SITE.email,
+  telephone: SITE.phone,
+  areaServed: 'EC',
+  address: { '@type': 'PostalAddress', addressCountry: 'EC' },
+  sameAs: [SITE.social.facebook, SITE.social.instagram, SITE.social.linkedin],
+};
+
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: SITE.name,
+  url: SITE.url,
+};
+---
+<script type="application/ld+json" set:html={JSON.stringify(orgLd)} />
+<script type="application/ld+json" set:html={JSON.stringify(websiteLd)} />

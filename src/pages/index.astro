@@ -1,142 +1,276 @@
 ---
 import Base from '../layouts/Base.astro';
-import ServiceCard from '../components/ServiceCard.astro';
+import PlanCard from '../components/PlanCard.astro';
 import FinalCta from '../components/FinalCta.astro';
 import { getCollection } from 'astro:content';
-import { SITE, SERVICES } from '../data/site';
+import { SITE, PLANS, HOME_PLAN_SLUGS, waLink, WA_MESSAGES } from '../data/site';
 
 const testimonials = (await getCollection('testimonials')).sort(
   (a, b) => a.data.order - b.data.order
 );
 const initials = (name: string) =>
-  name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+  name.split(/[\s&]+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+
+const homePlans = HOME_PLAN_SLUGS.map((slug) => PLANS.find((p) => p.slug === slug)!);
+const enterprise = PLANS.find((p) => p.slug === 'enterprise')!;
+
+const painPoints = [
+  '¿Conoces realmente cuánto gana tu empresa?',
+  '¿Sabes cuánto efectivo tendrás dentro de ocho semanas?',
+  '¿Tu contador te entrega información o también recomendaciones?',
+  '¿Conoces qué clientes, servicios o proyectos son realmente rentables?',
+  '¿Planificas impuestos o solamente los declaras cuando llega la fecha?',
+];
+
+const dimensions = [
+  { icon: '📊', title: 'Contabilidad', text: 'Información ordenada, conciliada y confiable.' },
+  { icon: '🧾', title: 'Tributación', text: 'Cumplimiento y planificación preventiva.' },
+  { icon: '👥', title: 'Laboral', text: 'Nómina, IESS y obligaciones laborales.' },
+  { icon: '💰', title: 'Finanzas', text: 'Caja, presupuesto, rentabilidad, KPIs y decisiones.' },
+];
+
+const compareCols = [
+  { key: 'trad', label: 'Contador tradicional' },
+  { key: 'devcorp', label: 'DEVCORP 360', hi: true },
+  { key: 'interno', label: 'Departamento interno' },
+];
+const compareRows = [
+  { feature: 'Cumplimiento tributario', trad: 'Sí', devcorp: 'Sí', interno: 'Sí' },
+  { feature: 'Contabilidad', trad: 'Sí', devcorp: 'Sí', interno: 'Sí' },
+  { feature: 'Nómina', trad: 'Generalmente no', devcorp: 'Sí', interno: 'Sí' },
+  { feature: 'Dashboard financiero', trad: 'No', devcorp: 'Sí', interno: 'Depende del equipo' },
+  { feature: 'Presupuesto', trad: 'No', devcorp: 'Sí', interno: 'Depende del equipo' },
+  { feature: 'Análisis financiero', trad: 'Limitado', devcorp: 'Sí', interno: 'Depende del equipo' },
+  { feature: 'Flujo de caja', trad: 'No', devcorp: 'Sí', interno: 'Depende del equipo' },
+  { feature: 'Reuniones gerenciales', trad: 'Ocasionales', devcorp: 'Mensuales', interno: 'Según disponibilidad' },
+  { feature: 'Continuidad del servicio', trad: 'Depende de una persona', devcorp: 'Firma con equipo y procesos', interno: 'Depende de contratación y rotación' },
+  { feature: 'Costo estructural', trad: 'Bajo, servicio acotado', devcorp: 'Un solo honorario mensual', interno: 'Salarios, cargas sociales, herramientas y gestión' },
+];
+
+const steps = [
+  { n: 1, title: 'Diagnóstico', text: 'Conocemos empresa, volumen, equipo y necesidades.' },
+  { n: 2, title: 'Propuesta', text: 'Recomendamos el plan y alcance adecuado.' },
+  { n: 3, title: 'Onboarding', text: 'Configuramos accesos, información y calendario.' },
+  { n: 4, title: 'Operación mensual', text: 'Gestionamos el alcance contratado.' },
+  { n: 5, title: 'Análisis y decisiones', text: 'Entregamos información y recomendaciones.' },
+];
 ---
 <Base>
+  <!-- SECCIÓN 1 — HERO -->
   <div class="hero hero-photo">
     <img class="hero-bg" src="/images/stock-oficina.jpg" alt="" role="presentation" />
     <div class="hero-overlay"></div>
     <div class="hero-inner">
       <div class="hero-content">
-        <h1>Impulsamos el crecimiento de tu empresa<span class="line2">con asesoría integral.</span></h1>
-        <p class="hero-sub">Soluciones financieras, contables, tributarias y laborales a la medida de tu negocio. Más de una década ayudando a empresas, personas naturales y ONGs a tomar mejores decisiones.</p>
+        <h1>Tu área contable, tributaria y financiera<span class="line2">externa</span></h1>
+        <p class="hero-sub">
+          Ayudamos a PYMEs ecuatorianas a cumplir sus obligaciones, controlar su flujo de caja y entender la
+          rentabilidad del negocio sin tener que construir un departamento financiero interno.
+        </p>
+        <div class="pillars-row">
+          <span class="pillar-chip">Contabilidad</span>
+          <span class="pillar-chip">Tributación</span>
+          <span class="pillar-chip">Nómina</span>
+          <span class="pillar-chip">Finanzas</span>
+          <span class="pillar-chip">CFO externo</span>
+        </div>
         <div class="hero-ctas">
-          <a class="btn-primary" href="/contacto/">Solicita tu asesoría →</a>
-          <a class="btn-secondary" href="/servicios/">Ver servicios</a>
+          <a class="btn-primary" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'hero' })">Solicitar diagnóstico empresarial →</a>
+          <a class="btn-secondary" href="/planes/">Conocer soluciones</a>
         </div>
-        <div class="hero-stats">
-          <div class="stat-card"><div class="stat-num">+100</div><div class="stat-label">Clientes atendidos</div></div>
-          <div class="stat-card"><div class="stat-num">11 años</div><div class="stat-label">De experiencia</div></div>
-          <div class="stat-card"><div class="stat-num">99%</div><div class="stat-label">Satisfacción</div></div>
-        </div>
-      </div>
-      <div class="hero-visual-panel">
-        <div class="hero-visual-card">
-          <div class="hvp-badge"><img src="/isotipo-devcorp.png" alt="Isotipo DEVCORP" /></div>
-          <div class="hvp-title">Asesoría integral 360 para tu empresa</div>
-          <div class="hvp-pillars">
-            <a class="hvp-pill" href="/servicios/asesoria-financiera/">💰 Financiera</a>
-            <a class="hvp-pill" href="/servicios/asesoria-contable/">📊 Contable</a>
-            <a class="hvp-pill" href="/servicios/asesoria-tributaria/">🧾 Tributaria</a>
-            <a class="hvp-pill" href="/servicios/asesoria-laboral-empresarial/">👥 Laboral</a>
-          </div>
-        </div>
+        <div class="coverage-note"><span class="dot"></span> {SITE.coverage}.</div>
       </div>
     </div>
   </div>
 
+  <!-- SECCIÓN 2 — PROBLEMA -->
   <div class="section">
     <div class="section-header center">
-      <h2 class="section-title">Soluciones <span class="hi">integrales</span> para tu negocio</h2>
-      <p class="section-sub">Evaluamos, diseñamos y proponemos estrategias personalizadas que se adaptan a las necesidades y oportunidades de tu empresa.</p>
+      <h2 class="section-title">Cumplir no es suficiente. <span class="hi">También necesitas entender tu negocio.</span></h2>
     </div>
-    <div class="services-grid">
-      {SERVICES.map((s) => <ServiceCard service={s} />)}
+    <div class="problem-grid">
+      {painPoints.map((p, i) => (
+        <div class="problem-item">
+          <div class="problem-mark">{i + 1}</div>
+          <p>{p}</p>
+        </div>
+      ))}
     </div>
+    <p class="problem-close">DEVCORP convierte la información contable en control y decisiones.</p>
   </div>
 
+  <!-- SECCIÓN 3 — PROPUESTA DE VALOR -->
   <div class="section section-dark">
-    <div class="why-grid">
-      <div>
-        <span class="tag" style="font-size:.9rem;">¿Por qué DEVCORP?</span>
-        <h2 class="section-title section-title-white" style="margin-bottom:32px;">Aliados estratégicos para el <span class="hi">crecimiento</span> de tu negocio</h2>
-        <div class="why-list">
-          <div class="why-item"><div class="why-num">01</div><div class="why-text"><strong>Equipo multidisciplinario</strong><span>Profesionales especializados en finanzas, contabilidad, tributación y derecho laboral.</span></div></div>
-          <div class="why-item"><div class="why-num">02</div><div class="why-text"><strong>Soluciones a la medida</strong><span>Diagnosticamos tu realidad económica antes de proponer cualquier estrategia.</span></div></div>
-          <div class="why-item"><div class="why-num">03</div><div class="why-text"><strong>Cumplimiento garantizado</strong><span>Trabajamos en estricto apego a la normativa vigente del SRI, IESS y entes de control.</span></div></div>
-          <div class="why-item"><div class="why-num">04</div><div class="why-text"><strong>Acompañamiento continuo</strong><span>No te dejamos solo: te acompañamos en cada trámite administrativo y legal.</span></div></div>
-        </div>
-      </div>
-      <div class="why-visual">
-        <div class="metric-row">
-          <div class="metric"><span class="metric-num">+100</span><span class="metric-label">Empresas asesoradas</span></div>
-          <div class="metric"><span class="metric-num">11</span><span class="metric-label">Años en el mercado</span></div>
-          <div class="metric"><span class="metric-num">99%</span><span class="metric-label">Retención de clientes</span></div>
-          <div class="metric"><span class="metric-num">24h</span><span class="metric-label">Tiempo de respuesta</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="section section-alt">
-    <div class="spotlight-grid">
-      <div class="spotlight-photo">
-        <img src="/images/equipo-reunion.jpg" alt="Equipo DEVCORP en reunión de estrategia financiera" loading="lazy" />
-      </div>
-      <div class="about-text">
-        <span class="tag">Nosotros</span>
-        <h2>Más de una década impulsando el desarrollo empresarial en Ecuador</h2>
-        <p>DEVCORP S.A.S. nace con el propósito de ofrecer el respaldo de una asesoría profesional y confiable a empresas, personas naturales, jurídicas y organizaciones no gubernamentales.</p>
-        <p>Evaluamos el entorno económico-financiero de cada organización para diseñar soluciones que se adapten a los cambios constantes del entorno empresarial ecuatoriano.</p>
-        <a class="btn-primary" href="/nosotros/">Conoce nuestra historia →</a>
-      </div>
-    </div>
-  </div>
-
-  <div class="trust-bar">
-    <span class="trust-label">Trabajamos en cumplimiento con</span>
-    <div class="trust-marquee">
-      <div class="trust-track">
-        <img src="/images/logo-sri.png" alt="SRI — Servicio de Rentas Internas" />
-        <img src="/images/logo-iess.png" alt="IESS — Instituto Ecuatoriano de Seguridad Social" />
-        <img src="/images/logo-mdt.jpeg" alt="Ministerio del Trabajo" />
-        <img src="/images/logo-scvs.png" alt="Superintendencia de Compañías y Valores" />
-        <img src="/images/logo-seps.png" alt="Superintendencia de Economía Popular y Solidaria" />
-        <img src="/images/logo-superbancos.jpeg" alt="Superintendencia de Bancos" />
-        <img src="/images/logo-sri.png" alt="" aria-hidden="true" />
-        <img src="/images/logo-iess.png" alt="" aria-hidden="true" />
-        <img src="/images/logo-mdt.jpeg" alt="" aria-hidden="true" />
-        <img src="/images/logo-scvs.png" alt="" aria-hidden="true" />
-        <img src="/images/logo-seps.png" alt="" aria-hidden="true" />
-        <img src="/images/logo-superbancos.jpeg" alt="" aria-hidden="true" />
-      </div>
-    </div>
-  </div>
-
-  <div class="section">
     <div class="section-header center">
-      <span class="tag">Testimonios</span>
-      <h2 class="section-title">Lo que dicen <span class="hi">nuestros clientes</span></h2>
+      <span class="tag" style="font-size:.9rem;">Propuesta de valor</span>
+      <h2 class="section-title section-title-white">Una sola firma. <span class="hi">Cuatro dimensiones críticas</span> de tu empresa.</h2>
     </div>
-    <div class="test-grid">
-      {testimonials.map((t) => (
-        <div class="test-card">
-          <div class="stars">{'★'.repeat(t.data.stars)}</div>
-          <p class="test-quote">"{t.body?.trim()}"</p>
-          <div class="test-author">
-            <div class="avatar">{initials(t.data.name)}</div>
-            <div>
-              <div class="author-name">{t.data.name}</div>
-              <div class="author-role">{t.data.role}</div>
+    <div class="dims-grid">
+      {dimensions.map((d) => (
+        <div class="dim-card">
+          <div class="dim-icon">{d.icon}</div>
+          <h3>{d.title}</h3>
+          <p>{d.text}</p>
+        </div>
+      ))}
+    </div>
+    <p class="dims-message">Menos proveedores. Más control. Una sola visión del negocio.</p>
+  </div>
+
+  <!-- SECCIÓN 4 — PLANES -->
+  <div class="section" id="planes-home">
+    <div class="section-header center">
+      <span class="tag">Soluciones recurrentes</span>
+      <h2 class="section-title">Elige el nivel de <span class="hi">acompañamiento</span> que necesitas</h2>
+    </div>
+    <div class="plan-grid">
+      {homePlans.map((p) => <PlanCard plan={p} compact />)}
+    </div>
+    <p class="plan-note" style="text-align:center;font-size:.85rem;margin-top:24px;">
+      {enterprise.name}: {enterprise.pitch} <a href="/diagnostico/" style="color:var(--blue);font-weight:700;">Solicitar evaluación →</a>
+    </p>
+    <div class="plans-compare-link"><a href="/planes/">Comparar todos los planes →</a></div>
+  </div>
+
+  <!-- SECCIÓN 5 — DIFERENCIADOR -->
+  <div class="section section-dark">
+    <div class="section-header center">
+      <h2 class="section-title section-title-white">No te entregamos <span class="hi">solamente balances.</span></h2>
+    </div>
+    <div class="diff-panel">
+      <p class="diff-lead">Cada mes queremos ayudarte a responder:</p>
+      <div class="diff-cols">
+        <div class="diff-col">
+          <div class="diff-col-num">5</div>
+          <h4>Cosas que están ocurriendo en tu negocio</h4>
+          <p>Hallazgos concretos de tu operación financiera y contable del mes: qué cambió, qué se desvió, qué mejoró.</p>
+        </div>
+        <div class="diff-col">
+          <div class="diff-col-num">3</div>
+          <h4>Decisiones que recomendamos tomar</h4>
+          <p>No solo datos: una lectura gerencial de qué hacer con esa información, mes a mes.</p>
+        </div>
+      </div>
+      <p class="diff-foot">Buscamos transformar la información contable en acciones gerenciales — disponible desde DEVCORP 360.</p>
+    </div>
+  </div>
+
+  <!-- Testimonios reales -->
+  {testimonials.length > 0 && (
+    <div class="section">
+      <div class="section-header center">
+        <span class="tag">Testimonios</span>
+        <h2 class="section-title">Lo que dicen <span class="hi">nuestros clientes</span></h2>
+      </div>
+      <div class="test-grid">
+        {testimonials.map((t) => (
+          <div class="test-card">
+            <div class="stars">{'★'.repeat(t.data.stars)}</div>
+            <p class="test-quote">"{t.body?.trim()}"</p>
+            <div class="test-author">
+              <div class="avatar">{initials(t.data.name)}</div>
+              <div>
+                <div class="author-name">{t.data.name}</div>
+                {t.data.role && <div class="author-role">{t.data.role}</div>}
+              </div>
             </div>
           </div>
+        ))}
+      </div>
+    </div>
+  )}
+
+  <!-- SECCIÓN 6 — DEVCORP VS ALTERNATIVAS -->
+  <div class="section section-alt">
+    <div class="section-header center">
+      <span class="tag">Comparativo</span>
+      <h2 class="section-title">Una alternativa flexible a <span class="hi">construir por tu cuenta</span></h2>
+      <p class="section-sub">Una alternativa flexible a construir internamente múltiples funciones administrativas y financieras.</p>
+    </div>
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Función</th>
+            {compareCols.map((c) => <th class:list={{ hi: c.hi }}>{c.label}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {compareRows.map((r) => (
+            <tr>
+              <td>{r.feature}</td>
+              <td>{r.trad}</td>
+              <td class="hi">{r.devcorp}</td>
+              <td>{r.interno}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="compare-note">No siempre somos la opción más barata — somos una forma de tener control financiero real sin construir un equipo interno completo.</p>
+  </div>
+
+  <!-- SECCIÓN 7 — CÓMO FUNCIONA -->
+  <div class="section">
+    <div class="section-header center">
+      <span class="tag">Proceso</span>
+      <h2 class="section-title">Cómo <span class="hi">funciona</span></h2>
+    </div>
+    <div class="steps-row">
+      {steps.map((s) => (
+        <div class="step-card">
+          <div class="step-num">{s.n}</div>
+          <h4>{s.title}</h4>
+          <p>{s.text}</p>
         </div>
       ))}
     </div>
   </div>
 
-  <FinalCta sub="Agenda una asesoría gratuita con nuestro equipo de expertos.">
-    <Fragment slot="title">¿Listo para hacer crecer <span>tu negocio</span>?</Fragment>
-    <a class="btn-wa" href={SITE.whatsappGreeting} target="_blank" rel="noopener">📱 Escríbenos por WhatsApp</a>
-    <a class="btn-primary" href="/contacto/">Agendar asesoría</a>
+  <!-- SECCIÓN 8 — ONBOARDING -->
+  <div class="section section-alt">
+    <div class="section-header center">
+      <span class="tag">Onboarding</span>
+      <h2 class="section-title">Empezar es <span class="hi">simple</span></h2>
+    </div>
+    <div class="onboarding-grid">
+      <div class="onboarding-card">
+        <h4>Contrato mínimo de 6 meses</h4>
+        <p>Onboarding estándar <strong>sin costo</strong>: configuración de accesos, información y calendario.</p>
+      </div>
+      <div class="onboarding-card">
+        <h4>Modalidad mes a mes</h4>
+        <p>Onboarding equivalente al <strong>50% de una mensualidad</strong> del plan contratado.</p>
+      </div>
+    </div>
+    <p class="onboarding-aside">
+      El onboarding gratuito aplica a configuración y migración estándar, con información completa y conciliada.
+      Regularización histórica, reconstrucción contable, depuración de saldos o migraciones complejas se cotizan
+      por separado.
+    </p>
+  </div>
+
+  <!-- SECCIÓN 9 — ATENCIÓN NACIONAL -->
+  <div class="section section-dark">
+    <div class="section-header center">
+      <span class="tag" style="font-size:.9rem;">Cobertura</span>
+      <h2 class="section-title section-title-white">Tu equipo financiero puede estar <span class="hi">donde esté tu empresa.</span></h2>
+      <p class="section-sub" style="color:rgba(255,255,255,.5);margin-left:auto;margin-right:auto;">DEVCORP presta servicios de forma remota a empresas en todo Ecuador.</p>
+    </div>
+    <div class="coverage-cities">
+      <span class="coverage-city">Quito</span>
+      <span class="coverage-city">Guayaquil</span>
+      <span class="coverage-city">Cuenca</span>
+      <span class="coverage-city">Ambato</span>
+      <span class="coverage-city">Manta</span>
+      <span class="coverage-city">Resto del país</span>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 10 — CTA FINAL -->
+  <FinalCta sub="Solicita un Diagnóstico Empresarial DEVCORP 360 y determinemos qué nivel de acompañamiento necesita tu empresa.">
+    <Fragment slot="title">¿Tu empresa necesita <span>más que un contador?</span></Fragment>
+    <a class="btn-primary" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'final_cta' })">Solicitar diagnóstico</a>
+    <a class="btn-wa" href={waLink(WA_MESSAGES.diagnostico)} target="_blank" rel="noopener" onclick="dcTrack('click_whatsapp', { location: 'final_cta' })">Hablar por WhatsApp</a>
   </FinalCta>
 </Base>

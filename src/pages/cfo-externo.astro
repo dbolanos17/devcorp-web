@@ -1,0 +1,88 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PlanCard from '../components/PlanCard.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { PLANS, waLink, WA_MESSAGES } from '../data/site';
+
+const cfoPlans = PLANS.filter((p) => p.slug === 'cfo-advisory' || p.slug === 'cfo-integral');
+
+const problems = [
+  'No sé cuánto efectivo tendré en las próximas semanas.',
+  'No tengo presupuesto ni forma de compararme contra él.',
+  'Desconozco mis márgenes reales por producto, servicio o cliente.',
+  'Crezco en ventas, pero no sé si soy más rentable.',
+  'Mi contador entrega balances, pero no análisis ni recomendaciones.',
+  'Necesito evaluar una inversión o una decisión de financiamiento.',
+  'Necesito información financiera clara para bancos o accionistas.',
+];
+---
+<Base
+  title="CFO Externo para PYMEs en Ecuador | DEVCORP"
+  description="Convierte tus estados financieros en decisiones de caja, rentabilidad y crecimiento. CFO Advisory desde $790 + IVA, CFO Integral $1.190 + IVA."
+>
+  <PageHero
+    title="CFO externo para PYMEs en Ecuador"
+    sub="Convierte tus estados financieros en decisiones de caja, rentabilidad y crecimiento."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'CFO externo' }]}
+  />
+
+  <div class="section">
+    <div class="section-header center">
+      <span class="tag">¿Te suena familiar?</span>
+      <h2 class="section-title">Problemas que <span class="hi">resolvemos</span></h2>
+    </div>
+    <div class="problem-grid">
+      {problems.map((p, i) => (
+        <div class="problem-item">
+          <div class="problem-mark">{i + 1}</div>
+          <p>{p}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="section section-alt">
+    <div class="section-header center">
+      <span class="tag">No es "contabilidad cara"</span>
+      <h2 class="section-title">Una función financiera <span class="hi">externa para la gerencia</span></h2>
+      <p class="section-sub">
+        CFO externo no es un servicio contable con otro nombre: es dirección financiera — la mirada de un CFO,
+        sin necesidad de contratarlo internamente.
+      </p>
+    </div>
+    <div class="plan-grid-2" style="max-width:820px;margin:0 auto;">
+      {cfoPlans.map((p) => <PlanCard plan={p} />)}
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header center">
+      <span class="tag">Diferencia clave</span>
+      <h2 class="section-title">Advisory vs. <span class="hi">Integral</span></h2>
+    </div>
+    <div class="onboarding-grid">
+      <div class="onboarding-card">
+        <h4>CFO Advisory — desde $790 + IVA</h4>
+        <p>
+          Utiliza información contable ya procesada por el cliente o su contador y se concentra en análisis y
+          decisiones: dashboard ejecutivo, flujo de caja de 13 semanas, presupuesto, forecast, KPIs, rentabilidad
+          y reporte ejecutivo. No incluye registro contable, digitación, declaraciones, ATS ni nómina.
+        </p>
+      </div>
+      <div class="onboarding-card">
+        <h4>CFO Integral — $1.190 + IVA</h4>
+        <p>
+          Incorpora además toda la gestión operativa incluida en DEVCORP 360: contabilidad, tributación y
+          nómina, junto con la dirección financiera del CFO externo.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <FinalCta sub="Con datos básicos de tu empresa evaluamos si necesitas Advisory o Integral.">
+    <Fragment slot="title">¿Tu empresa necesita <span>dirección financiera?</span></Fragment>
+    <a class="btn-primary" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'cfo-externo' }); dcTrack('click_cfo', { location: 'cfo-externo' })">Solicitar diagnóstico financiero</a>
+    <a class="btn-wa" href={waLink(WA_MESSAGES.cfo)} target="_blank" rel="noopener" onclick="dcTrack('click_whatsapp', { location: 'cfo-externo' })">Hablar por WhatsApp</a>
+  </FinalCta>
+</Base>

@@ -3,7 +3,7 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import FinalCta from '../../components/FinalCta.astro';
 import { getCollection } from 'astro:content';
-import { SITE } from '../../data/site';
+import { SITE, waLink, WA_MESSAGES } from '../../data/site';
 
 const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.date.getTime() - a.data.date.getTime()
@@ -60,7 +60,7 @@ const fmt = (d: Date) =>
 
   <FinalCta sub="Recibe noticias, guías y novedades directamente en tu WhatsApp.">
     <Fragment slot="title">¿Tienes dudas sobre algún <span>tema</span>?</Fragment>
-    <a class="btn-wa" href={SITE.whatsappGreeting} target="_blank" rel="noopener">📱 Consulta con un asesor</a>
+    <a class="btn-wa" href={waLink(WA_MESSAGES.general)} target="_blank" rel="noopener" onclick="dcTrack('click_whatsapp', { location: 'blog' })">📱 Consulta con un asesor</a>
   </FinalCta>
 
   <script>

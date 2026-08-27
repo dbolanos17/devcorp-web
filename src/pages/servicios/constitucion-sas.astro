@@ -1,0 +1,63 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { SITE, waLink, WA_MESSAGES } from '../../data/site';
+---
+<Base
+  title="Constitución de S.A.S. en Ecuador + RUC + Firma Electrónica | DEVCORP"
+  description="Constituye tu S.A.S. en Ecuador con RUC y firma electrónica incluidos, desde $199 + IVA. Puerta de entrada a la administración contable de tu nueva empresa."
+>
+  <PageHero
+    title="Constitución de S.A.S."
+    sub="Constituye tu empresa con todo lo esencial para empezar a operar formalmente."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios', href: '/servicios/' }, { label: 'Constitución de S.A.S.' }]}
+  />
+  <div class="section">
+    <div class="svc-detail-grid">
+      <div class="svc-detail-body">
+        <h2>Constitución + RUC + firma electrónica</h2>
+        <p>
+          Te acompañamos en todo el proceso de constitución de tu Sociedad por Acciones Simplificada (S.A.S.) en
+          Ecuador, con los elementos esenciales para que tu empresa pueda facturar y operar desde el primer día.
+        </p>
+        <h2>¿Qué incluye?</h2>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">✓</span>Constitución de la S.A.S.</div>
+          <div class="check-item"><span class="check-icon">✓</span>Obtención del RUC</div>
+          <div class="check-item"><span class="check-icon">✓</span>Firma electrónica</div>
+        </div>
+        <h2>Precio</h2>
+        <div class="price-table">
+          <div class="price-row"><span>Constitución + RUC + firma electrónica</span><strong>$199 + IVA</strong></div>
+        </div>
+        <h2>¿Y después?</h2>
+        <p>
+          Una empresa recién constituida ya tiene obligaciones contables y tributarias desde su primer mes. Muchos
+          de nuestros clientes de constitución continúan con nosotros para no empezar a operar desconectados de su
+          contabilidad.
+        </p>
+      </div>
+      <aside class="svc-sidebar">
+        <h4>Constituye tu empresa</h4>
+        <a
+          class="btn-wa"
+          style="width:100%;justify-content:center;margin-bottom:14px;"
+          href={waLink(WA_MESSAGES.constitucion)}
+          target="_blank"
+          rel="noopener"
+          onclick="dcTrack('click_constitucion_sas', { location: 'servicio' })"
+        >📱 Iniciar por WhatsApp</a>
+        <a class="btn-primary" style="width:100%;justify-content:center;" href={`mailto:${SITE.email}?subject=${encodeURIComponent('Quiero constituir una S.A.S.')}`}>
+          Escribir por correo →
+        </a>
+        <div class="pay-divider"><span>¿ya tienes tu empresa?</span></div>
+        <p class="file-hint" style="margin-bottom:14px;">
+          ¿Quieres que también administremos la contabilidad de tu nueva empresa?
+        </p>
+        <a class="btn-secondary" style="width:100%;justify-content:center;color:var(--text);border-color:rgba(40,11,74,.15);" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'constitucion-sas' })">
+          Solicitar diagnóstico →
+        </a>
+      </aside>
+    </div>
+  </div>
+</Base>

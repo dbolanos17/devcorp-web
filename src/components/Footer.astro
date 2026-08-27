@@ -1,12 +1,12 @@
 ---
-import { SITE, SERVICES } from '../data/site';
+import { SITE, SPECIALIZED_SERVICES } from '../data/site';
 const year = new Date().getFullYear();
 ---
 <footer>
   <div class="footer-grid">
     <div class="footer-col footer-brand">
       <div class="logo-text" style="color:#fff;font-size:1.4rem;">DEVCORP</div>
-      <p>Asesores Financieros, Contables, Tributarios y Legales en Ecuador. Más de una década acompañando el crecimiento de tu empresa.</p>
+      <p>Tu área contable, tributaria, laboral y financiera externa. {SITE.coverage}.</p>
       <div class="footer-social">
         <a href={SITE.social.facebook} target="_blank" rel="noopener" aria-label="Facebook">f</a>
         <a href={SITE.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">ig</a>
@@ -16,24 +16,29 @@ const year = new Date().getFullYear();
     <div class="footer-col">
       <h5>Navegación</h5>
       <a href="/">Inicio</a>
+      <a href="/planes/">Planes</a>
+      <a href="/servicios/">Servicios especializados</a>
+      <a href="/blog/">Recursos</a>
       <a href="/nosotros/">Nosotros</a>
-      <a href="/servicios/">Servicios</a>
-      <a href="/blog/">Blog</a>
-      <a href="/contacto/">Contacto</a>
+      <a href="/diagnostico/">Diagnóstico</a>
     </div>
     <div class="footer-col">
-      <h5>Servicios</h5>
-      {SERVICES.map((s) => <a href={`/servicios/${s.slug}/`}>{s.title}</a>)}
+      <h5>Soluciones</h5>
+      <a href="/outsourcing-contable/">Outsourcing contable</a>
+      <a href="/planes/#360">DEVCORP 360</a>
+      <a href="/cfo-externo/">CFO externo</a>
+      {SPECIALIZED_SERVICES.slice(0, 3).map((s) => <a href={`/servicios/${s.slug}/`}>{s.title}</a>)}
     </div>
     <div class="footer-col">
       <h5>Contacto</h5>
       <a href={SITE.phoneHref}>{SITE.phone}</a>
       <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
-      <span class="footer-line">{SITE.city}</span>
+      <span class="footer-line">{SITE.coverage}</span>
+      <a href="/politica-de-privacidad/">Política de privacidad</a>
       <a href="/login/">Portal de Clientes</a>
     </div>
   </div>
   <div class="footer-bottom">
-    <p>© {year} DEVCORP S.A.S. Todos los derechos reservados.</p>
+    <p>© {year} {SITE.name.replace(/\.$/, '')}. Todos los derechos reservados.</p>
   </div>
 </footer>

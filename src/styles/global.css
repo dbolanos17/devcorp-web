@@ -487,3 +487,138 @@ footer { background:#16171a;color:rgba(255,255,255,.5);padding:64px 6% 28px; }
   .form-card, .auth-card { padding:30px 22px; }
   .blog-featured-body { padding:30px 24px; }
 }
+
+/* ══════════════════════════════════════════════════
+   REPOSICIONAMIENTO — Home, Planes, Diagnóstico, FAQ
+   ══════════════════════════════════════════════════ */
+
+/* ─── Pills de pilares (hero) ─── */
+.pillars-row { display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 6px; }
+.pillar-chip { font-size:.78rem;font-weight:700;color:rgba(255,255,255,.85);background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);padding:6px 14px;border-radius:100px; }
+.coverage-note { display:flex;align-items:center;gap:8px;margin-top:20px;color:rgba(255,255,255,.5);font-size:.82rem; }
+.coverage-note .dot { width:6px;height:6px;border-radius:50%;background:var(--blue-light); }
+
+/* ─── Sección Problema ─── */
+.problem-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:18px;max-width:920px;margin:0 auto; }
+.problem-item { display:flex;gap:16px;align-items:flex-start;background:var(--white);border:1px solid rgba(40,11,74,.08);border-radius:14px;padding:22px 24px;box-shadow:0 8px 24px rgba(40,11,74,.05); }
+.problem-mark { flex-shrink:0;width:34px;height:34px;border-radius:9px;background:rgba(56,113,193,.1);color:var(--blue);display:flex;align-items:center;justify-content:center;font-weight:900;font-family:'Playfair Display',serif;font-size:1.1rem; }
+.problem-item p { font-size:.96rem;color:var(--text);line-height:1.6;font-weight:600; }
+.problem-close { text-align:center;margin-top:44px;font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:800;color:var(--purple);max-width:640px;margin-left:auto;margin-right:auto; }
+
+/* ─── Cuatro dimensiones ─── */
+.dims-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:20px; }
+.dims-grid-3 { display:grid;grid-template-columns:repeat(3,1fr);gap:20px; }
+@media (max-width:1024px) { .dims-grid-3 { grid-template-columns:repeat(2,1fr); } }
+@media (max-width:640px) { .dims-grid-3 { grid-template-columns:1fr; } }
+.dim-card { background:rgba(255,255,255,.04);border:1px solid rgba(81,173,229,.14);border-radius:16px;padding:30px 24px;text-align:center;transition:all .25s; }
+.dim-card:hover { background:rgba(56,113,193,.08);transform:translateY(-4px); }
+.dim-icon { font-size:1.8rem;margin-bottom:14px; }
+.dim-card h3 { font-family:'Playfair Display',serif;color:var(--white);font-size:1.1rem;font-weight:800;margin-bottom:8px; }
+.dim-card p { color:rgba(255,255,255,.5);font-size:.85rem;line-height:1.6; }
+.dims-message { text-align:center;margin-top:36px;color:rgba(255,255,255,.55);font-size:.95rem;font-weight:600; }
+
+/* ─── Tarjetas de planes ─── */
+.plan-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch; }
+.plan-grid-2 { display:grid;grid-template-columns:repeat(2,1fr);gap:24px;align-items:stretch; }
+@media (max-width:640px) { .plan-grid-2 { grid-template-columns:1fr; } }
+.plan-card { position:relative;background:var(--white);border:1.5px solid rgba(40,11,74,.09);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;transition:all .25s; }
+.plan-card:hover { transform:translateY(-6px);box-shadow:0 24px 56px rgba(40,11,74,.12); }
+.plan-card.featured { border-color:var(--blue);box-shadow:0 20px 60px rgba(56,113,193,.18);transform:scale(1.02); }
+.plan-badge { position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,var(--blue),var(--blue-light));color:#fff;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:6px 16px;border-radius:100px;box-shadow:0 6px 16px rgba(56,113,193,.35);white-space:nowrap; }
+.plan-name { font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--text);margin-bottom:6px; }
+.plan-audience { font-size:.8rem;color:var(--gray);margin-bottom:18px;line-height:1.5; }
+.plan-price { display:flex;align-items:baseline;gap:6px;margin-bottom:6px; }
+.plan-price .from { font-size:.78rem;color:var(--gray);font-weight:600; }
+.plan-price .amount { font-family:'Playfair Display',serif;font-size:2.1rem;font-weight:900;color:var(--purple); }
+.plan-price .period { font-size:.82rem;color:var(--gray); }
+.plan-pitch { font-size:.9rem;color:var(--text);line-height:1.6;margin-bottom:20px;padding-bottom:20px;border-bottom:1px solid var(--gray-light); }
+.plan-features { display:flex;flex-direction:column;gap:10px;margin-bottom:24px;flex:1; }
+.plan-feature { display:flex;gap:10px;align-items:flex-start;font-size:.86rem;color:var(--text);line-height:1.5; }
+.plan-feature::before { content:'✓';color:var(--blue);font-weight:900;flex-shrink:0; }
+.plan-note { font-size:.76rem;color:var(--gray);font-style:italic;margin-bottom:16px; }
+.plan-cta { display:block;text-align:center;background:linear-gradient(135deg,var(--blue),var(--blue-light));color:#fff;padding:14px;border-radius:9px;font-weight:700;font-size:.92rem;transition:all .2s; }
+.plan-cta:hover { transform:translateY(-2px);box-shadow:0 10px 26px rgba(56,113,193,.35); }
+.plan-card:not(.featured) .plan-cta { background:var(--dark); }
+.plans-compare-link { text-align:center;margin-top:36px; }
+.plans-compare-link a { color:var(--blue);font-weight:700;font-size:.92rem; }
+
+/* ─── Diferenciador: 5 cosas + 3 decisiones ─── */
+.diff-panel { max-width:920px;margin:0 auto;background:rgba(255,255,255,.05);border:1px solid rgba(81,173,229,.15);border-radius:22px;padding:44px; }
+.diff-lead { text-align:center;color:rgba(255,255,255,.6);font-size:1rem;margin-bottom:32px; }
+.diff-cols { display:grid;grid-template-columns:1fr 1fr;gap:28px; }
+.diff-col { background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:26px; }
+.diff-col-num { font-family:'Playfair Display',serif;font-size:2.4rem;font-weight:900;background:linear-gradient(135deg,var(--blue-light),var(--blue));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1;margin-bottom:10px; }
+.diff-col h4 { color:#fff;font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:800;margin-bottom:6px; }
+.diff-col p { color:rgba(255,255,255,.5);font-size:.86rem;line-height:1.6; }
+.diff-foot { text-align:center;margin-top:28px;color:rgba(255,255,255,.65);font-size:.92rem;max-width:600px;margin-left:auto;margin-right:auto; }
+
+/* ─── Comparativo DEVCORP vs alternativas ─── */
+.compare-wrap { overflow-x:auto;border-radius:16px;border:1px solid rgba(40,11,74,.08);box-shadow:0 8px 30px rgba(40,11,74,.05); }
+.compare-table { width:100%;border-collapse:collapse;min-width:640px;background:var(--white); }
+.compare-table th, .compare-table td { padding:14px 18px;text-align:left;font-size:.86rem;border-bottom:1px solid var(--gray-light); }
+.compare-table thead th { background:var(--dark);color:#fff;font-family:'Playfair Display',serif;font-weight:800;font-size:.88rem; }
+.compare-table thead th:first-child { border-top-left-radius:16px; }
+.compare-table thead th:last-child { border-top-right-radius:16px; }
+.compare-table thead th.hi { background:linear-gradient(135deg,var(--blue),var(--navy)); }
+.compare-table tbody td:first-child { font-weight:700;color:var(--text); }
+.compare-table tbody td.hi { background:rgba(56,113,193,.06);font-weight:700;color:var(--navy); }
+.compare-table tbody tr:last-child td { border-bottom:none; }
+.compare-note { margin-top:16px;font-size:.86rem;color:var(--gray);text-align:center; }
+
+/* ─── Cómo funciona (5 pasos) ─── */
+.steps-row { display:grid;grid-template-columns:repeat(5,1fr);gap:20px; }
+.step-card { text-align:center;position:relative; }
+.step-num { width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,var(--blue),var(--blue-light));color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-weight:900;font-size:1.2rem;margin:0 auto 14px;box-shadow:0 8px 20px rgba(56,113,193,.3); }
+.step-card h4 { font-family:'Playfair Display',serif;font-size:1rem;font-weight:800;margin-bottom:6px; }
+.step-card p { font-size:.82rem;color:var(--gray);line-height:1.55; }
+
+/* ─── Onboarding ─── */
+.onboarding-grid { display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:820px;margin:0 auto; }
+.onboarding-card { background:var(--white);border:1px solid rgba(40,11,74,.08);border-radius:16px;padding:28px; }
+.onboarding-card h4 { font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:800;margin-bottom:10px;color:var(--purple); }
+.onboarding-card p { font-size:.88rem;color:var(--gray);line-height:1.65; }
+.onboarding-aside { max-width:820px;margin:20px auto 0;background:var(--off-white);border-left:3px solid var(--blue);border-radius:10px;padding:16px 20px;font-size:.84rem;color:var(--gray);line-height:1.65; }
+
+/* ─── Cobertura nacional ─── */
+.coverage-cities { display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:24px; }
+.coverage-city { font-size:.82rem;font-weight:700;color:var(--blue);background:rgba(56,113,193,.08);padding:8px 18px;border-radius:100px; }
+
+/* ─── FAQ (accordion nativo, sin JS) ─── */
+.faq-list { max-width:760px;margin:0 auto;display:flex;flex-direction:column;gap:12px; }
+.faq-item { background:var(--white);border:1px solid rgba(40,11,74,.08);border-radius:12px;overflow:hidden; }
+.faq-item summary { cursor:pointer;list-style:none;padding:18px 22px;font-weight:700;font-size:.94rem;color:var(--text);display:flex;justify-content:space-between;align-items:center;gap:12px; }
+.faq-item summary::-webkit-details-marker { display:none; }
+.faq-item summary::after { content:'+';font-size:1.3rem;color:var(--blue);flex-shrink:0;transition:transform .2s; }
+.faq-item[open] summary::after { transform:rotate(45deg); }
+.faq-item p { padding:0 22px 20px;font-size:.88rem;color:var(--gray);line-height:1.7; }
+
+/* ─── Excedentes ─── */
+.overage-table { max-width:640px;margin:0 auto;border:1px solid rgba(40,11,74,.08);border-radius:12px;overflow:hidden; }
+.overage-row { display:flex;justify-content:space-between;padding:13px 20px;font-size:.86rem;border-bottom:1px solid rgba(40,11,74,.06); }
+.overage-row:last-child { border-bottom:none; }
+.overage-row:nth-child(even) { background:var(--off-white); }
+.overage-row strong { color:var(--blue); }
+
+/* ─── Not-included list ─── */
+.not-included-list { max-width:760px;margin:0 auto;columns:2;gap:28px;font-size:.86rem;color:var(--gray);line-height:2; }
+
+/* ─── Servicios especializados card (compacta) ─── */
+.spec-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:20px; }
+.spec-card { background:var(--white);border:1px solid rgba(40,11,74,.08);border-radius:14px;padding:22px;transition:all .2s; }
+.spec-card:hover { transform:translateY(-3px);box-shadow:0 16px 40px rgba(40,11,74,.08); }
+.spec-card .svc-head { margin-bottom:10px; }
+.spec-cat { display:inline-block;font-size:.66rem;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.05em;background:var(--off-white);padding:3px 9px;border-radius:100px;margin-bottom:10px; }
+
+/* ─── Responsive: reposicionamiento ─── */
+@media (max-width:1024px) {
+  .dims-grid, .plan-grid, .steps-row, .spec-grid { grid-template-columns:repeat(2,1fr); }
+  .problem-grid { grid-template-columns:1fr; }
+  .diff-cols, .onboarding-grid { grid-template-columns:1fr; }
+  .plan-card.featured { transform:none; }
+}
+@media (max-width:640px) {
+  .dims-grid, .plan-grid, .steps-row, .spec-grid, .problem-grid { grid-template-columns:1fr; }
+  .diff-panel { padding:26px 20px; }
+  .not-included-list { columns:1; }
+  .compare-table { min-width:560px; }
+}

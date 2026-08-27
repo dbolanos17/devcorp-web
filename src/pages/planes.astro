@@ -1,0 +1,144 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PlanCard from '../components/PlanCard.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { PLANS, COMPARISON_ROWS, OVERAGES, NOT_INCLUDED, FAQS, waLink, WA_MESSAGES } from '../data/site';
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQS.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+const colKeys = ['cumple', 'control', '360', 'cfo-advisory', 'cfo-integral'];
+const colLabels: Record<string, string> = {
+  cumple: 'Cumple',
+  control: 'Control',
+  '360': '360',
+  'cfo-advisory': 'CFO Advisory',
+  'cfo-integral': 'CFO Integral',
+};
+---
+<Base
+  title="Planes de Outsourcing Contable y CFO | DEVCORP"
+  description="Cumple $89, Control $249, 360 $499, CFO Advisory $790, CFO Integral $1.190, Enterprise desde $1.690. Todos + IVA. Compara los planes de DEVCORP para PYMEs en Ecuador."
+>
+  <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+
+  <PageHero
+    title="Planes DEVCORP"
+    sub="Cumplimiento, control financiero o dirección financiera externa — elige el nivel de acompañamiento que tu empresa necesita hoy."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Planes' }]}
+  />
+
+  <div class="section">
+    <div class="plan-grid">
+      {PLANS.filter((p) => ['control', '360', 'cfo-advisory'].includes(p.slug)).map((p) => (
+        <div id={p.slug}><PlanCard plan={p} /></div>
+      ))}
+    </div>
+  </div>
+
+  <div class="section section-alt">
+    <div class="section-header center">
+      <span class="tag">Para empezar o para operaciones complejas</span>
+      <h2 class="section-title">Cumple y <span class="hi">Enterprise</span></h2>
+    </div>
+    <div class="plan-grid" style="max-width:840px;margin:0 auto;">
+      <div id="cumple"><PlanCard plan={PLANS.find((p) => p.slug === 'cumple')!} /></div>
+      <div id="cfo-integral"><PlanCard plan={PLANS.find((p) => p.slug === 'cfo-integral')!} /></div>
+      <div id="enterprise"><PlanCard plan={PLANS.find((p) => p.slug === 'enterprise')!} /></div>
+    </div>
+  </div>
+
+  <!-- Comparativo detallado -->
+  <div class="section">
+    <div class="section-header center">
+      <span class="tag">Comparativo</span>
+      <h2 class="section-title">Todos los planes, <span class="hi">lado a lado</span></h2>
+    </div>
+    <div class="compare-wrap">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Incluye</th>
+            {colKeys.map((k) => <th class:list={{ hi: k === '360' }}>{colLabels[k]}</th>)}
+          </tr>
+        </thead>
+        <tbody>
+          {COMPARISON_ROWS.map((row) => (
+            <tr>
+              <td>{row.feature}</td>
+              {colKeys.map((k) => <td class:list={{ hi: k === '360' }}>{row.values[k]}</td>)}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+    <p class="compare-note">
+      CFO Advisory <strong>no incluye</strong> procesamiento contable, tributario ni laboral. Su insumo es
+      información financiera previamente procesada y conciliada por el cliente o su contador.
+    </p>
+  </div>
+
+  <!-- Límites y excedentes -->
+  <div class="section section-alt">
+    <div class="section-header center">
+      <span class="tag">Límites</span>
+      <h2 class="section-title">¿Qué pasa si <span class="hi">excedo el volumen</span> de mi plan?</h2>
+      <p class="section-sub">
+        Los planes tienen límites de transacciones, empleados, cuentas bancarias, establecimientos y, cuando
+        corresponde, novedades laborales. Si un exceso se mantiene durante dos meses consecutivos, DEVCORP podrá
+        recomendar migrar al siguiente plan o redefinir el alcance.
+      </p>
+    </div>
+    <div class="overage-table">
+      {OVERAGES.map((o) => (
+        <div class="overage-row"><span>{o.label}</span><strong>{o.price}</strong></div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Qué se cotiza aparte -->
+  <div class="section">
+    <div class="section-header center">
+      <span class="tag">Importante</span>
+      <h2 class="section-title">Qué <span class="hi">no está incluido</span> en los planes</h2>
+      <p class="section-sub">Estos servicios existen y los ofrecemos, pero se cotizan aparte de la mensualidad recurrente.</p>
+    </div>
+    <ul class="not-included-list">
+      {NOT_INCLUDED.map((item) => <li>{item}</li>)}
+    </ul>
+  </div>
+
+  <!-- FAQ -->
+  <div class="section section-alt">
+    <div class="section-header center">
+      <span class="tag">Preguntas frecuentes</span>
+      <h2 class="section-title">Antes de <span class="hi">decidir</span></h2>
+    </div>
+    <div class="faq-list">
+      {FAQS.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+  </div>
+
+  <FinalCta sub="Con datos básicos de tu empresa te recomendamos el plan adecuado.">
+    <Fragment slot="title">¿Cuál plan es <span>para tu empresa?</span></Fragment>
+    <a class="btn-primary" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'planes' })">Solicitar diagnóstico</a>
+    <a class="btn-wa" href={waLink(WA_MESSAGES.plan360)} target="_blank" rel="noopener" onclick="dcTrack('click_whatsapp', { location: 'planes' })">Hablar por WhatsApp</a>
+  </FinalCta>
+
+  <script is:inline>
+    if (window.dcTrack) window.dcTrack('view_planes');
+  </script>
+</Base>

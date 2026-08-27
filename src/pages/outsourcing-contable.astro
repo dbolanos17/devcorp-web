@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PlanCard from '../components/PlanCard.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { PLANS, waLink, WA_MESSAGES } from '../data/site';
+
+const plans = PLANS.filter((p) => p.slug === 'control' || p.slug === '360');
+
+const coverAreas = [
+  { icon: '📊', title: 'Contabilidad', text: 'Registro, conciliación y cierre mensual bajo normativa ecuatoriana.' },
+  { icon: '🧾', title: 'Tributación', text: 'IVA, retenciones, ATS e Impuesto a la Renta, sin sorpresas.' },
+  { icon: '🔄', title: 'Conciliaciones', text: 'Bancos, cartera y proveedores conciliados cada mes.' },
+  { icon: '👥', title: 'Nómina', text: 'Roles de pago, IESS y Ministerio del Trabajo al día.' },
+  { icon: '📈', title: 'Información financiera', text: 'Estados financieros y reportes listos para decidir.' },
+  { icon: '🗓️', title: 'Reuniones', text: 'Espacio mensual para revisar resultados con tu equipo.' },
+];
+---
+<Base
+  title="Outsourcing Contable para PYMEs en Ecuador | DEVCORP"
+  description="Contabilidad, tributación, nómina y control financiero para PYMEs ecuatorianas. Delega la operación administrativa con DEVCORP Control y DEVCORP 360."
+>
+  <PageHero
+    title="Outsourcing contable para PYMEs en Ecuador"
+    sub="Contabilidad, tributación, conciliaciones, nómina, información financiera y control — no solo declaraciones."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Outsourcing contable' }]}
+  />
+
+  <div class="section">
+    <div class="section-header center">
+      <span class="tag">Qué cubre</span>
+      <h2 class="section-title">Más que <span class="hi">presentar declaraciones</span></h2>
+    </div>
+    <div class="dims-grid-3">
+      {coverAreas.map((a) => (
+        <div class="dim-card" style="background:var(--off-white);border-color:rgba(40,11,74,.08);">
+          <div class="dim-icon">{a.icon}</div>
+          <h3 style="color:var(--text);">{a.title}</h3>
+          <p style="color:var(--gray);">{a.text}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="section section-alt">
+    <div class="section-header center">
+      <span class="tag">Soluciones</span>
+      <h2 class="section-title">Control o <span class="hi">DEVCORP 360</span></h2>
+    </div>
+    <div class="plan-grid-2" style="max-width:820px;margin:0 auto;">
+      {plans.map((p) => <PlanCard plan={p} />)}
+    </div>
+    <div class="plans-compare-link"><a href="/planes/">Ver todos los planes →</a></div>
+  </div>
+
+  <FinalCta sub="Cuéntanos el volumen y la complejidad de tu operación y te recomendamos el plan adecuado.">
+    <Fragment slot="title">Delega tu operación <span>contable y tributaria</span></Fragment>
+    <a class="btn-primary" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'outsourcing-contable' })">Solicitar diagnóstico</a>
+    <a class="btn-wa" href={waLink(WA_MESSAGES.control)} target="_blank" rel="noopener" onclick="dcTrack('click_whatsapp', { location: 'outsourcing-contable' })">Hablar por WhatsApp</a>
+  </FinalCta>
+</Base>

@@ -1,9 +1,15 @@
 ---
-import { SERVICES } from '../data/site';
+import { SPECIALIZED_SERVICES } from '../data/site';
 
 const path = Astro.url.pathname;
 const isCurrent = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
+
+const SPEC_EVENT: Record<string, string> = {
+  'firmas-electronicas': 'click_firma_electronica',
+  'notas-de-credito-sri': 'click_notas_credito',
+  'constitucion-sas': 'click_constitucion_sas',
+};
 ---
 <nav>
   <a href="/" class="nav-logo" aria-label="DEVCORP — Inicio">
@@ -12,25 +18,42 @@ const isCurrent = (href: string) =>
 
   <ul class="nav-menu" id="nav-menu">
     <li><a class:list={['nav-link', { current: isCurrent('/') }]} href="/">Inicio</a></li>
-    <li><a class:list={['nav-link', { current: isCurrent('/nosotros') }]} href="/nosotros/">Nosotros</a></li>
     <li class="has-dropdown">
-      <a class:list={['nav-link', { current: isCurrent('/servicios') }]} href="/servicios/">Servicios <span class="caret">▾</span></a>
+      <a class:list={['nav-link', { current: isCurrent('/outsourcing-contable') || isCurrent('/cfo-externo') }]} href="/outsourcing-contable/">Soluciones <span class="caret">▾</span></a>
       <div class="dropdown">
-        {SERVICES.map((s) => (
-          <a href={`/servicios/${s.slug}/`}>
+        <a href="/outsourcing-contable/">
+          <span class="dropdown-icon">📊</span>
+          <span>Outsourcing contable<span class="dropdown-sub">Contabilidad, IVA, nómina y control</span></span>
+        </a>
+        <a href="/planes/#360">
+          <span class="dropdown-icon">🎯</span>
+          <span>DEVCORP 360<span class="dropdown-sub">Contabilidad + finanzas en una sola solución</span></span>
+        </a>
+        <a href="/cfo-externo/">
+          <span class="dropdown-icon">💼</span>
+          <span>CFO externo<span class="dropdown-sub">Dirección financiera para PYMEs</span></span>
+        </a>
+      </div>
+    </li>
+    <li><a class:list={['nav-link', { current: isCurrent('/planes') }]} href="/planes/">Planes</a></li>
+    <li class="has-dropdown">
+      <a class:list={['nav-link', { current: isCurrent('/servicios') }]} href="/servicios/">Servicios especializados <span class="caret">▾</span></a>
+      <div class="dropdown">
+        {SPECIALIZED_SERVICES.map((s) => (
+          <a href={`/servicios/${s.slug}/`} onclick={`dcTrack('${SPEC_EVENT[s.slug] || 'click_servicio_especializado'}', { slug: '${s.slug}' })`}>
             <span class="dropdown-icon">{s.icon}</span>
             <span>{s.title}<span class="dropdown-sub">{s.navSub}</span></span>
           </a>
         ))}
       </div>
     </li>
-    <li><a class:list={['nav-link', { current: isCurrent('/blog') }]} href="/blog/">Blog</a></li>
-    <li><a class:list={['nav-link', { current: isCurrent('/contacto') }]} href="/contacto/">Contacto</a></li>
+    <li><a class:list={['nav-link', { current: isCurrent('/blog') }]} href="/blog/">Recursos</a></li>
+    <li><a class:list={['nav-link', { current: isCurrent('/nosotros') }]} href="/nosotros/">Nosotros</a></li>
   </ul>
 
   <div class="nav-actions">
     <a class="btn-login" href="/login/">Iniciar Sesión</a>
-    <a class="btn-register" href="/registro/">Registrarse</a>
+    <a class="btn-register" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'nav' })">Solicitar diagnóstico</a>
     <button class="nav-burger" id="nav-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
       <span></span><span></span><span></span>
     </button>

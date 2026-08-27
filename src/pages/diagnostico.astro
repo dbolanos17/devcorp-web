@@ -1,0 +1,176 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { SITE, PLANS, waLink, WA_MESSAGES } from '../data/site';
+
+const FACTURACION = [
+  'Menos de $5.000',
+  '$5.000 – $10.000',
+  '$10.000 – $25.000',
+  '$25.000 – $50.000',
+  '$50.000 – $100.000',
+  'Más de $100.000',
+];
+const TRANSACCIONES = ['Menos de 50', '50 – 150', '151 – 300', '301 – 600', 'Más de 600', 'No lo sé'];
+const CONTABILIDAD_ACTUAL = ['Yo mismo', 'Contador independiente', 'Contador interno', 'Firma externa', 'Actualmente nadie', 'Otro'];
+const DESAFIOS = [
+  'Cumplimiento tributario',
+  'Contabilidad desordenada',
+  'Nómina / laboral',
+  'No tengo información para decidir',
+  'Flujo de caja',
+  'Rentabilidad',
+  'Impuestos altos / sin planificación',
+  'Crecimiento de la empresa',
+  'Necesito CFO / dirección financiera',
+  'Otro',
+];
+---
+<Base
+  title="Diagnóstico Empresarial 360 | DEVCORP"
+  description="En pocos minutos conoceremos la situación de tu empresa y determinaremos qué nivel de acompañamiento contable-financiero necesitas."
+>
+  <PageHero
+    title="Diagnóstico Empresarial DEVCORP 360"
+    sub="En pocos minutos conoceremos la situación de tu empresa y determinaremos qué nivel de acompañamiento contable-financiero necesitas."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Diagnóstico' }]}
+  />
+
+  <div class="section">
+    <div class="form-card" style="max-width:760px;margin:0 auto;">
+      <form id="form-diagnostico" data-key={SITE.web3formsKey}>
+        <div class="form-row">
+          <div class="form-group"><label>Nombre completo *</label><input type="text" name="nombre" required /></div>
+          <div class="form-group"><label>Empresa *</label><input type="text" name="empresa" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>WhatsApp *</label><input type="tel" name="whatsapp" required /></div>
+          <div class="form-group"><label>Email *</label><input type="email" name="email" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Ciudad *</label><input type="text" name="ciudad" required placeholder="Quito, Guayaquil, Cuenca..." /></div>
+          <div class="form-group"><label>Actividad económica *</label><input type="text" name="actividad" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Facturación mensual aproximada *</label>
+            <select name="facturacion" required>
+              <option value="" disabled selected>Selecciona un rango</option>
+              {FACTURACION.map((f) => <option>{f}</option>)}
+            </select>
+          </div>
+          <div class="form-group"><label>Número de empleados *</label><input type="number" name="empleados" min="0" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Transacciones/documentos mensuales aproximados *</label>
+            <select name="transacciones" required>
+              <option value="" disabled selected>Selecciona un rango</option>
+              {TRANSACCIONES.map((t) => <option>{t}</option>)}
+            </select>
+          </div>
+          <div class="form-group"><label>Número aproximado de cuentas bancarias *</label><input type="number" name="cuentas" min="0" required /></div>
+        </div>
+        <div class="form-group">
+          <label>¿Quién maneja actualmente tu contabilidad? *</label>
+          <select name="contabilidad_actual" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            {CONTABILIDAD_ACTUAL.map((c) => <option>{c}</option>)}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>¿Cuál es tu principal desafío? *</label>
+          <select name="desafio" required>
+            <option value="" disabled selected>Selecciona una opción</option>
+            {DESAFIOS.map((d) => <option>{d}</option>)}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Servicio que más te interesa</label>
+          <select name="servicio_interes">
+            {PLANS.map((p) => <option>{p.name}</option>)}
+            <option>No estoy seguro — quiero que me recomienden</option>
+          </select>
+        </div>
+        <div class="form-check">
+          <input type="checkbox" name="consentimiento" required />
+          Acepto el tratamiento de mis datos personales conforme a la
+          <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> de DEVCORP S.A.S.
+        </div>
+        <button class="btn-submit" type="submit" id="diag-btn">Solicitar diagnóstico</button>
+        <p class="form-notice" id="diag-notice"></p>
+      </form>
+
+      <div id="diag-success" style="display:none;text-align:center;padding:20px 0;">
+        <p style="font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:800;color:var(--purple);margin-bottom:10px;">
+          Gracias. Revisaremos la información y nos pondremos en contacto para coordinar tu diagnóstico.
+        </p>
+        <a class="btn-wa" href={waLink(WA_MESSAGES.diagnostico)} target="_blank" rel="noopener" style="margin-top:14px;display:inline-flex;">
+          📱 Hablar por WhatsApp mientras tanto
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{ WEB3FORMS_KEY: SITE.web3formsKey }}>
+    const form = document.getElementById('form-diagnostico');
+    let started = false;
+    form?.addEventListener('input', () => {
+      if (!started) {
+        started = true;
+        if (window.dcTrack) window.dcTrack('start_diagnostico');
+      }
+    }, { once: false });
+
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('diag-btn');
+      const notice = document.getElementById('diag-notice');
+      const d = new FormData(form);
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      notice.classList.remove('show');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_KEY,
+            subject: 'Nuevo Diagnóstico Empresarial 360 — ' + d.get('empresa'),
+            from_name: 'Sitio Web DEVCORP — Diagnóstico',
+            'Nombre': d.get('nombre'),
+            'Empresa': d.get('empresa'),
+            'WhatsApp': d.get('whatsapp'),
+            'Email': d.get('email'),
+            'Ciudad': d.get('ciudad'),
+            'Actividad económica': d.get('actividad'),
+            'Facturación mensual aproximada': d.get('facturacion'),
+            'Número de empleados': d.get('empleados'),
+            'Transacciones mensuales aproximadas': d.get('transacciones'),
+            'Cuentas bancarias': d.get('cuentas'),
+            'Quién maneja la contabilidad actualmente': d.get('contabilidad_actual'),
+            'Principal desafío': d.get('desafio'),
+            'Servicio de interés': d.get('servicio_interes'),
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          if (window.dcTrack) window.dcTrack('submit_diagnostico');
+          form.style.display = 'none';
+          document.getElementById('diag-success').style.display = 'block';
+        } else {
+          notice.textContent = '⚠️ No se pudo enviar el formulario. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+          notice.classList.add('show');
+        }
+      } catch {
+        notice.textContent = '⚠️ No se pudo enviar el formulario. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+        notice.classList.add('show');
+      }
+
+      btn.disabled = false;
+      btn.textContent = 'Solicitar diagnóstico';
+    });
+  </script>
+</Base>

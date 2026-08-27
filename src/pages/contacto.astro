@@ -1,11 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import { SITE, SERVICES } from '../data/site';
+import { SITE, PLANS } from '../data/site';
 ---
 <Base
   title="Contacto — DEVCORP S.A.S. | Agenda tu asesoría gratuita"
-  description="Agenda una asesoría gratuita con DEVCORP S.A.S. Respondemos en menos de 24 horas por WhatsApp, teléfono o correo. Quito, Ecuador."
+  description="Agenda una asesoría gratuita con DEVCORP S.A.S. Respondemos en menos de 24 horas por WhatsApp, teléfono o correo. Atención remota en todo Ecuador."
 >
   <PageHero
     title="Hablemos de tu negocio"
@@ -17,7 +17,7 @@ import { SITE, SERVICES } from '../data/site';
     <div class="contact-grid">
       <div>
         <div class="contact-info-card">
-          <div class="contact-row"><div class="contact-icon">📍</div><div><h5>Oficina</h5><span>{SITE.city}</span></div></div>
+          <div class="contact-row"><div class="contact-icon">📍</div><div><h5>Cobertura</h5><span>{SITE.coverage}</span></div></div>
           <div class="contact-row"><div class="contact-icon">📞</div><div><h5>Teléfono / WhatsApp</h5><a href={SITE.phoneHref}>{SITE.phone}</a></div></div>
           <div class="contact-row"><div class="contact-icon">✉️</div><div><h5>Correo electrónico</h5><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div></div>
           <div class="contact-row"><div class="contact-icon">🕒</div><div><h5>Horario de atención</h5><span>{SITE.hours}</span></div></div>
@@ -30,13 +30,9 @@ import { SITE, SERVICES } from '../data/site';
             </div>
           </div>
         </div>
-        <div class="map-embed">
-          <iframe
-            title="Ubicación DEVCORP — Quito, Ecuador"
-            src="https://www.google.com/maps?q=Quito,Ecuador&output=embed"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
+        <div class="onboarding-aside" style="max-width:none;margin:20px 0 0;">
+          <strong style="color:var(--text);">{SITE.coverage}.</strong> Trabajamos con empresas en Quito, Guayaquil,
+          Cuenca, Ambato, Manta y el resto del país de forma 100% remota.
         </div>
       </div>
 
@@ -52,12 +48,13 @@ import { SITE, SERVICES } from '../data/site';
           <div class="form-group">
             <label>Servicio de interés</label>
             <select name="servicio">
-              {SERVICES.map((s) => <option>{s.title}</option>)}
+              {PLANS.map((p) => <option>{p.name}</option>)}
+              <option>Servicios especializados (firma electrónica, notas de crédito, etc.)</option>
               <option>Otro</option>
             </select>
           </div>
           <div class="form-group"><label>Mensaje *</label><textarea name="mensaje" required placeholder="Cuéntanos sobre tu negocio y en qué podemos ayudarte..."></textarea></div>
-          <div class="form-check"><input type="checkbox" required /> Acepto la política de privacidad y el tratamiento de mis datos.</div>
+          <div class="form-check"><input type="checkbox" required /> Acepto la <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> y el tratamiento de mis datos.</div>
           <button class="btn-submit" type="submit" id="contacto-btn">Enviar mensaje →</button>
           <p class="form-notice" id="contacto-notice"></p>
         </form>

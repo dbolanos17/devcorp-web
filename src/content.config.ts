@@ -17,8 +17,11 @@ const testimonials = defineCollection({
   loader: glob({ pattern: '**/*.md', base: './src/content/testimonials' }),
   schema: z.object({
     name: z.string(),
-    role: z.string(),
+    // Cargo o empresa. Opcional: las reseñas reales no siempre lo incluyen y
+    // no se debe inventar.
+    role: z.string().optional(),
     stars: z.number().min(1).max(5).default(5),
+    date: z.coerce.date().optional(),
     order: z.number().default(0),
   }),
 });

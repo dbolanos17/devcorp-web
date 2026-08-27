@@ -1,18 +1,19 @@
 ---
 import Base from '../layouts/Base.astro';
 import FinalCta from '../components/FinalCta.astro';
+import { SITE, waLink, WA_MESSAGES } from '../data/site';
 ---
 <Base
-  title="Nosotros — DEVCORP S.A.S. | Asesores Financieros en Ecuador"
-  description="Conoce a DEVCORP S.A.S.: más de una década de asesoría financiera, contable, tributaria y laboral para empresas, personas naturales y ONGs en Ecuador."
+  title="Nosotros — DEVCORP S.A.S. | Aliados estratégicos del crecimiento empresarial"
+  description="DEVCORP S.A.S. es una firma ecuatoriana de outsourcing contable, tributario, laboral y financiero para PYMEs. Conoce nuestro enfoque y equipo."
 >
   <div class="section" style="padding-top:100px;">
     <div class="about-grid">
       <div class="about-text">
         <span class="tag">Nosotros</span>
-        <h2>Somos aliados estratégicos del crecimiento empresarial en Ecuador</h2>
-        <p>En DEVCORP S.A.S. ofrecemos el respaldo de una asesoría profesional y confiable en torno a los aspectos financieros, contables, tributarios y laborales de empresas, personas naturales, jurídicas y organizaciones no gubernamentales.</p>
-        <p>Evaluamos, diseñamos y proponemos estrategias personalizadas que se adaptan a las necesidades y oportunidades de cada organización, siempre en estricto cumplimiento con la normativa vigente.</p>
+        <h1 style="font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3vw,2.4rem);font-weight:900;line-height:1.25;color:var(--text);margin:14px 0 20px;">Aliados estratégicos del crecimiento empresarial</h1>
+        <p>DEVCORP S.A.S. es una firma ecuatoriana que ofrece el respaldo de una asesoría profesional y confiable en torno a los aspectos financieros, contables, tributarios y laborales de empresas, personas naturales, jurídicas y organizaciones no gubernamentales.</p>
+        <p>Evaluamos, diseñamos y proponemos estrategias personalizadas que se adaptan a las necesidades y oportunidades de cada organización, siempre en estricto cumplimiento con la normativa vigente. {SITE.coverage}.</p>
       </div>
       <div class="about-img">
         <div class="about-photo-wrap">
@@ -30,11 +31,10 @@ import FinalCta from '../components/FinalCta.astro';
 
   <div class="section">
     <div class="about-solo">
-      <span class="tag">Nuestra historia</span>
-      <h2>Asesoría profesional y confiable, desde la experiencia</h2>
-      <p>DEVCORP S.A.S. fue constituida con el propósito de ofrecer el respaldo de una asesoría profesional y confiable en torno a los aspectos financieros, contables, tributarios y laborales de empresas, personas naturales, jurídicas y organizaciones no gubernamentales en Ecuador.</p>
-      <p>Nuestro equipo evalúa, diseña y propone estrategias personalizadas que se adaptan a las necesidades y oportunidades de cada organización, siempre en estricto cumplimiento con la normativa vigente.</p>
-      <p>A lo largo de los años hemos consolidado relaciones de largo plazo con nuestros clientes, basadas en la confianza, la transparencia y los resultados.</p>
+      <span class="tag">Nuestro enfoque</span>
+      <h2>Asesoría profesional y confiable, desde el conocimiento normativo</h2>
+      <p>Somos una firma de origen ecuatoriano con un equipo multidisciplinario que conoce a fondo la normativa contable, tributaria, laboral y societaria del país — porque operar en Ecuador exige entender sus reglas, no solo procesar información.</p>
+      <p>No entregamos solamente balances: ayudamos a entender qué está pasando en el negocio y qué decisión tomar. Cada organización recibe estrategias diseñadas a su medida, con estricto apego a la normativa vigente y bajo total confidencialidad.</p>
     </div>
   </div>
 
@@ -51,16 +51,33 @@ import FinalCta from '../components/FinalCta.astro';
     </div>
   </div>
 
+  <!-- Cómo trabajamos (metodología, sin fechas ni cifras no verificadas) -->
   <div class="section section-dark">
     <div class="section-header center">
-      <span class="tag">Nuestra trayectoria</span>
-      <h2 class="section-title section-title-white">Un camino de <span class="hi">crecimiento constante</span></h2>
+      <span class="tag">Cómo trabajamos</span>
+      <h2 class="section-title section-title-white">Metodología, no <span class="hi">solo procesamiento</span></h2>
     </div>
-    <div class="timeline" style="max-width:780px;margin:0 auto;">
-      <div class="tl-item"><div class="tl-year">2026</div><div class="tl-text"><h4>Nueva etapa digital</h4><p>Renovamos nuestra presencia digital con un portal de clientes y nuevos canales de atención.</p></div></div>
-      <div class="tl-item"><div class="tl-year">2021</div><div class="tl-text"><h4>Servicios digitales</h4><p>Lanzamos la emisión de firmas electrónicas y la negociación de notas de crédito del SRI.</p></div></div>
-      <div class="tl-item"><div class="tl-year">2017</div><div class="tl-text"><h4>Expansión de servicios</h4><p>Incorporamos asesoría financiera y laboral, ampliando nuestra cartera a personas jurídicas y ONGs.</p></div></div>
-      <div class="tl-item"><div class="tl-year">2013</div><div class="tl-text"><h4>Fundación de DEVCORP S.A.S.</h4><p>Iniciamos operaciones ofreciendo asesoría contable y tributaria a pequeñas empresas en Ecuador.</p></div></div>
+    <div class="dims-grid">
+      <div class="dim-card">
+        <div class="dim-icon">🔍</div>
+        <h3>Diagnóstico primero</h3>
+        <p>Evaluamos tu operación antes de proponer un alcance — nada de planes genéricos.</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">📐</div>
+        <h3>Proceso definido</h3>
+        <p>Cada plan tiene alcance, entregables y calendario claros desde el onboarding.</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">🔒</div>
+        <h3>Confidencialidad</h3>
+        <p>La información financiera de tu empresa se trata con estricta reserva profesional.</p>
+      </div>
+      <div class="dim-card">
+        <div class="dim-icon">🧭</div>
+        <h3>Acompañamiento real</h3>
+        <p>Reuniones periódicas y recomendaciones, no solo reportes al final del mes.</p>
+      </div>
     </div>
   </div>
 
@@ -78,8 +95,9 @@ import FinalCta from '../components/FinalCta.astro';
     </div>
   </div>
 
-  <FinalCta sub="Agenda una reunión con nuestro equipo y descubre cómo podemos ayudarte.">
+  <FinalCta sub="Solicita un Diagnóstico Empresarial DEVCORP 360 y descubre cómo podemos ayudarte.">
     <Fragment slot="title">Conversemos sobre <span>tu negocio</span></Fragment>
-    <a class="btn-primary" href="/contacto/">Contáctanos →</a>
+    <a class="btn-primary" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'nosotros' })">Solicitar diagnóstico →</a>
+    <a class="btn-wa" href={waLink(WA_MESSAGES.general)} target="_blank" rel="noopener" onclick="dcTrack('click_whatsapp', { location: 'nosotros' })">Hablar por WhatsApp</a>
   </FinalCta>
 </Base>

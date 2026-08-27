@@ -2,7 +2,8 @@
 import '../styles/global.css';
 import Nav from '../components/Nav.astro';
 import Footer from '../components/Footer.astro';
-import { SITE } from '../data/site';
+import StructuredData from '../components/StructuredData.astro';
+import { SITE, waLink, WA_MESSAGES } from '../data/site';
 
 interface Props {
   title?: string;
@@ -28,6 +29,11 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
   <meta property="og:url" content={canonical} />
   <meta property="og:image" content={new URL('/logo-devcorp.png', SITE.url)} />
   <meta property="og:locale" content="es_EC" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={title} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={new URL('/logo-devcorp.png', SITE.url)} />
+  <StructuredData />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
@@ -35,9 +41,27 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
   <slot name="head" />
 </head>
 <body>
+  <script is:inline>
+    // Capa de eventos desacoplada: si en el futuro se instala GTM/GA4, estos
+    // eventos empiezan a fluir automáticamente sin tocar el resto del sitio.
+    window.dcTrack = function (event, params) {
+      try {
+        if (typeof window.gtag === 'function') window.gtag('event', event, params || {});
+        if (Array.isArray(window.dataLayer)) window.dataLayer.push(Object.assign({ event: event }, params));
+      } catch (e) {}
+    };
+  </script>
   <Nav />
   <slot />
   <Footer />
-  <a href={SITE.whatsappGreeting} target="_blank" rel="noopener" class="wa-float" title="Escríbenos por WhatsApp" aria-label="WhatsApp DEVCORP">💬</a>
+  <a
+    href={waLink(WA_MESSAGES.general)}
+    target="_blank"
+    rel="noopener"
+    class="wa-float"
+    title="Escríbenos por WhatsApp"
+    aria-label="WhatsApp DEVCORP"
+    onclick="dcTrack('click_whatsapp', { location: 'float' })"
+  >💬</a>
 </body>
 </html>
