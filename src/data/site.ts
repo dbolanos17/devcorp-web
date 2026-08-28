@@ -18,9 +18,10 @@ export const SITE = {
   // viven solo como variables de entorno en Netlify, nunca aquí.
   payphone: {
     token: 'REEMPLAZAR_CON_TU_PAYPHONE_TOKEN',
-    storeId: 'REEMPLAZAR_CON_TU_PAYPHONE_STORE_ID',
+    storeId: '1793200375001',
   },
-  paypalClientId: 'REEMPLAZAR_CON_TU_PAYPAL_CLIENT_ID',
+  // Client ID de PayPal SANDBOX (pruebas) — se cambiará por el de Live antes de publicar pagos reales.
+  paypalClientId: 'BAAj-cZzhb-trH8LT8QL3E87AU9DNtA4wPJEm4ITIalazk9rM4r7S2H4r4uabx9-mJen5uE5pwb8RpK2y0',
   social: {
     facebook: 'https://www.facebook.com/154936657697272',
     instagram: 'https://www.instagram.com/david_bolanos_devcorp',
