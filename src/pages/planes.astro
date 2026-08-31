@@ -39,7 +39,7 @@ const colLabels: Record<string, string> = {
   <div class="section">
     <div class="plan-grid">
       {PLANS.filter((p) => ['control', '360', 'cfo-advisory'].includes(p.slug)).map((p) => (
-        <div id={p.slug}><PlanCard plan={p} /></div>
+        <div id={p.slug} class="plan-anchor"><PlanCard plan={p} /></div>
       ))}
     </div>
   </div>
@@ -50,9 +50,9 @@ const colLabels: Record<string, string> = {
       <h2 class="section-title">Cumple y <span class="hi">Enterprise</span></h2>
     </div>
     <div class="plan-grid" style="max-width:840px;margin:0 auto;">
-      <div id="cumple"><PlanCard plan={PLANS.find((p) => p.slug === 'cumple')!} /></div>
-      <div id="cfo-integral"><PlanCard plan={PLANS.find((p) => p.slug === 'cfo-integral')!} /></div>
-      <div id="enterprise"><PlanCard plan={PLANS.find((p) => p.slug === 'enterprise')!} /></div>
+      <div id="cumple" class="plan-anchor"><PlanCard plan={PLANS.find((p) => p.slug === 'cumple')!} /></div>
+      <div id="cfo-integral" class="plan-anchor"><PlanCard plan={PLANS.find((p) => p.slug === 'cfo-integral')!} /></div>
+      <div id="enterprise" class="plan-anchor"><PlanCard plan={PLANS.find((p) => p.slug === 'enterprise')!} /></div>
     </div>
   </div>
 
@@ -140,5 +140,17 @@ const colLabels: Record<string, string> = {
 
   <script is:inline>
     if (window.dcTrack) window.dcTrack('view_planes');
+
+    // Si se llega con un ancla (ej. /planes/#360), el navegador salta ahí
+    // al cargar, pero la fuente Playfair Display termina de cargar después
+    // y desplaza el contenido. Reconfirmamos el scroll cuando todo asiente.
+    if (location.hash) {
+      const target = document.getElementById(location.hash.slice(1));
+      if (target) {
+        const rescroll = () => target.scrollIntoView({ block: 'start' });
+        if (document.fonts?.ready) document.fonts.ready.then(rescroll);
+        window.addEventListener('load', () => setTimeout(rescroll, 150));
+      }
+    }
   </script>
 </Base>
