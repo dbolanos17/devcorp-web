@@ -523,6 +523,11 @@ footer { background:#16171a;color:rgba(255,255,255,.5);padding:64px 6% 28px; }
 .plan-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch; }
 .plan-grid-2 { display:grid;grid-template-columns:repeat(2,1fr);gap:24px;align-items:stretch; }
 @media (max-width:640px) { .plan-grid-2 { grid-template-columns:1fr; } }
+/* Una sola tarjeta, con el mismo ancho que tendría dentro de .plan-grid (3 columnas)
+   en cada punto de quiebre — para que coincida exactamente con /planes/. */
+.plan-grid-solo { max-width:calc((100% - 48px) / 3);margin:0 auto; }
+@media (max-width:1024px) { .plan-grid-solo { max-width:calc((100% - 24px) / 2); } }
+@media (max-width:640px) { .plan-grid-solo { max-width:100%; } }
 .plan-card { position:relative;background:var(--white);border:1.5px solid rgba(40,11,74,.09);border-radius:20px;padding:32px 28px;display:flex;flex-direction:column;transition:all .25s; }
 .plan-card:hover { transform:translateY(-6px);box-shadow:0 24px 56px rgba(40,11,74,.12); }
 .plan-card.featured { border-color:var(--blue);box-shadow:0 20px 60px rgba(56,113,193,.18);transform:scale(1.02); }
