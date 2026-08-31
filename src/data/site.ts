@@ -347,11 +347,10 @@ export const SPECIALIZED_SERVICES: Service[] = [
   {
     slug: 'notas-de-credito-sri',
     icon: '💳',
-    title: 'Notas de crédito y devoluciones',
+    title: 'Notas de Crédito del SRI',
     navSub: 'Conviértelas en liquidez',
-    short:
-      'Negociamos tus notas de crédito del SRI y gestionamos devoluciones tributarias, con honorario de éxito.',
-    items: ['Evaluación del caso', 'Proceso legal', 'Honorario de éxito'],
+    short: 'Negociamos tus notas de crédito del SRI y las convertimos en liquidez inmediata, de forma legal.',
+    items: ['Evaluación del caso', 'Proceso legal', 'Liquidez inmediata'],
     category: 'Tributarios',
   },
   {
