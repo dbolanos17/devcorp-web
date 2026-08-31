@@ -402,6 +402,16 @@ export const SPECIALIZED_SERVICES: Service[] = [
     items: ['Valoración', 'Planificación', 'Evaluación de inversiones'],
     category: 'Financieros',
   },
+  {
+    slug: 'devolucion-de-impuestos',
+    icon: '💵',
+    title: 'Devolución de impuestos',
+    navSub: 'Recupera pagos en exceso',
+    short:
+      'Gestionamos ante el SRI la devolución de impuestos pagados en exceso, con evaluación gratuita y honorario de éxito.',
+    items: ['Evaluación del caso', 'Presentación ante el SRI', 'Honorario de éxito'],
+    category: 'Tributarios',
+  },
 ];
 
 /** Servicios que nunca están incluidos en los planes recurrentes: se cotizan aparte. */

@@ -1,0 +1,100 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { SITE } from '../../data/site';
+---
+<Base
+  title="Devolución de Impuestos ante el SRI — DEVCORP S.A.S."
+  description="Recupera impuestos pagados en exceso a través del proceso formal de devolución ante el SRI. Evaluación gratuita y honorario de éxito."
+>
+  <PageHero
+    title="Devolución de Impuestos ante el SRI"
+    sub="Recupera impuestos pagados en exceso a través del proceso formal de devolución ante el SRI."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios', href: '/servicios/' }, { label: 'Devolución de Impuestos' }]}
+  />
+  <div class="section">
+    <div class="svc-detail-grid">
+      <div class="svc-detail-body">
+        <h2>¿Por qué elegirnos?</h2>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">✓</span><span><strong>Evaluación experta:</strong> revisamos si tu caso realmente califica antes de iniciar cualquier trámite.</span></div>
+          <div class="check-item"><span class="check-icon">✓</span><span><strong>Expediente sólido:</strong> preparamos la documentación de forma que reduzca el riesgo de rechazo del SRI.</span></div>
+          <div class="check-item"><span class="check-icon">✓</span><span><strong>Seguimiento constante:</strong> damos seguimiento a tu solicitud hasta obtener la resolución.</span></div>
+          <div class="check-item"><span class="check-icon">✓</span><span><strong>Sin complicaciones:</strong> nos encargamos de todos los trámites por ti.</span></div>
+        </div>
+        <h2>¿Cómo funciona?</h2>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">1</span><span><strong>Evaluación:</strong> verificamos el pago en exceso y tu derecho a la devolución.</span></div>
+          <div class="check-item"><span class="check-icon">2</span><span><strong>Preparación:</strong> armamos el expediente y sustentos requeridos por el SRI.</span></div>
+          <div class="check-item"><span class="check-icon">3</span><span><strong>Presentación:</strong> ingresamos la solicitud formal de devolución ante el SRI.</span></div>
+          <div class="check-item"><span class="check-icon">4</span><span><strong>Resolución:</strong> damos seguimiento hasta que el SRI resuelve y se acredita el valor.</span></div>
+        </div>
+        <h2>Requisitos</h2>
+        <p>Declaraciones que sustenten el pago en exceso o indebido, y documentación que respalde la titularidad del reclamo.</p>
+        <h2>Honorario de éxito</h2>
+        <p>Solo cobramos si tu caso procede. El porcentaje depende de si ya eres cliente de un plan recurrente:</p>
+        <div class="check-list">
+          <div class="check-item"><span class="check-icon">✓</span><span>Cliente DEVCORP 360 o CFO: <strong>10%</strong></span></div>
+          <div class="check-item"><span class="check-icon">✓</span><span>Cliente Cumple o Control: <strong>12%</strong></span></div>
+          <div class="check-item"><span class="check-icon">✓</span><span>Sin plan mensual con DEVCORP: <strong>15%</strong></span></div>
+        </div>
+        <p style="font-size:.82rem;color:var(--gray);">No garantizamos la aprobación de casos que el SRI no reconozca — el honorario aplica únicamente sobre casos exitosos.</p>
+      </div>
+      <aside class="svc-sidebar">
+        <h4>Evaluar mi caso</h4>
+        <form id="form-devolucion" data-key={SITE.web3formsKey}>
+          <div class="form-group"><input type="text" name="nombre" placeholder="Nombre completo *" required /></div>
+          <div class="form-group"><input type="tel" name="telefono" placeholder="Teléfono *" required /></div>
+          <div class="form-group"><input type="email" name="correo" placeholder="Correo electrónico *" required /></div>
+          <div class="form-group"><input type="text" name="monto" placeholder="Monto aproximado a recuperar *" required /></div>
+          <div class="form-check"><input type="checkbox" required /> Acepto la <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> y el tratamiento de mis datos.</div>
+          <button class="btn-submit" type="submit" id="devolucion-btn">Evaluar mi caso</button>
+          <p class="form-notice" id="devolucion-notice"></p>
+        </form>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('form-devolucion') as HTMLFormElement | null;
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('devolucion-btn') as HTMLButtonElement;
+      const notice = document.getElementById('devolucion-notice')!;
+      const d = new FormData(form);
+
+      btn.disabled = true;
+      btn.textContent = 'Enviando...';
+      notice.classList.remove('show');
+
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: form.dataset.key,
+            subject: `Cotización de Devolución de Impuestos — ${d.get('nombre')}`,
+            from_name: 'Sitio Web DEVCORP',
+            'Nombre': d.get('nombre'),
+            'Teléfono': d.get('telefono'),
+            'Correo': d.get('correo'),
+            'Monto aproximado': d.get('monto'),
+          }),
+        });
+        const data = await res.json();
+        if (data.success) {
+          notice.textContent = 'Mensaje enviado correctamente.';
+          form.reset();
+        } else {
+          notice.textContent = '⚠️ No se pudo enviar la solicitud. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+        }
+      } catch {
+        notice.textContent = '⚠️ No se pudo enviar la solicitud. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';
+      }
+
+      notice.classList.add('show');
+      btn.disabled = false;
+      btn.textContent = 'Evaluar mi caso';
+    });
+  </script>
+</Base>

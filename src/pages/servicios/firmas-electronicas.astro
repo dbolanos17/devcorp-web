@@ -19,6 +19,10 @@ const PRECIOS = [
     <link rel="stylesheet" href="https://cdn.payphonetodoesposible.com/box/v2.0/payphone-payment-box.css" />
     <script type="module" src="https://cdn.payphonetodoesposible.com/box/v2.0/payphone-payment-box.js"></script>
     <script src={`https://www.paypal.com/sdk/js?client-id=${SITE.paypalClientId}&currency=USD`}></script>
+    <!-- El CSS de PayPhone trae "html{font-size:13px}" y encoge todo el sitio
+         (que usa rem) en esta página, incluido el menú. Se restaura el tamaño
+         base normal del navegador. -->
+    <style>html { font-size: 16px !important; }</style>
   </Fragment>
   <PageHero
     title="Firmas Electrónicas"
