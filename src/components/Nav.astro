@@ -19,13 +19,13 @@ const SPEC_EVENT: Record<string, string> = {
   <ul class="nav-menu" id="nav-menu">
     <li><a class:list={['nav-link', { current: isCurrent('/') }]} href="/">Inicio</a></li>
     <li class="has-dropdown">
-      <a class:list={['nav-link', { current: isCurrent('/outsourcing-contable') || isCurrent('/cfo-externo') }]} href="/outsourcing-contable/">Soluciones <span class="caret">▾</span></a>
+      <a class:list={['nav-link', { current: isCurrent('/outsourcing-contable') || isCurrent('/cfo-externo') || isCurrent('/devcorp-360') }]} href="/outsourcing-contable/">Soluciones <span class="caret">▾</span></a>
       <div class="dropdown">
         <a href="/outsourcing-contable/">
           <span class="dropdown-icon">📊</span>
           <span>Outsourcing contable<span class="dropdown-sub">Contabilidad, IVA, nómina y control</span></span>
         </a>
-        <a href="/planes/#360">
+        <a href="/devcorp-360/">
           <span class="dropdown-icon">🎯</span>
           <span>DEVCORP 360<span class="dropdown-sub">Contabilidad + finanzas en una sola solución</span></span>
         </a>

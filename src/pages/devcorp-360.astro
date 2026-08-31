@@ -1,0 +1,65 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import PlanCard from '../components/PlanCard.astro';
+import FinalCta from '../components/FinalCta.astro';
+import { PLANS, waLink, WA_MESSAGES } from '../data/site';
+
+const plan360 = PLANS.find((p) => p.slug === '360')!;
+
+const coverAreas = [
+  { icon: '📊', title: 'Contabilidad', text: 'Cierre contable mensual completo, balance, resultados y flujo de efectivo.' },
+  { icon: '🧾', title: 'Tributación', text: 'IVA, retenciones, ATS e Impuesto a la Renta, sin sorpresas.' },
+  { icon: '👥', title: 'Nómina', text: 'Roles de pago, IESS y Ministerio del Trabajo al día.' },
+  { icon: '📇', title: 'Cartera', text: 'Control de cuentas por cobrar y por pagar, cada mes.' },
+  { icon: '📈', title: 'Presupuesto y KPIs', text: 'Comparativo real vs. presupuesto y análisis de rentabilidad.' },
+  { icon: '🗓️', title: 'Reunión gerencial', text: 'Informe «5 cosas + 3 decisiones» y reunión mensual de 60 minutos.' },
+];
+---
+<Base
+  title="DEVCORP 360 — Contabilidad + Finanzas en una sola solución | DEVCORP"
+  description="DEVCORP 360: contabilidad, impuestos, nómina y control financiero en una sola solución para PYMEs en crecimiento. Desde $499 + IVA/mes."
+>
+  <PageHero
+    title="DEVCORP 360"
+    sub="Contabilidad, impuestos, nómina y control financiero en una sola solución — para la PYME que ya dejó de ser microempresa."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'DEVCORP 360' }]}
+  />
+
+  <div class="section">
+    <div class="section-header center">
+      <span class="tag">Qué incluye</span>
+      <h2 class="section-title">Todo lo que necesitas para <span class="hi">operar y decidir</span></h2>
+    </div>
+    <div class="dims-grid-3">
+      {coverAreas.map((a) => (
+        <div class="dim-card" style="background:var(--off-white);border-color:rgba(40,11,74,.08);">
+          <div class="dim-icon">{a.icon}</div>
+          <h3 style="color:var(--text);">{a.title}</h3>
+          <p style="color:var(--gray);">{a.text}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div class="section section-alt">
+    <div class="section-header center">
+      <span class="tag">La solución</span>
+      <h2 class="section-title">Un solo honorario. <span class="hi">Control total.</span></h2>
+      <p class="section-sub">
+        DEVCORP 360 reemplaza a tu contador tradicional con algo más completo: cumplimiento, contabilidad,
+        nómina y la información financiera que necesitas para decidir — todo en un solo servicio mensual.
+      </p>
+    </div>
+    <div class="plan-grid-2" style="max-width:420px;margin:0 auto;">
+      <PlanCard plan={plan360} />
+    </div>
+    <div class="plans-compare-link"><a href="/planes/">Comparar con los demás planes →</a></div>
+  </div>
+
+  <FinalCta sub="Cuéntanos el volumen y la complejidad de tu operación y confirmamos si DEVCORP 360 es el nivel adecuado.">
+    <Fragment slot="title">Deja de operar <span>a ciegas</span></Fragment>
+    <a class="btn-primary" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'devcorp_360' })">Solicitar diagnóstico</a>
+    <a class="btn-wa" href={waLink(WA_MESSAGES.plan360)} target="_blank" rel="noopener" onclick="dcTrack('click_whatsapp', { location: 'devcorp_360' })">Hablar por WhatsApp</a>
+  </FinalCta>
+</Base>
