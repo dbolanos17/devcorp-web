@@ -6,7 +6,6 @@ import FinalCta from '../../components/FinalCta.astro';
 import { SITE, PLANS, SPECIALIZED_SERVICES, waLink, WA_MESSAGES } from '../../data/site';
 
 const recurring = PLANS.filter((p) => ['control', '360', 'cfo-advisory'].includes(p.slug));
-const categories = [...new Set(SPECIALIZED_SERVICES.map((s) => s.category))];
 
 const SPEC_EVENT: Record<string, string> = {
   'firmas-electronicas': 'click_firma_electronica',
@@ -26,6 +25,23 @@ const SPEC_EVENT: Record<string, string> = {
 
   <div class="section">
     <div class="section-header center">
+      <span class="tag">Servicios especializados</span>
+      <h2 class="section-title">Necesidades <span class="hi">puntuales</span> de tu empresa</h2>
+      <p class="section-sub">Se cotizan aparte de los planes recurrentes. Son la puerta de entrada de muchas empresas hacia un acompañamiento continuo.</p>
+    </div>
+    <div class="spec-grid">
+      {SPECIALIZED_SERVICES.map((s) => (
+        <a class="spec-card" href={`/servicios/${s.slug}/`} onclick={`dcTrack('${SPEC_EVENT[s.slug] || 'click_servicio_especializado'}', { slug: '${s.slug}' })`}>
+          <span class="spec-cat">{s.category}</span>
+          <div class="svc-head"><div class="svc-icon">{s.icon}</div><h3 style="font-size:1rem;">{s.title}</h3></div>
+          <p style="font-size:.85rem;color:var(--gray);line-height:1.6;">{s.short}</p>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <div class="section section-alt">
+    <div class="section-header center">
       <span class="tag">Soluciones recurrentes</span>
       <h2 class="section-title">Tu área contable y financiera <span class="hi">externa</span></h2>
       <p class="section-sub">Outsourcing mensual: cumplimiento, control y decisiones, según el nivel de acompañamiento que tu empresa necesite.</p>
@@ -34,28 +50,6 @@ const SPEC_EVENT: Record<string, string> = {
       {recurring.map((p) => <PlanCard plan={p} compact />)}
     </div>
     <div class="plans-compare-link"><a href="/planes/">Ver los 6 planes y comparar en detalle →</a></div>
-  </div>
-
-  <div class="section section-alt">
-    <div class="section-header center">
-      <span class="tag">Servicios especializados</span>
-      <h2 class="section-title">Necesidades <span class="hi">puntuales</span> de tu empresa</h2>
-      <p class="section-sub">Se cotizan aparte de los planes recurrentes. Son la puerta de entrada de muchas empresas hacia un acompañamiento continuo.</p>
-    </div>
-    {categories.map((cat) => (
-      <div style="margin-bottom:36px;">
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:800;color:var(--purple);margin-bottom:16px;">{cat}</h3>
-        <div class="spec-grid">
-          {SPECIALIZED_SERVICES.filter((s) => s.category === cat).map((s) => (
-            <a class="spec-card" href={`/servicios/${s.slug}/`} onclick={`dcTrack('${SPEC_EVENT[s.slug] || 'click_servicio_especializado'}', { slug: '${s.slug}' })`}>
-              <span class="spec-cat">{s.category}</span>
-              <div class="svc-head"><div class="svc-icon">{s.icon}</div><h3 style="font-size:1rem;">{s.title}</h3></div>
-              <p style="font-size:.85rem;color:var(--gray);line-height:1.6;">{s.short}</p>
-            </a>
-          ))}
-        </div>
-      </div>
-    ))}
   </div>
 
   <FinalCta sub="Cuéntanos sobre tu negocio y te recomendamos el plan o servicio adecuado.">
