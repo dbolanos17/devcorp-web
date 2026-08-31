@@ -11,6 +11,8 @@ const testimonials = (await getCollection('testimonials')).sort(
 const initials = (name: string) =>
   name.split(/[\s&]+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
 
+const clients = (await getCollection('clients')).sort((a, b) => a.data.order - b.data.order);
+
 const homePlans = HOME_PLAN_SLUGS.map((slug) => PLANS.find((p) => p.slug === slug)!);
 const enterprise = PLANS.find((p) => p.slug === 'enterprise')!;
 
@@ -176,6 +178,26 @@ const steps = [
             </div>
           </div>
         ))}
+      </div>
+    </div>
+  )}
+
+  <!-- Clientes -->
+  {clients.length > 0 && (
+    <div class="section section-alt">
+      <div class="section-header center">
+        <span class="tag">Confían en nosotros</span>
+        <h2 class="section-title">Nuestros <span class="hi">clientes</span></h2>
+      </div>
+      <div class="clients-row">
+        {clients.map((c) => {
+          const logo = <img src={c.data.logo} alt={c.data.name} loading="lazy" />;
+          return c.data.url ? (
+            <a class="client-logo" href={c.data.url} target="_blank" rel="noopener" title={c.data.name}>{logo}</a>
+          ) : (
+            <div class="client-logo" title={c.data.name}>{logo}</div>
+          );
+        })}
       </div>
     </div>
   )}

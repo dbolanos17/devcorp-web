@@ -307,6 +307,15 @@ nav {
 .test-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:22px; }
 .test-card { background:var(--white);border-radius:16px;padding:32px;border:1px solid rgba(40,11,74,.07);transition:all .3s; }
 .test-card:hover { transform:translateY(-5px);box-shadow:0 20px 56px rgba(40,11,74,.1); }
+
+/* ─── CLIENTES (logos) ─── */
+.clients-row { display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:36px 52px; }
+.client-logo { display:flex;align-items:center;justify-content:center;height:48px; }
+.client-logo img {
+  max-height:100%;max-width:140px;width:auto;height:auto;object-fit:contain;
+  filter:grayscale(1) opacity(.55);transition:filter .25s,transform .25s;
+}
+.client-logo:hover img { filter:grayscale(0) opacity(1);transform:scale(1.05); }
 .stars { color:var(--blue);font-size:.9rem;letter-spacing:2px;margin-bottom:16px; }
 .test-quote { font-size:.9rem;line-height:1.74;color:#3d405b;font-style:italic;margin-bottom:24px; }
 .test-author { display:flex;align-items:center;gap:12px; }

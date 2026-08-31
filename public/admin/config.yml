@@ -40,3 +40,17 @@ collections:
       - { label: "Estrellas (1 a 5)", name: "stars", widget: "number", default: 5, min: 1, max: 5, value_type: "int" }
       - { label: "Orden de aparición", name: "order", widget: "number", default: 0, value_type: "int", hint: "1 = primero, 2 = segundo, etc." }
       - { label: "Texto del testimonio", name: "body", widget: "text" }
+
+  - name: "clients"
+    label: "Clientes (logos)"
+    folder: "src/content/clients"
+    create: true
+    delete: true
+    slug: "{{fields.name}}"
+    extension: "md"
+    format: "frontmatter"
+    fields:
+      - { label: "Nombre del cliente", name: "name", widget: "string", hint: "Se usa como texto alternativo del logo." }
+      - { label: "Logo", name: "logo", widget: "image", hint: "Idealmente PNG o SVG con fondo transparente." }
+      - { label: "Sitio web del cliente (opcional)", name: "url", widget: "string", required: false }
+      - { label: "Orden de aparición", name: "order", widget: "number", default: 0, value_type: "int", hint: "1 = primero, 2 = segundo, etc." }
