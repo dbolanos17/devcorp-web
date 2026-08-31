@@ -85,7 +85,7 @@ const PRECIOS = [
     </div>
   </div>
 
-  <script define:vars={{ PAYPHONE_TOKEN: SITE.payphone.token, PAYPHONE_STORE_ID: SITE.payphone.storeId }}>
+  <script define:vars={{ PAYPHONE_TOKEN: SITE.payphone.token }}>
     const sel = document.getElementById('firma-vigencia');
     sel?.addEventListener('change', () => {
       const price = sel.options[sel.selectedIndex]?.dataset.price ?? '—';
@@ -143,10 +143,12 @@ const PRECIOS = [
       localStorage.setItem(clientTransactionId, JSON.stringify(c));
 
       // PayPhone requiere reconstruir la caja cada vez que cambia el monto.
+      // storeId se omite a propósito: PayPhone lo toma como opcional y, con
+      // una sola tienda asociada al Token, enviarlo causaba el error
+      // "La tienda asociada no existe" (Error 100).
       // @ts-ignore — clase global cargada desde el script del CDN de PayPhone
       new PPaymentButtonBox({
         token: PAYPHONE_TOKEN,
-        storeId: PAYPHONE_STORE_ID,
         clientTransactionId,
         amount: Math.round(c.amount * 100),
         amountWithoutTax: Math.round(c.amount * 100),

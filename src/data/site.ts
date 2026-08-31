@@ -17,11 +17,14 @@ export const SITE = {
   // realmente secretas (PAYPHONE_TOKEN de confirmación, PAYPAL_CLIENT_SECRET)
   // viven solo como variables de entorno en Netlify, nunca aquí.
   payphone: {
-    token: 'REEMPLAZAR_CON_TU_PAYPHONE_TOKEN',
+    token: 'zlD80MrhA6G2VAB8CnekJEpO7Uv_QdtQPzVKuLLX35Ftw3bEzPoXOLVapdA2VZEsR1zjICBkbfmPKcooYZBKz4xy-hD8eLgqt7Tsx-TT4Nm0bGjajpjfiOCHW76ifrNJuCv2gajsJx-p400kWQBgIYdmbE1w0ipM4hJNX_mBc4DjabwLTsYrxh1W3QTBFo4k2Qn09MURz0yJ0BfhoXXl6pjkZ8E5wtwn_CfxRdIjcwDQaXuX1Wv52p2TaDzxRCxnfGtyWgccJ_1UZWljX7S1Zakfl5uTqSR5R4Q9neSEytMEbHy8NjtzJq_vz4-sB65WA3psA4rJtxG0BT9Yo4UtQs1ptwE',
+    // storeId NO se envía a PPaymentButtonBox (es opcional y con una sola tienda
+    // asociada al Token causaba "La tienda asociada no existe" — Error 100).
+    // Se deja aquí solo como referencia.
     storeId: '1793200375001',
   },
-  // Client ID de PayPal SANDBOX (pruebas) — se cambiará por el de Live antes de publicar pagos reales.
-  paypalClientId: 'BAAj-cZzhb-trH8LT8QL3E87AU9DNtA4wPJEm4ITIalazk9rM4r7S2H4r4uabx9-mJen5uE5pwb8RpK2y0',
+  // Client ID de PayPal LIVE (cuenta Business verificada) — pagos reales.
+  paypalClientId: 'BAAaj5Vh3oBX7vlw1OaZVCZOz_rV7OLUe9bET2i_HMFYMcYhzPeVm_5F2YeM-xZvcpzfpvAsbcY5MUzK2c',
   social: {
     facebook: 'https://www.facebook.com/154936657697272',
     instagram: 'https://www.instagram.com/david_bolanos_devcorp',

@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 4321
+    },
+    {
+      "name": "devcorp-web-netlify",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["netlify", "dev", "--port", "8888", "--targetPort", "4321"],
+      "port": 8888
     }
   ]
 }
