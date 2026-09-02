@@ -49,7 +49,19 @@ const SPEC_EVENT: Record<string, string> = {
       </div>
     </li>
     <li><a class:list={['nav-link', { current: isCurrent('/blog') }]} href="/blog/">Recursos</a></li>
-    <li><a class:list={['nav-link', { current: isCurrent('/nosotros') }]} href="/nosotros/">Nosotros</a></li>
+    <li class="has-dropdown">
+      <a class:list={['nav-link', { current: isCurrent('/nosotros') || isCurrent('/contacto') }]} href="/nosotros/">Nosotros <span class="caret">▾</span></a>
+      <div class="dropdown">
+        <a href="/nosotros/">
+          <span class="dropdown-icon">🏢</span>
+          <span>Nosotros<span class="dropdown-sub">Quiénes somos</span></span>
+        </a>
+        <a href="/contacto/">
+          <span class="dropdown-icon">✉️</span>
+          <span>Contacto<span class="dropdown-sub">Escríbenos directamente</span></span>
+        </a>
+      </div>
+    </li>
   </ul>
 
   <div class="nav-actions">
