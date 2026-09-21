@@ -8,10 +8,15 @@ import { SITE, waLink, WA_MESSAGES } from '../data/site';
 interface Props {
   title?: string;
   description?: string;
+  /** Imagen para redes (1200×630). Por defecto la imagen social de DEVCORP. */
+  image?: string;
+  /** true → <meta robots="noindex">. Usar en páginas que no deben aparecer en Google. */
+  noindex?: boolean;
 }
 
-const { title = SITE.title, description = SITE.description } = Astro.props;
+const { title = SITE.title, description = SITE.description, image = SITE.ogImage, noindex = false } = Astro.props;
 const canonical = new URL(Astro.url.pathname, SITE.url);
+const ogImage = new URL(image, SITE.url);
 ---
 <!doctype html>
 <html lang="es">
@@ -20,23 +25,30 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{title}</title>
   <meta name="description" content={description} />
+  {noindex && <meta name="robots" content="noindex, follow" />}
+  <meta name="theme-color" content="#232526" />
   <link rel="canonical" href={canonical} />
-  <link rel="icon" type="image/png" href="/isotipo-devcorp.png" />
+  <link rel="icon" type="image/png" sizes="48x48" href="/favicon-48.png" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <meta name="generator" content={Astro.generator} />
   <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={SITE.name} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
-  <meta property="og:image" content={new URL('/logo-devcorp.png', SITE.url)} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="DEVCORP — Tu área contable, tributaria y financiera externa" />
   <meta property="og:locale" content="es_EC" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content={title} />
   <meta name="twitter:description" content={description} />
-  <meta name="twitter:image" content={new URL('/logo-devcorp.png', SITE.url)} />
+  <meta name="twitter:image" content={ogImage} />
   <StructuredData />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="sitemap" href="/sitemap-index.xml" />
   <slot name="head" />
 </head>
@@ -51,8 +63,11 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
       } catch (e) {}
     };
   </script>
+  <a class="skip-link" href="#contenido">Saltar al contenido</a>
   <Nav />
-  <slot />
+  <main id="contenido" tabindex="-1">
+    <slot />
+  </main>
   <Footer />
   <a
     href={waLink(WA_MESSAGES.general)}
@@ -60,8 +75,10 @@ const canonical = new URL(Astro.url.pathname, SITE.url);
     rel="noopener"
     class="wa-float"
     title="Escríbenos por WhatsApp"
-    aria-label="WhatsApp DEVCORP"
+    aria-label="Escríbenos por WhatsApp (se abre en una pestaña nueva)"
     onclick="dcTrack('click_whatsapp', { location: 'float' })"
-  >💬</a>
+  >
+    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38a9.9 9.9 0 0 0 4.74 1.21h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.85 9.85 0 0 0 12.04 2zm0 1.67c2.2 0 4.26.86 5.82 2.42a8.2 8.2 0 0 1 2.41 5.83c0 4.54-3.7 8.23-8.24 8.23-1.48 0-2.93-.4-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.2 8.2 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.26-8.24zM8.53 7.33c-.16 0-.43.06-.66.31-.22.25-.87.85-.87 2.07 0 1.22.89 2.39 1.01 2.56.12.17 1.75 2.67 4.23 3.74 2.09.9 2.52.72 2.97.68.45-.04 1.46-.6 1.66-1.18.21-.58.21-1.07.15-1.18-.06-.1-.23-.17-.48-.29-.25-.13-1.46-.72-1.69-.8-.22-.09-.39-.13-.55.12-.17.25-.64.8-.78.96-.14.17-.29.19-.53.06-.25-.12-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.55-1.35-.76-1.84-.2-.48-.4-.42-.55-.43h-.47z"/></svg>
+  </a>
 </body>
 </html>

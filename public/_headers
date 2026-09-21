@@ -1,0 +1,18 @@
+# Cabeceras HTTP (Netlify). Se aplican a todo el sitio.
+# Nota: no se define Content-Security-Policy a propósito. El sitio usa scripts
+# de PayPal, PayPhone, Google Fonts y Web3Forms; una CSP mal ajustada rompería
+# los pagos. Si se desea, probarla primero como Content-Security-Policy-Report-Only.
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# Archivos con hash en el nombre: se pueden cachear un año sin riesgo.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Imágenes subidas desde el panel /admin (sin hash): 1 día.
+/images/*
+  Cache-Control: public, max-age=86400

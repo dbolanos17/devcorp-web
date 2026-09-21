@@ -4,6 +4,7 @@ description: "Un análisis del proceso legal para negociar tus notas de crédito
 category: "Tributario"
 date: 2026-05-20
 icon: "💳"
+draft: true
 ---
 
 *Este es un artículo de muestra. El contenido definitivo se redactará y publicará por el equipo de DEVCORP.*

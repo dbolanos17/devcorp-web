@@ -4,6 +4,7 @@ description: "Una guía práctica para emprendedores que recién inician operaci
 category: "Contable"
 date: 2026-05-14
 icon: "📈"
+draft: true
 ---
 
 *Este es un artículo de muestra. El contenido definitivo se redactará y publicará por el equipo de DEVCORP.*

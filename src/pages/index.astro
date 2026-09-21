@@ -1,9 +1,11 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import heroImg from '../assets/stock-oficina.jpg';
 import PlanCard from '../components/PlanCard.astro';
 import FinalCta from '../components/FinalCta.astro';
 import { getCollection } from 'astro:content';
-import { SITE, PLANS, HOME_PLAN_SLUGS, waLink, WA_MESSAGES } from '../data/site';
+import { SITE, PLANS, HOME_PLAN_SLUGS, FAQS, waLink, WA_MESSAGES } from '../data/site';
 
 const testimonials = (await getCollection('testimonials')).sort(
   (a, b) => a.data.order - b.data.order
@@ -49,6 +51,18 @@ const compareRows = [
   { feature: 'Costo estructural', trad: 'Bajo, servicio acotado', devcorp: 'Un solo honorario mensual', interno: 'Salarios, cargas sociales, herramientas y gestión' },
 ];
 
+// Las 4 preguntas más útiles para quien llega por primera vez (el resto está en /planes/).
+const homeFaqs = FAQS.slice(0, 4);
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: homeFaqs.map((f) => ({
+    '@type': 'Question',
+    name: f.q,
+    acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
 const steps = [
   { n: 1, title: 'Diagnóstico', text: 'Conocemos empresa, volumen, equipo y necesidades.' },
   { n: 2, title: 'Propuesta', text: 'Recomendamos el plan y alcance adecuado.' },
@@ -60,7 +74,7 @@ const steps = [
 <Base>
   <!-- SECCIÓN 1 — HERO -->
   <div class="hero hero-photo">
-    <img class="hero-bg" src="/images/stock-oficina.jpg" alt="" role="presentation" />
+    <Image class="hero-bg" src={heroImg} alt="" widths={[640, 1024, 1600, 2000]} sizes="100vw" format="webp" quality={60} loading="eager" fetchpriority="high" />
     <div class="hero-overlay"></div>
     <div class="hero-inner">
       <div class="hero-content">
@@ -282,6 +296,24 @@ const steps = [
     <div class="coverage-cities">
       <span class="coverage-city coverage-city-national">🇪🇨 Cobertura nacional</span>
     </div>
+  </div>
+
+  <!-- PREGUNTAS FRECUENTES -->
+  <div class="section">
+    <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+    <div class="section-header center">
+      <span class="tag">Preguntas frecuentes</span>
+      <h2 class="section-title">Antes de <span class="hi">empezar</span></h2>
+    </div>
+    <div class="faq-list">
+      {homeFaqs.map((f) => (
+        <details class="faq-item">
+          <summary>{f.q}</summary>
+          <p>{f.a}</p>
+        </details>
+      ))}
+    </div>
+    <div class="plans-compare-link"><a href="/planes/#faq">Ver todas las preguntas →</a></div>
   </div>
 
   <!-- SECCIÓN 10 — CTA FINAL -->

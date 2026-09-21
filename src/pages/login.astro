@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base
+  noindex
   title="Portal de Clientes — DEVCORP S.A.S."
   description="Inicia sesión en el Portal de Clientes de DEVCORP para ver tus documentos, facturas y el estado de tus asesorías."
 >
@@ -12,8 +13,8 @@ import Base from '../layouts/Base.astro';
       <h1 style="font-family:'Playfair Display',serif;font-size:1.7rem;font-weight:900;text-align:center;margin-bottom:6px;">Portal de Clientes</h1>
       <p class="sub">Inicia sesión para ver tus documentos, facturas y el estado de tus asesorías.</p>
       <form id="form-login">
-        <div class="form-group"><label>Correo electrónico</label><input type="email" required placeholder="tucorreo@ejemplo.com" /></div>
-        <div class="form-group"><label>Contraseña</label><input type="password" required placeholder="••••••••" /></div>
+        <div class="form-group"><label for="l-1">Correo electrónico</label><input id="l-1" autocomplete="off" type="email" required placeholder="tucorreo@ejemplo.com" /></div>
+        <div class="form-group"><label for="l-2">Contraseña</label><input id="l-2" autocomplete="current-password" type="password" required placeholder="••••••••" /></div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
           <label class="form-check" style="margin-bottom:0;"><input type="checkbox" /> Recordarme</label>
           <span style="font-size:.82rem;color:var(--blue);font-weight:600;">¿Olvidaste tu contraseña?</span>

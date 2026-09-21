@@ -1,10 +1,12 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import davidFoto from '../assets/nosotros-hero-white.jpg';
 import FinalCta from '../components/FinalCta.astro';
 import { SITE, waLink, WA_MESSAGES } from '../data/site';
 ---
 <Base
-  title="Nosotros — DEVCORP S.A.S. | Aliados estratégicos del crecimiento empresarial"
+  title="Nosotros — Firma contable y financiera | DEVCORP"
   description="DEVCORP S.A.S. es una firma ecuatoriana de outsourcing contable, tributario, laboral y financiero para PYMEs. Conoce nuestro enfoque y equipo."
 >
   <div class="section" style="padding-top:100px;">
@@ -18,7 +20,7 @@ import { SITE, waLink, WA_MESSAGES } from '../data/site';
       <div class="about-img">
         <div class="about-photo-wrap">
           <div class="about-photo-frame">
-            <img src="/images/nosotros-hero-white.jpg" alt="David Bolaños, Presidente de DEVCORP S.A.S." loading="lazy" />
+            <Image src={davidFoto} alt="David Bolaños, Presidente de DEVCORP S.A.S." widths={[300, 600]} sizes="300px" format="webp" quality={75} loading="lazy" />
           </div>
           <div class="about-photo-caption">
             <strong>David Bolaños</strong>
@@ -84,7 +86,7 @@ import { SITE, waLink, WA_MESSAGES } from '../data/site';
   <div class="section">
     <div class="section-header center">
       <span class="tag">Nuestro equipo</span>
-      <h2 class="section-title">Los mejores <span class="hi">en cada área</span></h2>
+      <h2 class="section-title">Un equipo para <span class="hi">cada frente</span> de tu empresa</h2>
       <p class="section-sub">Un equipo multidisciplinario, con especialistas dedicados a cada frente de tu empresa: finanzas, contabilidad, lo legal y la administración.</p>
     </div>
     <div class="team-grid">

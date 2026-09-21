@@ -1,9 +1,15 @@
 ---
-import { SPECIALIZED_SERVICES } from '../data/site';
+import { Image } from 'astro:assets';
+import isotipoBlanco from '../assets/isotipo-devcorp-white.png';
+import { SITE, SPECIALIZED_SERVICES } from '../data/site';
+import { getPublishedPosts } from '../lib/blog';
 
 const path = Astro.url.pathname;
 const isCurrent = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
+
+// "Recursos" solo aparece cuando hay artículos publicados.
+const hasBlog = (await getPublishedPosts()).length > 0;
 
 const SPEC_EVENT: Record<string, string> = {
   'firmas-electronicas': 'click_firma_electronica',
@@ -12,52 +18,56 @@ const SPEC_EVENT: Record<string, string> = {
   'devolucion-de-impuestos': 'click_devolucion_impuestos',
 };
 ---
-<nav>
+<nav aria-label="Principal">
   <a href="/" class="nav-logo" aria-label="DEVCORP — Inicio">
-    <div class="nav-logo-badge"><img src="/isotipo-devcorp-white.png" alt="DEVCORP S.A.S." /></div>
+    <div class="nav-logo-badge">
+      <Image src={isotipoBlanco} alt="DEVCORP S.A.S." width={45} height={38} densities={[1, 2]} format="webp" loading="eager" />
+    </div>
   </a>
 
   <ul class="nav-menu" id="nav-menu">
-    <li><a class:list={['nav-link', { current: isCurrent('/') }]} href="/">Inicio</a></li>
+    <li><a class:list={['nav-link', { current: isCurrent('/') }]} href="/" aria-current={path === '/' ? 'page' : undefined}>Inicio</a></li>
     <li class="has-dropdown">
-      <a class:list={['nav-link', { current: isCurrent('/outsourcing-contable') || isCurrent('/cfo-externo') || isCurrent('/devcorp-360') }]} href="/outsourcing-contable/">Soluciones <span class="caret">▾</span></a>
+      <a class:list={['nav-link', { current: isCurrent('/outsourcing-contable') || isCurrent('/cfo-externo') || isCurrent('/devcorp-360') }]} href="/outsourcing-contable/" aria-haspopup="true">Soluciones <span class="caret" aria-hidden="true">▾</span></a>
       <div class="dropdown">
         <a href="/outsourcing-contable/">
-          <span class="dropdown-icon">📊</span>
+          <span class="dropdown-icon" aria-hidden="true">📊</span>
           <span>Outsourcing contable<span class="dropdown-sub">Contabilidad, IVA, nómina y control</span></span>
         </a>
         <a href="/devcorp-360/">
-          <span class="dropdown-icon">🎯</span>
+          <span class="dropdown-icon" aria-hidden="true">🎯</span>
           <span>DEVCORP 360<span class="dropdown-sub">Contabilidad + finanzas en una sola solución</span></span>
         </a>
         <a href="/cfo-externo/">
-          <span class="dropdown-icon">💼</span>
+          <span class="dropdown-icon" aria-hidden="true">💼</span>
           <span>CFO externo<span class="dropdown-sub">Dirección financiera para PYMEs</span></span>
         </a>
       </div>
     </li>
-    <li><a class:list={['nav-link', { current: isCurrent('/planes') }]} href="/planes/">Planes</a></li>
+    <li><a class:list={['nav-link', { current: isCurrent('/planes') }]} href="/planes/" aria-current={isCurrent('/planes') ? 'page' : undefined}>Planes</a></li>
     <li class="has-dropdown">
-      <a class:list={['nav-link', { current: isCurrent('/servicios') }]} href="/servicios/">Servicios especializados <span class="caret">▾</span></a>
+      <a class:list={['nav-link', { current: isCurrent('/servicios') }]} href="/servicios/" aria-haspopup="true">Servicios especializados <span class="caret" aria-hidden="true">▾</span></a>
       <div class="dropdown">
         {SPECIALIZED_SERVICES.map((s) => (
           <a href={`/servicios/${s.slug}/`} onclick={`dcTrack('${SPEC_EVENT[s.slug] || 'click_servicio_especializado'}', { slug: '${s.slug}' })`}>
-            <span class="dropdown-icon">{s.icon}</span>
+            <span class="dropdown-icon" aria-hidden="true">{s.icon}</span>
             <span>{s.title}<span class="dropdown-sub">{s.navSub}</span></span>
           </a>
         ))}
       </div>
     </li>
-    <li><a class:list={['nav-link', { current: isCurrent('/blog') }]} href="/blog/">Recursos</a></li>
+    {hasBlog && (
+      <li><a class:list={['nav-link', { current: isCurrent('/blog') }]} href="/blog/" aria-current={isCurrent('/blog') ? 'page' : undefined}>Recursos</a></li>
+    )}
     <li class="has-dropdown">
-      <a class:list={['nav-link', { current: isCurrent('/nosotros') || isCurrent('/contacto') }]} href="/nosotros/">Nosotros <span class="caret">▾</span></a>
+      <a class:list={['nav-link', { current: isCurrent('/nosotros') || isCurrent('/contacto') }]} href="/nosotros/" aria-haspopup="true">Nosotros <span class="caret" aria-hidden="true">▾</span></a>
       <div class="dropdown">
         <a href="/nosotros/">
-          <span class="dropdown-icon">🏢</span>
+          <span class="dropdown-icon" aria-hidden="true">🏢</span>
           <span>Nosotros<span class="dropdown-sub">Quiénes somos</span></span>
         </a>
         <a href="/contacto/">
-          <span class="dropdown-icon">✉️</span>
+          <span class="dropdown-icon" aria-hidden="true">✉️</span>
           <span>Contacto<span class="dropdown-sub">Escríbenos directamente</span></span>
         </a>
       </div>
@@ -65,7 +75,7 @@ const SPEC_EVENT: Record<string, string> = {
   </ul>
 
   <div class="nav-actions">
-    <a class="btn-login" href="/login/">Iniciar Sesión</a>
+    {SITE.portalEnabled && <a class="btn-login" href="/login/">Iniciar Sesión</a>}
     <a class="btn-register" href="/diagnostico/" onclick="dcTrack('click_diagnostico', { location: 'nav' })">Solicitar diagnóstico</a>
     <button class="nav-burger" id="nav-burger" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-menu">
       <span></span><span></span><span></span>
@@ -79,5 +89,15 @@ const SPEC_EVENT: Record<string, string> = {
   burger?.addEventListener('click', () => {
     const open = menu?.classList.toggle('open');
     burger.setAttribute('aria-expanded', String(!!open));
+    burger.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+  });
+  // Escape cierra el menú móvil y devuelve el foco al botón.
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu?.classList.contains('open')) {
+      menu.classList.remove('open');
+      burger?.setAttribute('aria-expanded', 'false');
+      burger?.setAttribute('aria-label', 'Abrir menú');
+      burger?.focus();
+    }
   });
 </script>

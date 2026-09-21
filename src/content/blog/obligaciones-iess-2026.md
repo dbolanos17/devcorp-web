@@ -4,6 +4,7 @@ description: "Todo lo que un empleador debe cumplir este año frente a la seguri
 category: "Laboral"
 date: 2026-05-28
 icon: "👥"
+draft: true
 ---
 
 *Este es un artículo de muestra. El contenido definitivo se redactará y publicará por el equipo de DEVCORP.*

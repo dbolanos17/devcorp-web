@@ -5,6 +5,7 @@ category: "Tributario"
 date: 2026-06-19
 icon: "📰"
 featured: true
+draft: true
 ---
 
 *Este es un artículo de muestra. El contenido definitivo se redactará y publicará por el equipo de DEVCORP.*

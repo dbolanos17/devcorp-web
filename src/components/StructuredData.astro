@@ -1,23 +1,44 @@
 ---
 import { SITE } from '../data/site';
 
+// Datos estructurados (JSON-LD) para buscadores.
+// Dirección: solo ciudad/región (no se publica dirección de calle).
 const orgLd = {
   '@context': 'https://schema.org',
   '@type': 'ProfessionalService',
+  '@id': `${SITE.url}/#organization`,
   name: SITE.name,
   url: SITE.url,
+  logo: new URL('/logo-devcorp.png', SITE.url).href,
+  image: new URL(SITE.ogImage, SITE.url).href,
+  description: SITE.description,
   email: SITE.email,
   telephone: SITE.phone,
-  areaServed: 'EC',
-  address: { '@type': 'PostalAddress', addressCountry: 'EC' },
+  areaServed: { '@type': 'Country', name: 'Ecuador' },
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: SITE.address.locality,
+    addressRegion: SITE.address.region,
+    addressCountry: SITE.address.country,
+  },
+  openingHoursSpecification: {
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '09:00',
+    closes: '18:00',
+  },
+  knowsLanguage: 'es',
   sameAs: [SITE.social.facebook, SITE.social.instagram, SITE.social.linkedin],
 };
 
 const websiteLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
+  '@id': `${SITE.url}/#website`,
   name: SITE.name,
   url: SITE.url,
+  inLanguage: 'es-EC',
+  publisher: { '@id': `${SITE.url}/#organization` },
 };
 ---
 <script type="application/ld+json" set:html={JSON.stringify(orgLd)} />

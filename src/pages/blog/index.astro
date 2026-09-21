@@ -2,12 +2,10 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import FinalCta from '../../components/FinalCta.astro';
-import { getCollection } from 'astro:content';
+import { getPublishedPosts } from '../../lib/blog';
 import { SITE, waLink, WA_MESSAGES } from '../../data/site';
 
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.date.getTime() - a.data.date.getTime()
-);
+const posts = await getPublishedPosts();
 const featured = posts.find((p) => p.data.featured) ?? posts[0];
 const rest = posts.filter((p) => p.id !== featured?.id);
 const categories = [...new Set(posts.map((p) => p.data.category))];
@@ -16,8 +14,9 @@ const fmt = (d: Date) =>
   d.toLocaleDateString('es-EC', { day: 'numeric', month: 'short', year: 'numeric' });
 ---
 <Base
-  title="Blog — DEVCORP S.A.S. | Finanzas, contabilidad y tributación en Ecuador"
-  description="Noticias, guías y análisis sobre finanzas, contabilidad, tributación y normativa laboral en Ecuador."
+  title="Blog de finanzas y tributación en Ecuador | DEVCORP"
+  description="Noticias, guías y análisis sobre finanzas, contabilidad, tributación y normativa laboral en Ecuador, por el equipo de DEVCORP."
+  noindex={posts.length === 0}
 >
   <PageHero
     title="Blog DEVCORP"
@@ -26,6 +25,13 @@ const fmt = (d: Date) =>
   />
 
   <div class="section">
+    {posts.length === 0 && (
+      <div class="blog-empty">
+        <h2>Estamos preparando nuestros primeros artículos</h2>
+        <p>Pronto publicaremos guías y análisis sobre contabilidad, tributación, nómina y finanzas para PYMEs en Ecuador. Mientras tanto, cuéntanos tu caso y con gusto te orientamos.</p>
+        <a class="btn-primary" href="/diagnostico/">Solicitar diagnóstico →</a>
+      </div>
+    )}
     {featured && (
       <div class="blog-featured">
         <div class="blog-featured-img">{featured.data.icon}</div>
@@ -38,10 +44,10 @@ const fmt = (d: Date) =>
       </div>
     )}
 
-    <div class="blog-filters">
+    {posts.length > 0 && <div class="blog-filters">
       <button class="blog-filter active" data-cat="todos">Todos</button>
       {categories.map((c) => <button class="blog-filter" data-cat={c}>{c}</button>)}
-    </div>
+    </div>}
 
     <div class="blog-grid" id="blog-grid">
       {rest.map((p) => (

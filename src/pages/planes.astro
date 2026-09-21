@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import PlanCard from '../components/PlanCard.astro';
 import FinalCta from '../components/FinalCta.astro';
-import { PLANS, COMPARISON_ROWS, OVERAGES, NOT_INCLUDED, FAQS, waLink, WA_MESSAGES } from '../data/site';
+import { SITE, PLANS, COMPARISON_ROWS, OVERAGES, NOT_INCLUDED, FAQS, waLink, WA_MESSAGES } from '../data/site';
 
 const faqLd = {
   '@context': 'https://schema.org',
@@ -12,6 +12,37 @@ const faqLd = {
     '@type': 'Question',
     name: f.q,
     acceptedAnswer: { '@type': 'Answer', text: f.a },
+  })),
+};
+
+// Catálogo de planes para buscadores (precios en USD por mes, sin IVA).
+const plansLd = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  name: 'Planes DEVCORP',
+  itemListElement: PLANS.map((p, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    item: {
+      '@type': 'Service',
+      name: p.name,
+      description: p.pitch,
+      provider: { '@id': `${SITE.url}/#organization` },
+      areaServed: 'EC',
+      offers: {
+        '@type': 'Offer',
+        url: `${SITE.url}/planes/#${p.slug}`,
+        priceCurrency: 'USD',
+        price: p.price,
+        priceSpecification: {
+          '@type': 'UnitPriceSpecification',
+          price: p.price,
+          priceCurrency: 'USD',
+          unitCode: 'MON',
+          valueAddedTaxIncluded: false,
+        },
+      },
+    },
   })),
 };
 
@@ -26,9 +57,10 @@ const colLabels: Record<string, string> = {
 ---
 <Base
   title="Planes de Outsourcing Contable y CFO | DEVCORP"
-  description="Cumple $89, Control $249, 360 $499, CFO Advisory $790, CFO Integral $1.190, Enterprise desde $1.690. Todos + IVA. Compara los planes de DEVCORP para PYMEs en Ecuador."
+  description="Cumple $89, Control $249, 360 $499, CFO Advisory $790, CFO Integral $1.190 y Enterprise desde $1.690, más IVA. Compara los planes para PYMEs en Ecuador."
 >
   <script type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  <script type="application/ld+json" set:html={JSON.stringify(plansLd)} />
 
   <PageHero
     title="Planes DEVCORP"
@@ -117,7 +149,7 @@ const colLabels: Record<string, string> = {
   </div>
 
   <!-- FAQ -->
-  <div class="section section-alt">
+  <div class="section section-alt plan-anchor" id="faq">
     <div class="section-header center">
       <span class="tag">Preguntas frecuentes</span>
       <h2 class="section-title">Antes de <span class="hi">decidir</span></h2>

@@ -4,6 +4,7 @@ description: "Evita multas y errores comunes en tu declaración mensual de IVA."
 category: "Tributario"
 date: 2026-06-05
 icon: "🧾"
+draft: true
 ---
 
 *Este es un artículo de muestra. El contenido definitivo se redactará y publicará por el equipo de DEVCORP.*

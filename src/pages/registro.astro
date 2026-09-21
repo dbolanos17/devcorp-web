@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 ---
 <Base
+  noindex
   title="Crear cuenta — Portal de Clientes DEVCORP S.A.S."
   description="Regístrate para acceder al Portal de Clientes DEVCORP: documentos, facturas y seguimiento de tus asesorías en línea."
 >
@@ -13,11 +14,11 @@ import Base from '../layouts/Base.astro';
       <p class="sub">Regístrate para acceder al Portal de Clientes DEVCORP.</p>
       <form id="form-registro">
         <div class="form-row">
-          <div class="form-group"><label>Nombres *</label><input type="text" required /></div>
-          <div class="form-group"><label>Apellidos *</label><input type="text" required /></div>
+          <div class="form-group"><label for="r-1">Nombres *</label><input id="r-1" autocomplete="given-name" type="text" required /></div>
+          <div class="form-group"><label for="r-2">Apellidos *</label><input id="r-2" autocomplete="family-name" type="text" required /></div>
         </div>
-        <div class="form-group"><label>Correo electrónico *</label><input type="email" required /></div>
-        <div class="form-group"><label>Teléfono *</label><input type="tel" required /></div>
+        <div class="form-group"><label for="r-3">Correo electrónico *</label><input id="r-3" autocomplete="off" type="email" required /></div>
+        <div class="form-group"><label for="r-4">Teléfono *</label><input id="r-4" autocomplete="tel" type="tel" required /></div>
         <div class="form-group"><label>Tipo de cliente *</label>
           <select required>
             <option value="" disabled selected>Selecciona una opción</option>
@@ -26,8 +27,8 @@ import Base from '../layouts/Base.astro';
             <option>ONG</option>
           </select>
         </div>
-        <div class="form-group"><label>Contraseña *</label><input type="password" required /></div>
-        <div class="form-check"><input type="checkbox" required /> Acepto los Términos y Condiciones y la Política de Privacidad.</div>
+        <div class="form-group"><label for="r-5">Contraseña *</label><input id="r-5" autocomplete="new-password" type="password" required /></div>
+        <div class="form-check"><input type="checkbox" required /> Acepto los <a href="/terminos-y-condiciones/" target="_blank">Términos y Condiciones</a> y la <a href="/politica-de-privacidad/" target="_blank">Política de Privacidad</a>.</div>
         <button class="btn-submit" type="submit">Crear cuenta →</button>
         <p class="form-notice" id="registro-notice">El Portal de Clientes estará disponible muy pronto. Te avisaremos cuando puedas crear tu cuenta.</p>
       </form>

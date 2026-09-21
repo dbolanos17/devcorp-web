@@ -6,3 +6,7 @@ dist/
 .DS_Store
 *.zip
 public/images/DSC_0250.JPG
+
+# Originales fuera del sitio (no se despliegan). Siguen en el historial git.
+_originales/
+deno.lock

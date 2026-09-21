@@ -1,0 +1,4 @@
+# Redirecciones (Netlify)
+# La pagina heredada "Asesoria Contable" se retiro: su contenido vive en Outsourcing contable.
+/servicios/asesoria-contable   /outsourcing-contable/   301
+/servicios/asesoria-contable/  /outsourcing-contable/   301

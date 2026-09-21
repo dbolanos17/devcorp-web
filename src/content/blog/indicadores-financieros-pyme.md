@@ -4,6 +4,7 @@ description: "Conoce las métricas clave para tomar mejores decisiones en tu emp
 category: "Financiero"
 date: 2026-06-12
 icon: "📊"
+draft: true
 ---
 
 *Este es un artículo de muestra. El contenido definitivo se redactará y publicará por el equipo de DEVCORP.*

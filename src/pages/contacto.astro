@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
+import SocialIcons from '../components/SocialIcons.astro';
 import { SITE, PLANS } from '../data/site';
 ---
 <Base
@@ -17,16 +18,14 @@ import { SITE, PLANS } from '../data/site';
     <div class="contact-grid">
       <div>
         <div class="contact-info-card">
-          <div class="contact-row"><div class="contact-icon">📍</div><div><h5>Cobertura</h5><span>{SITE.coverage}</span></div></div>
-          <div class="contact-row"><div class="contact-icon">📞</div><div><h5>Teléfono / WhatsApp</h5><a href={SITE.phoneHref}>{SITE.phone}</a></div></div>
-          <div class="contact-row"><div class="contact-icon">✉️</div><div><h5>Correo electrónico</h5><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div></div>
-          <div class="contact-row"><div class="contact-icon">🕒</div><div><h5>Horario de atención</h5><span>{SITE.hours}</span></div></div>
+          <div class="contact-row"><div class="contact-icon" aria-hidden="true">📍</div><div><h5>Cobertura</h5><span>{SITE.coverage}</span></div></div>
+          <div class="contact-row"><div class="contact-icon" aria-hidden="true">📞</div><div><h5>Teléfono / WhatsApp</h5><a href={SITE.phoneHref}>{SITE.phone}</a></div></div>
+          <div class="contact-row"><div class="contact-icon" aria-hidden="true">✉️</div><div><h5>Correo electrónico</h5><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div></div>
+          <div class="contact-row"><div class="contact-icon" aria-hidden="true">🕒</div><div><h5>Horario de atención</h5><span>{SITE.hours}</span></div></div>
           <div style="padding-top:18px;">
             <h5 style="font-size:.88rem;font-weight:700;margin-bottom:10px;">Síguenos</h5>
             <div class="social-row">
-              <a class="social-pill" href={SITE.social.facebook} target="_blank" rel="noopener" aria-label="Facebook">f</a>
-              <a class="social-pill" href={SITE.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">ig</a>
-              <a class="social-pill" href={SITE.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+              <SocialIcons linkClass="social-pill" />
             </div>
           </div>
         </div>
@@ -37,26 +36,27 @@ import { SITE, PLANS } from '../data/site';
       </div>
 
       <div class="form-card">
-        <h3 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;margin-bottom:6px;">Envíanos un mensaje</h3>
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;margin-bottom:6px;">Envíanos un mensaje</h2>
         <p style="color:var(--gray);font-size:.9rem;margin-bottom:28px;">Completa el formulario y tu mensaje nos llegará directo a nuestro correo. Un asesor se pondrá en contacto contigo.</p>
         <form id="form-contacto" data-key={SITE.web3formsKey}>
           <div class="form-row">
-            <div class="form-group"><label>Nombre completo *</label><input type="text" name="nombre" required /></div>
-            <div class="form-group"><label>Teléfono *</label><input type="tel" name="telefono" required /></div>
+            <div class="form-group"><label for="c-nombre">Nombre completo *</label><input id="c-nombre" type="text" name="nombre" autocomplete="name" required /></div>
+            <div class="form-group"><label for="c-telefono">Teléfono *</label><input id="c-telefono" type="tel" name="telefono" autocomplete="tel" required /></div>
           </div>
-          <div class="form-group"><label>Correo electrónico *</label><input type="email" name="correo" required /></div>
+          <div class="form-group"><label for="c-correo">Correo electrónico *</label><input id="c-correo" type="email" name="correo" autocomplete="email" required /></div>
           <div class="form-group">
-            <label>Servicio de interés</label>
-            <select name="servicio">
+            <label for="c-servicio">Servicio de interés</label>
+            <select id="c-servicio" name="servicio">
               {PLANS.map((p) => <option>{p.name}</option>)}
               <option>Servicios especializados (firma electrónica, notas de crédito, etc.)</option>
               <option>Otro</option>
             </select>
           </div>
-          <div class="form-group"><label>Mensaje *</label><textarea name="mensaje" required placeholder="Cuéntanos sobre tu negocio y en qué podemos ayudarte..."></textarea></div>
-          <div class="form-check"><input type="checkbox" required /> Acepto la <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> y el tratamiento de mis datos.</div>
+          <div class="form-group"><label for="c-mensaje">Mensaje *</label><textarea id="c-mensaje" name="mensaje" required placeholder="Cuéntanos sobre tu negocio y en qué podemos ayudarte..."></textarea></div>
+          <div class="hp" aria-hidden="true"><label>No marcar esta casilla <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" /></label></div>
+          <div class="form-check"><input id="c-acepto" type="checkbox" required /> <label for="c-acepto">Acepto la <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> y el tratamiento de mis datos.</label></div>
           <button class="btn-submit" type="submit" id="contacto-btn">Enviar mensaje →</button>
-          <p class="form-notice" id="contacto-notice"></p>
+          <p class="form-notice" id="contacto-notice" role="status" aria-live="polite"></p>
         </form>
       </div>
     </div>
@@ -70,6 +70,9 @@ import { SITE, PLANS } from '../data/site';
       const notice = document.getElementById('contacto-notice')!;
       const d = new FormData(form);
 
+      // Trampa anti-spam: los humanos no ven esta casilla; si llega marcada, es un bot.
+      if (d.get('botcheck')) { form.reset(); return; }
+
       btn.disabled = true;
       btn.textContent = 'Enviando...';
       notice.classList.remove('show');
@@ -82,6 +85,7 @@ import { SITE, PLANS } from '../data/site';
             access_key: form.dataset.key,
             subject: `Nuevo mensaje de contacto — ${d.get('nombre')}`,
             from_name: 'Sitio Web DEVCORP',
+            replyto: d.get('correo'),
             'Nombre': d.get('nombre'),
             'Teléfono': d.get('telefono'),
             'Correo': d.get('correo'),
@@ -91,7 +95,7 @@ import { SITE, PLANS } from '../data/site';
         });
         const data = await res.json();
         if (data.success) {
-          notice.textContent = 'Mensaje enviado correctamente.';
+          notice.textContent = 'Mensaje enviado correctamente. Te responderemos en menos de 24 horas.';
           form.reset();
         } else {
           notice.textContent = '⚠️ No se pudo enviar el mensaje. Intenta de nuevo o escríbenos a info@devcorp-ec.com.';

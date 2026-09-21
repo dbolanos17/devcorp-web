@@ -35,13 +35,14 @@ import { SITE } from '../../data/site';
       <aside class="svc-sidebar">
         <h4>Evaluar mi caso</h4>
         <form id="form-notas" data-key={SITE.web3formsKey}>
-          <div class="form-group"><input type="text" name="nombre" placeholder="Nombre completo *" required /></div>
-          <div class="form-group"><input type="tel" name="telefono" placeholder="Teléfono *" required /></div>
-          <div class="form-group"><input type="email" name="correo" placeholder="Correo electrónico *" required /></div>
-          <div class="form-group"><input type="text" name="monto" placeholder="Monto de la nota de crédito *" required /></div>
-          <div class="form-check"><input type="checkbox" required /> Acepto la <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> y el tratamiento de mis datos.</div>
+          <div class="form-group"><label class="sr-only" for="n-nombre">Nombre completo</label><input id="n-nombre" type="text" name="nombre" placeholder="Nombre completo *" autocomplete="name" required /></div>
+          <div class="form-group"><label class="sr-only" for="n-telefono">Teléfono</label><input id="n-telefono" type="tel" name="telefono" placeholder="Teléfono *" autocomplete="tel" required /></div>
+          <div class="form-group"><label class="sr-only" for="n-correo">Correo electrónico</label><input id="n-correo" type="email" name="correo" placeholder="Correo electrónico *" autocomplete="email" required /></div>
+          <div class="form-group"><label class="sr-only" for="n-monto">Monto de la nota de crédito</label><input id="n-monto" type="text" name="monto" placeholder="Monto de la nota de crédito *" autocomplete="off" required /></div>
+          <div class="hp" aria-hidden="true"><label>No marcar esta casilla <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" /></label></div>
+          <div class="form-check"><input id="n-acepto" type="checkbox" required /> <label for="n-acepto">Acepto la <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> y el tratamiento de mis datos.</label></div>
           <button class="btn-submit" type="submit" id="notas-btn">Evaluar mi caso</button>
-          <p class="form-notice" id="notas-notice"></p>
+          <p class="form-notice" id="notas-notice" role="status" aria-live="polite"></p>
         </form>
       </aside>
     </div>
@@ -54,6 +55,8 @@ import { SITE } from '../../data/site';
       const btn = document.getElementById('notas-btn') as HTMLButtonElement;
       const notice = document.getElementById('notas-notice')!;
       const d = new FormData(form);
+      // Trampa anti-spam: si llega marcada, es un bot.
+      if (d.get('botcheck')) { form.reset(); return; }
 
       btn.disabled = true;
       btn.textContent = 'Enviando...';
@@ -67,6 +70,7 @@ import { SITE } from '../../data/site';
             access_key: form.dataset.key,
             subject: `Cotización de Nota de Crédito SRI — ${d.get('nombre')}`,
             from_name: 'Sitio Web DEVCORP',
+            replyto: d.get('correo'),
             'Nombre': d.get('nombre'),
             'Teléfono': d.get('telefono'),
             'Correo': d.get('correo'),

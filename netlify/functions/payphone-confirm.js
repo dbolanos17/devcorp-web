@@ -2,33 +2,39 @@
 // Nunca confía en el resultado que reporta el navegador: siempre confirma
 // contra la API de PayPhone usando el token secreto (variable de entorno).
 //
+// SEGURIDAD: en la Cajita de Pagos el monto lo fija el navegador, así que aquí
+// se compara lo que PayPhone realmente cobró contra la tarifa oficial de la
+// vigencia (src/data/firma-precios.js). Si no coincide, el pago se marca para
+// revisión manual y DEVCORP recibe una alerta.
+//
 // Documentación: https://docs.payphone.app/cajita-de-pagos
 
-const WEB3FORMS_KEY = '2d27232a-9864-4e50-bf55-01077f13254d';
+import { firmaPorAnios, firmaCentavos } from '../../src/data/firma-precios.js';
+import { clean, notify } from './lib/notify.js';
+import { buildPaymentEmail, sendCustomerEmail } from './lib/emails.js';
 
-exports.handler = async (event) => {
+const json = (statusCode, obj) => ({ statusCode, body: JSON.stringify(obj) });
+
+export const handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return { statusCode: 405, body: 'Method Not Allowed' };
   }
 
   const token = process.env.PAYPHONE_TOKEN;
   if (!token) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ success: false, message: 'PAYPHONE_TOKEN no configurado en Netlify.' }),
-    };
+    return json(500, { success: false, message: 'PAYPHONE_TOKEN no configurado en Netlify.' });
   }
 
   let payload;
   try {
     payload = JSON.parse(event.body || '{}');
   } catch {
-    return { statusCode: 400, body: JSON.stringify({ success: false, message: 'Body inválido.' }) };
+    return json(400, { success: false, message: 'Body inválido.' });
   }
 
   const { id, clientTxId, customer } = payload;
   if (!id || !clientTxId) {
-    return { statusCode: 400, body: JSON.stringify({ success: false, message: 'Faltan id o clientTxId.' }) };
+    return json(400, { success: false, message: 'Faltan id o clientTxId.' });
   }
 
   try {
@@ -44,44 +50,55 @@ exports.handler = async (event) => {
     const data = await res.json();
 
     if (!res.ok || data.statusCode !== 3 || data.transactionStatus !== 'Approved') {
-      return {
-        statusCode: 200,
-        body: JSON.stringify({ success: false, message: 'El pago no fue aprobado.', data }),
-      };
+      return json(200, { success: false, message: 'El pago no fue aprobado.', data });
     }
 
-    // Pago verificado: notificar a DEVCORP por correo (Web3Forms).
-    await fetch('https://api.web3forms.com/submit', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({
-        access_key: WEB3FORMS_KEY,
-        subject: `Pago recibido (PayPhone) — Firma Electrónica — ${customer?.nombre || 'Cliente'}`,
-        from_name: 'Sitio Web DEVCORP — Pagos',
-        'Nombre': customer?.nombre || '—',
-        'Cédula': customer?.cedula || '—',
-        'Correo': customer?.correo || '—',
-        'Teléfono': customer?.telefono || '—',
-        'Vigencia comprada': customer?.vigencia || '—',
-        'Monto': `$${(data.amount / 100).toFixed(2)}`,
-        'Método de pago': 'PayPhone',
-        'ID de transacción': data.transactionId,
-        'Código de autorización': data.authorizationCode,
-      }),
-    });
+    // Verificación: el monto cobrado debe coincidir con la tarifa de la vigencia.
+    const plan = firmaPorAnios(customer?.years);
+    const verified = !!plan && Number(data.amount) === firmaCentavos(plan);
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        success: true,
-        transactionId: data.transactionId,
-        amount: data.amount,
-      }),
-    };
+    // Confirmación al cliente (solo si hay proveedor de correo configurado).
+    const mail = buildPaymentEmail({
+      nombre: customer?.nombre,
+      vigencia: plan ? plan.label : undefined,
+      monto: (Number(data.amount) / 100).toFixed(2),
+      metodo: 'PayPhone',
+      codigo: data.transactionId,
+      review: !verified,
+    });
+    const enviado = await sendCustomerEmail({ to: customer?.correo, ...mail });
+
+    await notify(
+      `${verified ? 'Pago recibido' : '⚠️ REVISAR pago'} (PayPhone) — Firma Electrónica — ${clean(customer?.nombre, 80)}`,
+      {
+        'Verificación': verified
+          ? 'OK — el monto coincide con la tarifa de la vigencia'
+          : plan
+            ? '⚠️ REVISAR — el monto cobrado no coincide con la tarifa de la vigencia declarada'
+            : '⚠️ REVISAR — no llegaron datos válidos del cliente (¿otro navegador o vigencia inválida?)',
+        'Nombre': clean(customer?.nombre),
+        'Cédula': clean(customer?.cedula),
+        'Correo': clean(customer?.correo),
+        'Teléfono': clean(customer?.telefono),
+        'Tipo': clean(customer?.tipo),
+        'RUC': clean(customer?.ruc),
+        'Vigencia declarada': plan ? plan.label : clean(customer?.vigencia),
+        'Monto': `$${(Number(data.amount) / 100).toFixed(2)}`,
+        'Método de pago': 'PayPhone',
+        'ID de transacción': clean(data.transactionId),
+        'Código de autorización': clean(data.authorizationCode),
+        'Confirmación enviada al cliente': enviado.sent ? 'Sí' : `No (${enviado.reason})`,
+      }
+    );
+
+    return json(200, {
+      success: true,
+      review: !verified,
+      transactionId: data.transactionId,
+      amount: data.amount,
+    });
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ success: false, message: 'Error al confirmar con PayPhone.', error: String(err) }),
-    };
+    console.error('payphone-confirm error:', String(err));
+    return json(500, { success: false, message: 'Error al confirmar con PayPhone.' });
   }
 };

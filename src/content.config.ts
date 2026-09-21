@@ -10,6 +10,8 @@ const blog = defineCollection({
     date: z.coerce.date(),
     icon: z.string().default('📰'),
     featured: z.boolean().default(false),
+    // Borrador: si es true el artículo no se publica (ni en la página, ni en el listado, ni en el sitemap).
+    draft: z.boolean().default(false),
   }),
 });
 

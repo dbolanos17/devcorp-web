@@ -1,24 +1,22 @@
 ---
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
-import { SITE } from '../../data/site';
+import { SITE, FIRMA_PRECIOS, firmaPrecioTexto } from '../../data/site';
 
-const PRECIOS = [
-  { years: '1 año', price: '$18.50' },
-  { years: '2 años', price: '$32.50' },
-  { years: '3 años', price: '$44.99' },
-  { years: '4 años', price: '$54.99' },
-  { years: '5 años', price: '$64.99' },
-];
+// Las tarifas viven en src/data/firma-precios.js (también las valida el servidor).
+const PRECIOS = FIRMA_PRECIOS.map((p) => ({ ...p, priceText: firmaPrecioTexto(p) }));
+const desde = PRECIOS[0].priceText;
 ---
 <Base
   title="Firmas Electrónicas en Ecuador — DEVCORP S.A.S."
-  description="Obtén tu firma electrónica en minutos, para personas naturales o jurídicas, con validez legal en Ecuador. Vigencia de 1 a 5 años desde $18.50."
+  description={`Obtén tu firma electrónica en minutos, para personas naturales o jurídicas, con validez legal en Ecuador. Vigencia de 1 a 5 años desde ${desde}.`}
 >
   <Fragment slot="head">
     <link rel="stylesheet" href="https://cdn.payphonetodoesposible.com/box/v2.0/payphone-payment-box.css" />
     <script type="module" src="https://cdn.payphonetodoesposible.com/box/v2.0/payphone-payment-box.js"></script>
-    <script src={`https://www.paypal.com/sdk/js?client-id=${SITE.paypalClientId}&currency=USD`}></script>
+    <!-- defer: el SDK de PayPal ya no bloquea el pintado de la página. Solo se usa
+         cuando el cliente interactúa con el formulario, mucho después de cargar. -->
+    <script defer src={`https://www.paypal.com/sdk/js?client-id=${SITE.paypalClientId}&currency=USD`}></script>
     <!-- El CSS de PayPhone trae "html{font-size:13px}" y encoge todo el sitio
          (que usa rem) en esta página, incluido el menú. Se restaura el tamaño
          base normal del navegador. -->
@@ -44,33 +42,33 @@ const PRECIOS = [
         <h2>Tarifas vigentes</h2>
         <div class="price-table">
           {PRECIOS.map((p) => (
-            <div class="price-row"><span>{p.years}</span><strong>{p.price}</strong></div>
+            <div class="price-row"><span>{p.label}</span><strong>{p.priceText}</strong></div>
           ))}
         </div>
       </div>
       <aside class="svc-sidebar">
-        <h4>Solicita tu firma electrónica</h4>
+        <h2>Solicita tu firma electrónica</h2>
         <form id="form-firmas" data-key={SITE.web3formsKey}>
-          <div class="form-group"><input type="text" name="nombre" placeholder="Apellidos y nombres completos *" required /></div>
-          <div class="form-group"><input type="text" name="cedula" placeholder="Cédula de identidad *" required /></div>
-          <div class="form-group"><input type="email" name="correo" placeholder="Correo electrónico *" required /></div>
-          <div class="form-group"><input type="tel" name="telefono" placeholder="Número de teléfono *" required /></div>
+          <div class="form-group"><label class="sr-only" for="f-nombre">Apellidos y nombres completos</label><input id="f-nombre" type="text" name="nombre" placeholder="Apellidos y nombres completos *" autocomplete="name" required /></div>
+          <div class="form-group"><label class="sr-only" for="f-cedula">Cédula de identidad</label><input id="f-cedula" type="text" name="cedula" placeholder="Cédula de identidad *" inputmode="numeric" autocomplete="off" required /></div>
+          <div class="form-group"><label class="sr-only" for="f-correo">Correo electrónico</label><input id="f-correo" type="email" name="correo" placeholder="Correo electrónico *" autocomplete="email" required /></div>
+          <div class="form-group"><label class="sr-only" for="f-telefono">Número de teléfono</label><input id="f-telefono" type="tel" name="telefono" placeholder="Número de teléfono *" autocomplete="tel" required /></div>
           <div class="form-group">
-            <select name="tipo" required>
+            <label class="sr-only" for="f-tipo">Persona natural o jurídica</label>
+            <select id="f-tipo" name="tipo" required>
               <option value="" disabled selected>Persona Natural o Jurídica *</option>
               <option>Persona Natural</option>
               <option>Persona Jurídica</option>
             </select>
           </div>
-          <div class="form-group"><input type="text" name="ruc" placeholder="RUC (si aplica)" /></div>
+          <div class="form-group"><label class="sr-only" for="f-ruc">RUC (si aplica)</label><input id="f-ruc" type="text" name="ruc" placeholder="RUC (si aplica)" inputmode="numeric" autocomplete="off" /></div>
           <div class="form-group">
+            <label class="sr-only" for="firma-vigencia">Años de vigencia</label>
             <select name="vigencia" id="firma-vigencia" required>
               <option value="" disabled selected>Años de vigencia *</option>
-              <option value="1 año — $18.50" data-price="$18.50">1 año — $18.50</option>
-              <option value="2 años — $32.50" data-price="$32.50">2 años — $32.50</option>
-              <option value="3 años — $44.99" data-price="$44.99">3 años — $44.99</option>
-              <option value="4 años — $54.99" data-price="$54.99">4 años — $54.99</option>
-              <option value="5 años — $64.99" data-price="$64.99">5 años — $64.99</option>
+              {PRECIOS.map((p) => (
+                <option value={`${p.label} — ${p.priceText}`} data-price={p.priceText} data-years={p.years}>{p.label} — {p.priceText}</option>
+              ))}
             </select>
           </div>
           <div class="form-group">
@@ -78,17 +76,19 @@ const PRECIOS = [
             <input type="file" id="firma-file" name="attachment" accept=".pdf,.jpg,.jpeg,.png" />
           </div>
           <p class="price-hint">Total a pagar: <strong id="firma-precio">—</strong></p>
-          <div class="form-check"><input type="checkbox" required /> Acepto la <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> y el tratamiento de mis datos.</div>
+          <div class="hp" aria-hidden="true"><label>No marcar esta casilla <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" /></label></div>
+          <div class="form-check"><input id="f-acepta" type="checkbox" name="acepta" required /> <label for="f-acepta">Acepto la <a href="/politica-de-privacidad/" target="_blank">política de privacidad</a> y los <a href="/terminos-y-condiciones/" target="_blank">términos y condiciones</a>.</label></div>
           <button class="btn-submit" type="submit" id="firmas-btn">Enviar solicitud</button>
           <p class="file-hint">Si no adjuntas tus documentos ahora, te contactamos para recibirlos y coordinar el pago.</p>
-          <p class="form-notice" id="firmas-notice"></p>
+          <p class="form-notice" id="firmas-notice" role="status" aria-live="polite"></p>
         </form>
 
         <div class="pay-divider"><span>o paga en línea ahora</span></div>
-        <p class="file-hint" id="pay-hint">Completa tus datos arriba y elige la vigencia para habilitar el pago.</p>
+        <p class="file-hint" id="pay-hint">Completa tus datos, elige la vigencia y acepta los términos para habilitar el pago.</p>
         <div id="payphone-button" class="pay-widget"></div>
         <div id="paypal-button-container" class="pay-widget"></div>
-        <p class="form-notice" id="pay-notice"></p>
+        <p class="form-notice" id="pay-notice" role="status" aria-live="polite"></p>
+        <div id="pay-success" class="pay-success" role="status" tabindex="-1"></div>
       </aside>
     </div>
   </div>
@@ -99,14 +99,28 @@ const PRECIOS = [
       const price = sel.options[sel.selectedIndex]?.dataset.price ?? '—';
       const el = document.getElementById('firma-precio');
       if (el) el.textContent = price;
-      refreshPaymentButtons();
+      scheduleRefresh();
     });
 
     // ─── Pago en línea (PayPhone + PayPal) ───
+    // Importante: el precio real lo decide el servidor a partir de la vigencia
+    // (src/data/firma-precios.js). El monto de aquí solo sirve para mostrarlo y
+    // para armar la cajita de PayPhone; el servidor lo verifica igualmente.
     const REQUIRED_FIELDS = ['nombre', 'cedula', 'correo', 'telefono', 'tipo'];
+
+    // La cajita de PayPhone se reconstruye cada vez que cambian los datos, y cada
+    // reconstrucción crea una transacción en PayPhone. Por eso se espera a que el
+    // cliente deje de escribir (400 ms) y, mientras tanto, la caja anterior se
+    // retira para que nunca quede visible con un monto desactualizado.
+    let refreshTimer;
+    function scheduleRefresh() {
+      document.getElementById('payphone-button').innerHTML = '';
+      clearTimeout(refreshTimer);
+      refreshTimer = setTimeout(refreshPaymentButtons, 400);
+    }
     document.querySelectorAll('#form-firmas input[name], #form-firmas select[name]').forEach((el) => {
-      el.addEventListener('input', () => refreshPaymentButtons());
-      el.addEventListener('change', () => refreshPaymentButtons());
+      el.addEventListener('input', scheduleRefresh);
+      el.addEventListener('change', scheduleRefresh);
     });
 
     function getCustomer() {
@@ -121,12 +135,14 @@ const PRECIOS = [
         tipo: d.get('tipo'),
         ruc: d.get('ruc') || 'No aplica',
         vigencia: opt?.value || '',
+        years: opt?.dataset.years ? Number(opt.dataset.years) : 0,
         amount: opt?.dataset.price ? parseFloat(opt.dataset.price.replace('$', '')) : 0,
+        acepta: !!d.get('acepta'),
       };
     }
 
     function customerIsValid(c) {
-      return REQUIRED_FIELDS.every((f) => c[f] && String(c[f]).trim() !== '') && c.amount > 0;
+      return REQUIRED_FIELDS.every((f) => c[f] && String(c[f]).trim() !== '') && c.amount > 0 && c.years > 0 && c.acepta;
     }
 
     function genClientTxId() {
@@ -148,7 +164,7 @@ const PRECIOS = [
       hint.style.display = 'none';
 
       const clientTransactionId = genClientTxId();
-      localStorage.setItem(clientTransactionId, JSON.stringify(c));
+      try { localStorage.setItem(clientTransactionId, JSON.stringify(c)); } catch (e) { /* modo privado */ }
 
       // PayPhone requiere reconstruir la caja cada vez que cambia el monto.
       // storeId se omite a propósito: PayPhone lo toma como opcional y, con
@@ -181,19 +197,20 @@ const PRECIOS = [
           createOrder: async () => {
             const cust = getCustomer();
             if (!customerIsValid(cust)) {
-              showPayNotice('⚠️ Completa tus datos y elige la vigencia antes de pagar.');
+              showPayNotice('⚠️ Completa tus datos, elige la vigencia y acepta los términos antes de pagar.');
               throw new Error('Datos incompletos');
             }
             const res = await fetch('/.netlify/functions/paypal-capture', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                action: 'create',
-                amount: cust.amount,
-                description: 'Firma Electrónica DEVCORP — ' + cust.vigencia,
-              }),
+              // Solo se envía la vigencia: el servidor busca el precio.
+              body: JSON.stringify({ action: 'create', years: cust.years }),
             });
             const data = await res.json();
+            if (!data.id) {
+              showPayNotice('⚠️ No se pudo iniciar el pago con PayPal. Intenta de nuevo o escríbenos a info@devcorp-ec.com.');
+              throw new Error('Orden no creada');
+            }
             return data.id;
           },
           onApprove: async (data) => {
@@ -205,7 +222,7 @@ const PRECIOS = [
             });
             const result = await res.json();
             if (result.success) {
-              showPaySuccess();
+              showPayResult(result);
             } else {
               showPayNotice('⚠️ No se pudo confirmar el pago con PayPal. Escríbenos a info@devcorp-ec.com.');
             }
@@ -221,13 +238,36 @@ const PRECIOS = [
       notice.classList.add('show');
     }
 
-    function showPaySuccess() {
-      showPayNotice('Mensaje enviado correctamente.');
+    // Comprobante en pantalla tras un pago confirmado por el servidor.
+    // result.review = el servidor cobró pero el monto no coincidió con la tarifa: se revisa a mano.
+    function showPayResult(result) {
+      document.getElementById('pay-notice').classList.remove('show');
+      const box = document.getElementById('pay-success');
+      box.replaceChildren();
+      box.classList.add('show');
+      box.classList.toggle('pay-review', !!result.review);
+
+      const title = document.createElement('strong');
+      title.textContent = result.review ? 'Recibimos tu pago y lo estamos verificando' : '¡Pago recibido!';
+      const code = document.createElement('code');
+      code.textContent = String(result.transactionId ?? '—');
+      const p1 = document.createElement('div');
+      p1.append('Tu código de transacción es ', code, '. Guárdalo como comprobante.');
+      const p2 = document.createElement('div');
+      p2.style.marginTop = '8px';
+      p2.textContent = result.review
+        ? 'Un asesor revisará el pago y te contactará al correo o teléfono que registraste.'
+        : 'Nuestro equipo validará tu información y te contactará al correo o teléfono que registraste para completar la emisión de tu firma. Si aún no enviaste tus documentos (cédula y RUC, si aplica), te los pediremos en ese contacto.';
+      box.append(title, p1, p2);
+
       const form = document.getElementById('form-firmas');
       form?.reset();
       document.getElementById('firma-precio').textContent = '—';
       document.getElementById('payphone-button').innerHTML = '';
       document.getElementById('pay-hint').style.display = 'block';
+      box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      box.focus();
+      if (window.dcTrack) window.dcTrack('pago_firma_confirmado', { review: !!result.review });
     }
 
     // Si volvemos de un redireccionamiento de PayPhone, confirmar el pago.
@@ -240,8 +280,11 @@ const PRECIOS = [
       history.replaceState({}, '', window.location.pathname);
       showPayNotice('Confirmando tu pago...');
 
-      const stored = localStorage.getItem(clientTxId);
-      const customer = stored ? JSON.parse(stored) : null;
+      let customer = null;
+      try {
+        const stored = localStorage.getItem(clientTxId);
+        customer = stored ? JSON.parse(stored) : null;
+      } catch (e) { /* sin datos locales: el servidor lo marcará para revisión */ }
 
       try {
         const res = await fetch('/.netlify/functions/payphone-confirm', {
@@ -251,8 +294,8 @@ const PRECIOS = [
         });
         const result = await res.json();
         if (result.success) {
-          localStorage.removeItem(clientTxId);
-          showPaySuccess();
+          try { localStorage.removeItem(clientTxId); } catch (e) {}
+          showPayResult(result);
         } else {
           showPayNotice('⚠️ El pago no pudo confirmarse. Escríbenos a info@devcorp-ec.com.');
         }
@@ -267,6 +310,9 @@ const PRECIOS = [
       const btn = document.getElementById('firmas-btn');
       const notice = document.getElementById('firmas-notice');
       const d = new FormData(form);
+
+      // Trampa anti-spam: los humanos no ven esta casilla; si llega marcada, es un bot.
+      if (d.get('botcheck')) { form.reset(); return; }
 
       const fileInput = document.getElementById('firma-file');
       const file = fileInput?.files?.[0];
@@ -286,6 +332,7 @@ const PRECIOS = [
       payload.append('access_key', form.dataset.key);
       payload.append('subject', `Solicitud de Firma Electrónica — ${d.get('nombre')}`);
       payload.append('from_name', 'Sitio Web DEVCORP');
+      payload.append('replyto', d.get('correo'));
       payload.append('Nombre', d.get('nombre'));
       payload.append('Cédula', d.get('cedula'));
       payload.append('Correo', d.get('correo'));
@@ -303,7 +350,7 @@ const PRECIOS = [
         });
         const data = await res.json();
         if (data.success) {
-          notice.textContent = 'Mensaje enviado correctamente.';
+          notice.textContent = 'Solicitud enviada correctamente. Te contactaremos en ' + 'menos de 24 horas' + '.';
           form.reset();
           document.getElementById('firma-precio').textContent = '—';
         } else {

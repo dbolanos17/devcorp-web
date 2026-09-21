@@ -12,6 +12,17 @@ export const SITE = {
   web3formsKey: '2d27232a-9864-4e50-bf55-01077f13254d',
   coverage: 'Atención remota en todo Ecuador',
   hours: 'Lunes a viernes · 9:00 – 18:00',
+  // Plazo de respuesta prometido en formularios (mismo texto que /contacto/).
+  responseTime: 'menos de 24 horas',
+  // Solo ciudad (sin dirección de calle) — usada en datos estructurados (JSON-LD).
+  // Confirmar/ajustar si el domicilio legal cambia.
+  address: { locality: 'Quito', region: 'Pichincha', country: 'EC' },
+  // Portal de Clientes: mientras no exista backend, /login y /registro quedan
+  // ocultos del menú, del pie de página y de los buscadores. Cambiar a true
+  // cuando el portal esté operativo.
+  portalEnabled: false,
+  // Imagen para compartir en redes (1200×630).
+  ogImage: '/og-devcorp.png',
   // Pagos en línea (Firmas Electrónicas). Estos valores son públicos por diseño
   // de cada proveedor (van en el JavaScript del navegador) — las credenciales
   // realmente secretas (PAYPHONE_TOKEN de confirmación, PAYPAL_CLIENT_SECRET)
@@ -31,6 +42,9 @@ export const SITE = {
     linkedin: 'https://www.linkedin.com/company/devcorp-sas/',
   },
 };
+
+// Tarifas de la firma electrónica (compartidas con las Netlify Functions de pago).
+export { FIRMA_PRECIOS, firmaPorAnios, firmaPrecioTexto } from './firma-precios.js';
 
 /** Construye un enlace de WhatsApp con mensaje prellenado según el contexto. */
 export function waLink(message: string): string {
@@ -377,18 +391,18 @@ export const SPECIALIZED_SERVICES: Service[] = [
     title: 'Requerimientos y regularizaciones SRI',
     navSub: 'Atención a la administración',
     short:
-      'Atendemos requerimientos, determinaciones y procesos de regularización ante el Servicio de Rentas Internas.',
-    items: ['Requerimientos', 'Determinaciones', 'Regularizaciones'],
+      'Atendemos requerimientos, determinaciones y procesos de regularización ante el SRI, y preparamos tu Informe de Cumplimiento Tributario (ICT).',
+    items: ['Requerimientos', 'Determinaciones', 'Regularizaciones', 'ICT'],
     category: 'Tributarios',
   },
   {
     slug: 'asesoria-laboral-empresarial',
     icon: '👥',
     title: 'Servicios laborales especializados',
-    navSub: 'ICT, reglamentos y actuaciones',
+    navSub: 'Reglamentos y actuaciones',
     short:
-      'Reglamento interno, informe de cumplimiento (ICT), seguridad ocupacional y actuaciones laborales complejas.',
-    items: ['Reglamento interno', 'ICT', 'Seguridad ocupacional'],
+      'Reglamento interno, seguridad ocupacional y actuaciones laborales complejas.',
+    items: ['Reglamento interno', 'Seguridad ocupacional', 'Actuaciones laborales'],
     category: 'Laborales',
   },
   {
@@ -431,66 +445,6 @@ export const NOT_INCLUDED = [
   'Actuaciones laborales complejas',
 ];
 
-/**
- * Servicios recurrentes usados por las páginas de detalle heredadas
- * (/servicios/asesoria-*) y por la barra lateral de esas páginas.
- */
-export const SERVICES: Service[] = [
-  {
-    slug: 'asesoria-financiera',
-    icon: '💰',
-    title: 'Asesoría Financiera',
-    navSub: 'Planificación y análisis',
-    short: 'Planificación presupuestaria y análisis financiero para una gestión empresarial sólida.',
-    items: ['Planificación presupuestaria', 'Análisis financiero', 'Flujo de caja', 'Indicadores de gestión'],
-    category: 'Financieros',
-  },
-  {
-    slug: 'asesoria-contable',
-    icon: '📊',
-    title: 'Asesoría Contable',
-    navSub: 'Contabilidad y reportes',
-    short: 'Contabilidad general, control de costos y reportes confiables para decidir.',
-    items: ['Contabilidad general', 'Costos', 'Estados financieros', 'Reportes gerenciales'],
-    category: 'Financieros',
-  },
-  {
-    slug: 'asesoria-tributaria',
-    icon: '🧾',
-    title: 'Asesoría Tributaria',
-    navSub: 'Obligaciones y gestión SRI',
-    short: 'Cumplimiento de obligaciones impositivas y eficiencia tributaria para tu empresa.',
-    items: ['Declaraciones SRI', 'Planificación tributaria', 'Auditoría tributaria', 'Atención a requerimientos'],
-    category: 'Tributarios',
-  },
-  {
-    slug: 'asesoria-laboral-empresarial',
-    icon: '👥',
-    title: 'Asesoría Laboral & Empresarial',
-    navSub: 'IESS, Min. Trabajo y gestión',
-    short: 'Gestión del talento humano, IESS, Min. de Trabajo y seguridad ocupacional.',
-    items: ['Nómina e IESS', 'Min. de Trabajo', 'Contratos laborales', 'Seguridad ocupacional'],
-    category: 'Laborales',
-  },
-  {
-    slug: 'notas-de-credito-sri',
-    icon: '💳',
-    title: 'Notas de Crédito SRI',
-    navSub: 'Conviértelas en liquidez',
-    short: 'Convierte tus notas de crédito del SRI en liquidez inmediata, de forma legal.',
-    items: ['Liquidez inmediata', 'Proceso legal', 'Evaluación gratuita'],
-    category: 'Tributarios',
-  },
-  {
-    slug: 'firmas-electronicas',
-    icon: '✍️',
-    title: 'Firmas Electrónicas',
-    navSub: 'Emisión en minutos',
-    short: 'Emisión de firmas electrónicas en minutos, para personas naturales o jurídicas.',
-    items: ['Persona natural', 'Persona jurídica', 'Vigencia 1 a 5 años', 'Entrega en minutos'],
-    category: 'Trámites',
-  },
-];
 
 /* ─────────────────────────────────────────────
    PREGUNTAS FRECUENTES

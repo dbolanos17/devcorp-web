@@ -1,34 +1,38 @@
 ---
+import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import ServiceSidebar from '../../components/ServiceSidebar.astro';
+import foto from '../../assets/stock-tributaria.webp';
 ---
 <Base
-  title="Asesoría Tributaria — DEVCORP S.A.S. | Quito, Ecuador"
-  description="Declaraciones SRI, planificación tributaria, optimización de carga fiscal y atención de requerimientos tributarios en Ecuador."
+  title="Requerimientos y regularizaciones SRI — DEVCORP"
+  description="Requerimientos, determinaciones y regularizaciones ante el SRI e Informe de Cumplimiento Tributario (ICT). Se cotiza aparte de los planes mensuales."
 >
   <PageHero
-    title="Asesoría Tributaria"
-    sub="La administración tributaria exige dominio de la normativa legal y gestión eficaz ante las autoridades pertinentes."
-    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios', href: '/servicios/' }, { label: 'Asesoría Tributaria' }]}
+    title="Requerimientos y regularizaciones SRI"
+    sub="Atención a la administración tributaria con dominio de la normativa y gestión eficaz ante las autoridades."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Servicios', href: '/servicios/' }, { label: 'Requerimientos y regularizaciones SRI' }]}
   />
   <div class="section">
     <div class="svc-detail-grid">
       <div class="svc-detail-body">
         <div class="svc-detail-photo">
-          <img src="/images/stock-tributaria.webp" alt="Gestión y cálculo de obligaciones tributarias" loading="lazy" />
+          <Image src={foto} alt="Gestión y cálculo de obligaciones tributarias" widths={[640, 1000]} sizes="(max-width: 1024px) 100vw, 700px" format="webp" quality={72} loading="lazy" />
         </div>
-        <h2>Cumplimiento y eficiencia tributaria</h2>
-        <p>Mediante una consultoría especializada en tributación, dispones de una herramienta para cumplir con las obligaciones legales, optimizando al mismo tiempo los procesos dentro de tu estructura empresarial.</p>
+        <h2>Atención a la administración tributaria</h2>
+        <p>Atendemos requerimientos, determinaciones y procesos de regularización ante el Servicio de Rentas Internas, y preparamos tu Informe de Cumplimiento Tributario (ICT), para que tu empresa responda a tiempo y con el sustento adecuado.</p>
         <h2>¿Qué incluye?</h2>
         <div class="check-list">
-          <div class="check-item"><span class="check-icon">✓</span>Gestión de obligaciones impositivas (IVA, Renta, ICE)</div>
-          <div class="check-item"><span class="check-icon">✓</span>Planificación tributaria y optimización de carga fiscal</div>
           <div class="check-item"><span class="check-icon">✓</span>Atención de requerimientos del SRI</div>
-          <div class="check-item"><span class="check-icon">✓</span>Declaraciones mensuales y anuales</div>
+          <div class="check-item"><span class="check-icon">✓</span>Respuesta a determinaciones</div>
+          <div class="check-item"><span class="check-icon">✓</span>Procesos de regularización</div>
+          <div class="check-item"><span class="check-icon">✓</span>Informe de Cumplimiento Tributario (ICT)</div>
         </div>
         <h2>¿Para quién es?</h2>
-        <p>Personas naturales, jurídicas y organizaciones que buscan un manejo tributario seguro, eficiente y en regla con el SRI.</p>
+        <p>Personas naturales, jurídicas y organizaciones que recibieron una notificación del SRI o necesitan poner en regla su situación tributaria.</p>
+        <h2>¿Cómo se contrata?</h2>
+        <p>Es un servicio especializado que se cotiza aparte de los planes recurrentes, según la complejidad de cada caso. Si lo que necesitas es cumplimiento mensual (IVA, retenciones, ATS e Impuesto a la Renta), revisa nuestros <a href="/planes/" style="color:var(--blue);font-weight:700;">planes</a>.</p>
       </div>
       <ServiceSidebar current="asesoria-tributaria" />
     </div>

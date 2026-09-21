@@ -49,6 +49,7 @@ collections:
       - { label: "Fecha", name: "date", widget: "datetime" }
       - { label: "Ícono (emoji)", name: "icon", widget: "string", default: "📰" }
       - { label: "Destacado en portada del blog", name: "featured", widget: "boolean", default: false }
+      - { label: "Borrador (no publicar todavía)", name: "draft", widget: "boolean", default: false, hint: "Si está marcado, el artículo NO aparece en el sitio ni en Google. Desmárcalo cuando esté listo para publicarse." }
       - { label: "Contenido del artículo", name: "body", widget: "markdown" }
 
   - name: "testimonials"

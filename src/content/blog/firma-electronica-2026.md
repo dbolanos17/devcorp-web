@@ -4,6 +4,7 @@ description: "Por qué cada vez más empresas en Ecuador la están adoptando."
 category: "Trámites"
 date: 2026-05-02
 icon: "✍️"
+draft: true
 ---
 
 *Este es un artículo de muestra. El contenido definitivo se redactará y publicará por el equipo de DEVCORP.*

@@ -1,6 +1,10 @@
 ---
 import { SITE, SPECIALIZED_SERVICES } from '../data/site';
+import { getPublishedPosts } from '../lib/blog';
+import SocialIcons from './SocialIcons.astro';
+
 const year = new Date().getFullYear();
+const hasBlog = (await getPublishedPosts()).length > 0;
 ---
 <footer>
   <div class="footer-grid">
@@ -8,9 +12,7 @@ const year = new Date().getFullYear();
       <div class="logo-text" style="color:#fff;font-size:1.4rem;">DEVCORP</div>
       <p>Tu área contable, tributaria, laboral y financiera externa. {SITE.coverage}.</p>
       <div class="footer-social">
-        <a href={SITE.social.facebook} target="_blank" rel="noopener" aria-label="Facebook">f</a>
-        <a href={SITE.social.instagram} target="_blank" rel="noopener" aria-label="Instagram">ig</a>
-        <a href={SITE.social.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+        <SocialIcons />
       </div>
     </div>
     <div class="footer-col">
@@ -18,7 +20,7 @@ const year = new Date().getFullYear();
       <a href="/">Inicio</a>
       <a href="/planes/">Planes</a>
       <a href="/servicios/">Servicios especializados</a>
-      <a href="/blog/">Recursos</a>
+      {hasBlog && <a href="/blog/">Recursos</a>}
       <a href="/nosotros/">Nosotros</a>
       <a href="/diagnostico/">Diagnóstico</a>
     </div>
@@ -35,7 +37,8 @@ const year = new Date().getFullYear();
       <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
       <span class="footer-line">{SITE.coverage}</span>
       <a href="/politica-de-privacidad/">Política de privacidad</a>
-      <a href="/login/">Portal de Clientes</a>
+      <a href="/terminos-y-condiciones/">Términos y condiciones</a>
+      {SITE.portalEnabled && <a href="/login/">Portal de Clientes</a>}
     </div>
   </div>
   <div class="footer-bottom">

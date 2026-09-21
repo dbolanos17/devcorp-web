@@ -1,0 +1,102 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import { SITE } from '../data/site';
+---
+<Base
+  title="Términos y Condiciones — DEVCORP S.A.S."
+  description="Condiciones de uso del sitio web y de contratación de los servicios de DEVCORP S.A.S., incluidos los pagos en línea de firma electrónica."
+>
+  <PageHero
+    title="Términos y Condiciones"
+    sub="Condiciones de uso de devcorp-ec.com y de contratación de nuestros servicios."
+    crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Términos y Condiciones' }]}
+  />
+  <div class="section">
+    <div class="post-body" style="max-width:820px;margin:0 auto;">
+      <p class="legal-note">
+        <strong>Nota:</strong> este texto es una versión inicial y general, pendiente de revisión legal formal antes
+        de considerarse definitiva.
+      </p>
+
+      <h2>1. Quiénes somos</h2>
+      <p>
+        {SITE.name} es una firma ecuatoriana de servicios contables, tributarios, laborales y financieros. Puedes
+        contactarnos en <a href={`mailto:${SITE.email}`}>{SITE.email}</a> o al {SITE.phone}.
+      </p>
+
+      <h2>2. Uso del sitio</h2>
+      <p>
+        La información de este sitio es de carácter general y no sustituye una asesoría profesional para tu caso
+        concreto. Al usar los formularios te comprometes a entregar información veraz y actualizada.
+      </p>
+
+      <h2>3. Servicios y alcance</h2>
+      <ul>
+        <li>
+          <strong>Planes recurrentes</strong> (Cumple, Control, 360, CFO Advisory, CFO Integral y Enterprise): el
+          alcance, los límites y el honorario se confirman en la propuesta que sigue al diagnóstico. Los valores
+          marcados como «desde» dependen de la carga real de trabajo.
+        </li>
+        <li>
+          <strong>Servicios especializados</strong> (firma electrónica, notas de crédito, devolución de impuestos,
+          constitución de S.A.S., regularizaciones y otros): se cotizan aparte de los planes recurrentes.
+        </li>
+        <li>
+          Los servicios que se indican como «no incluidos» en cada plan se cotizan por separado.
+        </li>
+      </ul>
+
+      <h2>4. Precios</h2>
+      <p>
+        Los precios se expresan en dólares de los Estados Unidos de América (USD) y, salvo que se indique lo
+        contrario, <strong>no incluyen IVA</strong>. Cuando corresponda, el IVA se suma al valor indicado.
+      </p>
+
+      <h2>5. Firma electrónica y pagos en línea</h2>
+      <ul>
+        <li>Puedes pagar la firma electrónica con PayPhone o PayPal, según las tarifas publicadas en la página del servicio.</li>
+        <li>El pago lo procesa el proveedor elegido; DEVCORP no almacena los datos de tu tarjeta.</li>
+        <li>
+          Tras el pago, nuestro equipo valida tu información y te contacta al correo o teléfono registrados para
+          completar la emisión. Si aún no enviaste tus documentos (cédula y, si aplica, RUC), te los solicitaremos
+          en ese contacto.
+        </li>
+        <li>
+          Conserva el código de transacción que se muestra al finalizar el pago: es tu comprobante. Si tienes algún
+          inconveniente con un pago o con tu trámite, escríbenos a <a href={`mailto:${SITE.email}`}>{SITE.email}</a>{' '}
+          y lo revisaremos.
+        </li>
+      </ul>
+
+      <h2>6. Servicios con honorario de éxito</h2>
+      <p>
+        En los servicios que se contratan con honorario de éxito (por ejemplo, devolución de impuestos), el honorario
+        se cobra únicamente sobre los casos que resulten exitosos. El porcentaje del honorario es variable, depende de
+        cada caso y se confirma al evaluarlo. DEVCORP no garantiza la aprobación de casos que la autoridad tributaria
+        no reconozca.
+      </p>
+
+      <h2>7. Obligaciones del cliente</h2>
+      <p>
+        Para prestar el servicio necesitamos información completa, veraz y oportuna. DEVCORP no se responsabiliza por
+        los efectos de información incompleta, inexacta o entregada fuera de plazo por el cliente.
+      </p>
+
+      <h2>8. Confidencialidad y datos personales</h2>
+      <p>
+        La información de nuestros clientes se trata bajo estricta confidencialidad profesional. El tratamiento de
+        datos personales se rige por nuestra <a href="/politica-de-privacidad/">Política de Privacidad</a>.
+      </p>
+
+      <h2>9. Legislación aplicable</h2>
+      <p>Estos términos se rigen por las leyes de la República del Ecuador.</p>
+
+      <h2>10. Cambios</h2>
+      <p>
+        Podemos actualizar estos términos para reflejar cambios en nuestros servicios o en la normativa. La versión
+        vigente es la publicada en esta página.
+      </p>
+    </div>
+  </div>
+</Base>

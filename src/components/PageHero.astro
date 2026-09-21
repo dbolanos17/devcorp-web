@@ -1,4 +1,6 @@
 ---
+import { SITE } from '../data/site';
+
 interface Crumb {
   label: string;
   href?: string;
@@ -9,16 +11,33 @@ interface Props {
   crumbs?: Crumb[];
 }
 const { title, sub, crumbs = [] } = Astro.props;
+
+// Ruta de navegación estructurada (BreadcrumbList) para buscadores.
+const breadcrumbLd =
+  crumbs.length > 1
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: crumbs.map((c, i) => ({
+          '@type': 'ListItem',
+          position: i + 1,
+          name: c.label,
+          // El último elemento es la página actual: se identifica con su URL.
+          item: new URL(c.href ?? Astro.url.pathname, SITE.url).href,
+        })),
+      }
+    : null;
 ---
+{breadcrumbLd && <script type="application/ld+json" set:html={JSON.stringify(breadcrumbLd)} />}
 <div class="page-hero">
   <div class="hero-grid"></div>
   <div class="page-hero-inner">
     {crumbs.length > 0 && (
-      <div class="breadcrumb">
+      <div class="breadcrumb" role="navigation" aria-label="Ruta de navegación">
         {crumbs.map((c, i) => (
           <>
-            {c.href ? <a href={c.href}>{c.label}</a> : c.label}
-            {i < crumbs.length - 1 && <span class="sep">/</span>}
+            {c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}
+            {i < crumbs.length - 1 && <span class="sep" aria-hidden="true">/</span>}
           </>
         ))}
       </div>
