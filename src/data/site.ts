@@ -178,7 +178,7 @@ export const PLANS: Plan[] = [
       'Dirección financiera para empresarios que necesitan entender sus números y tomar mejores decisiones.',
     highlights: [
       'Revisión financiera y dashboard ejecutivo',
-      'Flujo de caja proyectado a 13 semanas',
+      'Flujo de caja proyectado a 12 semanas',
       'Presupuesto, forecast y real vs. presupuesto',
       'KPIs, rentabilidad, márgenes y capital de trabajo',
       'Escenarios financieros y análisis gerencial',
@@ -206,7 +206,7 @@ export const PLANS: Plan[] = [
     highlights: [
       'Todo lo incluido en DEVCORP 360',
       'CFO externo asignado',
-      'Forecast de caja de 13 semanas y presupuesto anual',
+      'Forecast de caja de 12 semanas y presupuesto anual',
       'Análisis de rentabilidad, márgenes y capital de trabajo',
       'Escenarios financieros e indicadores ejecutivos',
       'Planificación tributaria estratégica',
@@ -296,7 +296,7 @@ export const COMPARISON_ROWS: { feature: string; values: Record<string, string> 
   },
   {
     feature: 'Flujo de caja proyectado',
-    values: { cumple: 'No', control: 'No', '360': 'Mensual', 'cfo-advisory': '13 semanas', 'cfo-integral': '13 semanas' },
+    values: { cumple: 'No', control: 'No', '360': 'Mensual', 'cfo-advisory': '12 semanas', 'cfo-integral': '12 semanas' },
   },
   {
     feature: 'Planificación tributaria',
