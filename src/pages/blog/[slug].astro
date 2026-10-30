@@ -21,6 +21,7 @@ const fecha = post.data.date.toLocaleDateString('es-EC', {
   day: 'numeric',
   month: 'long',
   year: 'numeric',
+  timeZone: 'UTC',
 });
 ---
 <Base title={pageTitle} description={post.data.description}>
