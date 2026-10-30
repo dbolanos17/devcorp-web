@@ -9,6 +9,8 @@ const blog = defineCollection({
     category: z.enum(['Financiero', 'Tributario', 'Laboral', 'Contable', 'Trámites']),
     date: z.coerce.date(),
     icon: z.string().default('📰'),
+    // Imagen de portada (ruta pública, p. ej. /images/blog/mi-articulo.jpg). Si falta, se usa el ícono.
+    image: z.string().optional(),
     featured: z.boolean().default(false),
     // Borrador: si es true el artículo no se publica (ni en la página, ni en el listado, ni en el sitemap).
     draft: z.boolean().default(false),

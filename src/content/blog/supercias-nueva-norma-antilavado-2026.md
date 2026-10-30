@@ -4,6 +4,7 @@ description: "La Resolución SCVS-INC-DNCDN-2026-0014 reforma las reglas de prev
 category: "Trámites"
 date: 2026-10-30
 icon: "🛡️"
+image: "/images/blog/norma-antilavado-supercias.svg"
 draft: false
 ---
 

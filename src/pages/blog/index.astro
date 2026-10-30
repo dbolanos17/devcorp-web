@@ -34,7 +34,11 @@ const fmt = (d: Date) =>
     )}
     {featured && (
       <div class="blog-featured">
-        <div class="blog-featured-img">{featured.data.icon}</div>
+        <div class="blog-featured-img">
+          {featured.data.image
+            ? <img src={featured.data.image} alt="" width="1200" height="630" />
+            : featured.data.icon}
+        </div>
         <div class="blog-featured-body">
           <span class="blog-cat">{featured.data.category} · Destacado</span>
           <h2>{featured.data.title}</h2>
@@ -52,7 +56,11 @@ const fmt = (d: Date) =>
     <div class="blog-grid" id="blog-grid">
       {rest.map((p) => (
         <a class="blog-card" href={`/blog/${p.id}/`} data-cat={p.data.category}>
-          <div class="blog-img">{p.data.icon}</div>
+          <div class="blog-img">
+            {p.data.image
+              ? <img src={p.data.image} alt="" width="1200" height="630" loading="lazy" />
+              : p.data.icon}
+          </div>
           <div class="blog-body">
             <span class="blog-cat">{p.data.category}</span>
             <h3>{p.data.title}</h3>
