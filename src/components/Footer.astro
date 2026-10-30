@@ -1,10 +1,8 @@
 ---
 import { SITE, SPECIALIZED_SERVICES } from '../data/site';
-import { getPublishedPosts } from '../lib/blog';
 import SocialIcons from './SocialIcons.astro';
 
 const year = new Date().getFullYear();
-const hasBlog = (await getPublishedPosts()).length > 0;
 ---
 <footer>
   <div class="footer-grid">
@@ -20,7 +18,7 @@ const hasBlog = (await getPublishedPosts()).length > 0;
       <a href="/">Inicio</a>
       <a href="/planes/">Planes</a>
       <a href="/servicios/">Servicios especializados</a>
-      {hasBlog && <a href="/blog/">Recursos</a>}
+      <a href="/blog/">Blog</a>
       <a href="/nosotros/">Nosotros</a>
       <a href="/diagnostico/">Diagnóstico</a>
     </div>

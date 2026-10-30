@@ -2,14 +2,10 @@
 import { Image } from 'astro:assets';
 import isotipoBlanco from '../assets/isotipo-devcorp-white.png';
 import { SITE, SPECIALIZED_SERVICES } from '../data/site';
-import { getPublishedPosts } from '../lib/blog';
 
 const path = Astro.url.pathname;
 const isCurrent = (href: string) =>
   href === '/' ? path === '/' : path.startsWith(href);
-
-// "Recursos" solo aparece cuando hay artículos publicados.
-const hasBlog = (await getPublishedPosts()).length > 0;
 
 const SPEC_EVENT: Record<string, string> = {
   'firmas-electronicas': 'click_firma_electronica',
@@ -56,15 +52,16 @@ const SPEC_EVENT: Record<string, string> = {
         ))}
       </div>
     </li>
-    {hasBlog && (
-      <li><a class:list={['nav-link', { current: isCurrent('/blog') }]} href="/blog/" aria-current={isCurrent('/blog') ? 'page' : undefined}>Recursos</a></li>
-    )}
     <li class="has-dropdown">
-      <a class:list={['nav-link', { current: isCurrent('/nosotros') || isCurrent('/contacto') }]} href="/nosotros/" aria-haspopup="true">Nosotros <span class="caret" aria-hidden="true">▾</span></a>
+      <a class:list={['nav-link', { current: isCurrent('/nosotros') || isCurrent('/contacto') || isCurrent('/blog') }]} href="/nosotros/" aria-haspopup="true">Nosotros <span class="caret" aria-hidden="true">▾</span></a>
       <div class="dropdown">
         <a href="/nosotros/">
           <span class="dropdown-icon" aria-hidden="true">🏢</span>
           <span>Nosotros<span class="dropdown-sub">Quiénes somos</span></span>
+        </a>
+        <a href="/blog/">
+          <span class="dropdown-icon" aria-hidden="true">📰</span>
+          <span>Blog<span class="dropdown-sub">Guías y novedades</span></span>
         </a>
         <a href="/contacto/">
           <span class="dropdown-icon" aria-hidden="true">✉️</span>
